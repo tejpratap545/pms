@@ -1,139 +1,117 @@
 <template>
-  <div class="container">
-    <div>
-      <header class="content-logos">
-        <logo />
-        <span class="plus">+</span>
-        <VuesaxLogo />
-      </header>
-      <h1 class="title">Nuxt.js + Vuesax</h1>
-      <h2 class="subtitle">
-        <a href="https://vuesax.com/">Vuesax</a> is a framework of ui components
-        for <a href="https://vuejs.org/">Vuejs</a>, It was created to make new
-        interfaces that have a new trend and are visually beautiful
-      </h2>
-      <div class="links">
-        <h3 class="h3">Vuesax</h3>
+  <div class="app">
+    <vs-dialog v-model="active" class="dialog" not-close prevent-close>
+      <template #header>
+        <h4 class="not-margin">Login to <b>Denselight</b></h4>
+      </template>
 
-        Nuxt + vite so fast in dev
-        <a
-          href="https://vuesax.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://discordapp.com/invite/9dsKtvB"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          Discord
-        </a>
-        <a
-          href="https://github.com/lusaxweb/vuesax"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+      <div class="con-form">
+        <vs-input v-model="email">
+          <template #icon> @ </template>
+        </vs-input>
+        <vs-input v-model="password" type="password">
+          <template #icon>
+            <i class="bx bxs-lock"></i>
+          </template>
+        </vs-input>
+        <div class="flex">
+          <vs-checkbox v-model="remember">Remember me</vs-checkbox>
+          <a href="#">Forgot Password?</a>
+        </div>
       </div>
-      <div class="links">
-        <h3 class="h3">Nuxt.js</h3>
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+
+      <template #footer>
+        <div class="footer-dialog">
+          <vs-button block> Sign In </vs-button>
+
+          <div class="new">New Here? <a href="#">Create New Account</a></div>
+        </div>
+      </template>
+    </vs-dialog>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuesaxLogo from '~/components/VuesaxLogo.vue'
-
 export default {
-  components: {
-    Logo,
-    VuesaxLogo,
-  },
-}
+  data: () => ({
+    active: true,
+    email: "",
+    password: "",
+    remember: false,
+  }),
+};
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.app {
+  background: url(/assets/img/background.jpg);
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 55px;
-  color: #35495e;
-  letter-spacing: 1px;
-  text-transform: capitalize;
-  margin: 25px 0;
+a {
+  text-decoration: none;
+  font-weight: 600;
+  color: rgb(102, 102, 102);
+  opacity: 0.7;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 1.1rem;
-  color: #526488;
-  word-spacing: 2px;
-  padding-bottom: 15px;
-  max-width: 600px;
+a:hover {
+  text-decoration: none;
 }
 
-.subtitle a {
-  font-weight: 500;
-  color: inherit;
+.not-margin {
+  margin: 0px;
+  font-weight: normal;
+  padding: 10px;
 }
-
-.links {
-  padding-top: 15px;
-  margin-bottom: 20px;
+.con-form {
+  width: 100%;
 }
-
-.content-logos {
+.con-form .flex {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+.con-form .flex a {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+.con-form .flex a:hover {
+  opacity: 1;
+}
+.con-form .vs-checkbox-label {
+  font-size: 0.8rem;
+}
+.con-form .vs-input-content {
+  margin: 10px 0px;
+  width: calc(100%);
+}
+.con-form .vs-input-content .vs-input {
+  width: 100%;
+}
+.footer-dialog {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  min-width: 500px;
+  flex-direction: column;
+  width: calc(100%);
 }
-
-.plus {
-  font-size: 2.5rem;
-  margin: 15px;
-  color: #35495e;
+.footer-dialog .new {
+  margin: 0px;
+  margin-top: 20px;
+  padding: 0px;
+  font-size: 0.7rem;
 }
-
-.h3 {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 400;
-  margin: 10px;
+.footer-dialog .new a {
+  margin-left: 6px;
+}
+.footer-dialog .new a:hover {
+  text-decoration: underline;
+}
+.footer-dialog .vs-button {
+  margin: 0px;
 }
 </style>

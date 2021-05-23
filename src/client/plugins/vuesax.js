@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import Vuesax from 'vuesax'
+import Vue from "vue";
+import Vuesax from "vuesax";
 
-import 'boxicons/css/boxicons.min.css'
+import "boxicons/css/boxicons.min.css";
 
-Vue.use(Vuesax)
+Vue.use(Vuesax);
