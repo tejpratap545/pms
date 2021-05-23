@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <vs-dialog class="dialog" v-model="active" not-close prevent-close>
+    <vs-dialog v-model="active" class="dialog" not-close prevent-close>
       <template #header>
         <h4 class="not-margin">Login to <b>Denselight</b></h4>
       </template>
@@ -44,11 +44,11 @@ export default {
 
 <style>
 .app {
-     background: url(/assets/img/background.jpg);
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-    position: absolute;
+  background: url(/assets/img/background.jpg);
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
 a {
