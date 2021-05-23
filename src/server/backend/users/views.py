@@ -10,7 +10,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend.users.models import AccessToken, Company, Profile, RefreshToken, User
+from backend.users.models import (AccessToken, Company, Profile, RefreshToken,
+                                  User)
 
 from .backend import decode_jwt_token, encode_jwt_token
 
@@ -63,16 +64,12 @@ class TokenView(APIView):
         grant_type = request.data.get("grant_type", "access_token")
         if grant_type == "access_token":
             username = request.data.get("username")
-            email = request.data.get("email")
             password = request.data.get("password")
-            typeOfEmployee = request.data.get("typeOfEmployee", "INDIRECT")
 
             try:
                 user = User.objects.get(
-                    Q(username=username) & Q(email=email) & Q(is_active=True)
-                )
-                profile = get_object_or_404(
-                    Profile, user=user, typeOfEmployee=typeOfEmployee
+                    Q(Q(username=username) | Q(email=username) | Q(contact_number=username))
+                    & Q(is_active=True)
                 )
                 if user.check_password(password):
                     return self._generate_token_response(user, grant_type)
