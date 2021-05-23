@@ -13,23 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from backend.users.views import TokenView, create_admin_user
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
-
 # from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/", include("config.api_routers")),
+    path("api/", include("config.api_urls")),
+    path("auth/token/", TokenView.as_view()),
+    path("createadminuser", create_admin_user),
 ]
 
 
-from drf_spectacular.views import (
-    SpectacularAPIView,
-    SpectacularRedocView,
-    SpectacularSwaggerView,
-)
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 
 if settings.DEBUG:
     import debug_toolbar
