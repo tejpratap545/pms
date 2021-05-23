@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <h1>Employee Management</h1>
-    <div class="center" style="margin-top: 20px">
+    <div class="center" style="margin-top: 50px">
       <vs-table>
         <template #thead>
           <vs-tr>

@@ -44,7 +44,7 @@ export default {
 
 <style>
 .app {
-  background: url(/assets/img/background.jpg);
+  background: url(~/assets/img/background.jpg);
   background-size: cover;
   width: 100%;
   height: 100%;

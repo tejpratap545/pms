@@ -1,8 +1,8 @@
 <template>
   <div class="hidden">
-    <vs-sidebar v-model="active" absolute hover-expand reduce open>
+    <vs-sidebar v-model="active" absolute reduce open>
       <template #logo>
-        <!-- ...img logo -->
+        <img src="~/assets/img/icon.png" />
       </template>
 
       <vs-sidebar-item id="home" to="/">
@@ -12,7 +12,7 @@
         Home
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="appraisals" to="/sections/appraisals">
+      <vs-sidebar-item id="appraisals" to="/sections/my-appraisals">
         <template #icon>
           <i class="bx bx-message-square-dots"></i>
         </template>
@@ -33,7 +33,7 @@
         Employee Management
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="appraisal-managment">
+      <vs-sidebar-item id="appraisal-managment" to="/sections/appraisals">
         <template #icon>
           <i class="bx bx-list-check"></i>
         </template>
@@ -48,7 +48,7 @@
       </vs-sidebar-item>
 
       <template #footer>
-        <vs-row justify="space-between">
+        <vs-row justify="center">
           <vs-avatar
             badge-color="danger"
             badge-position="top-right"
