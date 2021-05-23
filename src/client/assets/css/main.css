@@ -1,0 +1,11 @@
+.page {
+  margin: 0 200px;
+  padding: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+  .page {
+    margin: 0 20px 0px 70;
+    padding: 10px;
+  }
+}
