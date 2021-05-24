@@ -33,6 +33,12 @@
 
 <script>
 export default {
+  middleware({ store, redirect }) {
+    console.log(store.state);
+    if (store.state.isAuthenticate) {
+      return redirect("/");
+    }
+  },
   data: () => ({
     active: true,
     username: "",
