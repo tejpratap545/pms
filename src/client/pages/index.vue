@@ -77,7 +77,19 @@
             </template> -->
             <template #tbody>
               <vs-tr>
-                <vs-td> Name </vs-td>
+                <vs-td> Firstname </vs-td>
+                <vs-td>
+                  {{ $store.state.user.user.first_name }}
+                </vs-td>
+              </vs-tr>
+              <vs-tr>
+                <vs-td> Lastname </vs-td>
+                <vs-td>
+                  {{ $store.state.user.user.last_name }}
+                </vs-td>
+              </vs-tr>
+              <vs-tr>
+                <vs-td> Username </vs-td>
                 <vs-td>
                   {{ $store.state.user.user.username }}
                 </vs-td>
@@ -85,7 +97,7 @@
               <vs-tr>
                 <vs-td> Email </vs-td>
                 <vs-td>
-                  {{ $store.state.user.user.username }}
+                  {{ $store.state.user.user.email }}
                 </vs-td>
               </vs-tr>
               <vs-tr>
@@ -101,7 +113,7 @@
         </div>
 
         <div class="action-buttons">
-          <vs-button @click="logout"> Logout </vs-button>
+          <vs-button :loading="loading" @click="logout"> Logout </vs-button>
         </div>
       </div>
     </div>
@@ -112,11 +124,18 @@
 export default {
   layout: "dashboard",
   middleware: ["auth"],
+  data: () => ({
+    loading: false,
+  }),
   methods: {
     logout() {
-      fetch("/api/logout", {
-        method: "POST",
-      }).then(() => location.reload());
+      if (!this.loading) {
+        this.loading = true;
+
+        fetch("/api/logout", {
+          method: "POST",
+        }).then(() => location.reload());
+      }
     },
   },
 };
