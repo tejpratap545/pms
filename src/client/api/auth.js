@@ -28,6 +28,36 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.post("/logout", (req, res, next) => {
+  req.session.destroy();
+  res.json(req.session);
+});
+
+router.post("/refresh", async (req, res, next) => {
+  try {
+    const response = await axios.post(`${apiUrl}/auth/token/`, {
+      grant_type: "refresh_token",
+      refresh_token: req.session.tokens.refresh_token,
+    });
+    const tokens = response.data;
+    req.session.isAuthenticate = true;
+    req.session.tokens = tokens;
+
+    const user = await axios.get(`${apiUrl}/api/profile/me`, {
+      headers: {
+        Authorization: `Bearer ${tokens.access_token}`,
+      },
+    });
+
+    req.session.user = user.data;
+    req.session.save();
+
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+  }
+});
+
 router.get("/user", (req, res, next) => {
   res.json(req.session.user);
 });

@@ -34,7 +34,6 @@
 <script>
 export default {
   middleware({ store, redirect }) {
-    console.log(store.state);
     if (store.state.isAuthenticate) {
       return redirect("/");
     }
@@ -57,7 +56,7 @@ export default {
           username: this.username,
           password: this.password,
         }),
-      });
+      }).then(() => location.reload());
     },
   },
 };

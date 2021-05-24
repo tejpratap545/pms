@@ -53,7 +53,7 @@ class TokenView(APIView):
                     grant_type="refresh_token",
                     user_id=user.id,
                 ),
-                "expire": 172800,
+                "expire": timezone.now() + timedelta(seconds=172800),
                 "grant_type": grant_type,
             },
             status=status.HTTP_200_OK,

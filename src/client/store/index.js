@@ -18,7 +18,19 @@ export const mutations = {
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
     if (req.session.user && req.session.tokens) {
-      console.log(req.session.user);
+      const expire = new Date(req.session.tokens.expire);
+
+      if (expire - Date.now() < 86400000) {
+        // if the token expires in less than a day then refresh token
+
+        fetch("/api/refresh", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then(() => location.reload());
+      }
+
       commit("SET_USER", req.session.user);
       commit("SET_TOKEN", req.session.tokens.access_token);
 
