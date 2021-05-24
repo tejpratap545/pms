@@ -25,6 +25,8 @@
         </vs-card>
       </vs-card-group>
     </div>
+
+    {{ $store.state.user }}
   </div>
 </template>
 
