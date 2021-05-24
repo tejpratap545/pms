@@ -31,7 +31,7 @@ class Company(models.Model):
 
 
 class Permission(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -68,6 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=True
     )
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True)
 
     USERNAME_FIELD = "username"
     objects = UserManager()
@@ -96,7 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True)
     logo = models.ImageField(upload_to="department/logo", blank=True, null=True)
     manager = models.ForeignKey(
         "Profile",
@@ -168,7 +169,7 @@ class Profile(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        related_name="first_reporting_employees"
+        related_name="first_reporting_employees",
     )
     second_reporting_manager = models.ForeignKey(
         "Profile",

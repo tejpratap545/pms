@@ -59,7 +59,6 @@ class Goal(models.Model):
         max_length=100, blank=True, null=True, choices=STATUS_CHOICE
     )
 
-
     stage1_employee_comment = models.TextField(blank=True, null=True)
     stage1_manager_comment = models.TextField(blank=True, null=True)
 
@@ -80,7 +79,6 @@ class Goal(models.Model):
     stage3_employee_comment = models.TextField(blank=True, null=True)
     stage3_manager_comment = models.TextField(blank=True, null=True)
 
-   
 
 class KPI(models.Model):
     PROGRESS_CHOICES = (("Working", "Working"), ("Completed", "Completed"))
@@ -116,7 +114,6 @@ class CoreValue(models.Model):
     )
 
 
- 
 class Skill(models.Model):
     appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
     skill_category = models.ForeignKey(

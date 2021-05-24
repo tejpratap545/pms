@@ -109,11 +109,12 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.FileUploadParser",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 
 SPECTACULAR_SETTINGS = {
-    "SCHEMA_PATH_PREFIX": r"api",
+    "SCHEMA_PATH_PREFIX": r"/api",
     # available SwaggerUI configuration parameters
     # https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
     "SWAGGER_UI_SETTINGS": {
