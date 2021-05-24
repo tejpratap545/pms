@@ -26,6 +26,8 @@ router.post("/login", async (req, res, next) => {
   } catch (error) {
     res.status(400);
   }
+
+  res.end();
 });
 
 router.post("/logout", (req, res, next) => {
@@ -56,6 +58,8 @@ router.post("/refresh", async (req, res, next) => {
   } catch (error) {
     res.status(400);
   }
+
+  res.end();
 });
 
 router.get("/user", (req, res, next) => {

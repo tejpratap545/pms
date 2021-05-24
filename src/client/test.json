@@ -1,0 +1,38 @@
+{
+  "id": 1,
+  "user": {
+    "username": "ayushkumar121",
+    "is_active": true,
+    "is_admin": true,
+    "is_email_verified": false,
+    "date_joined": "2021-05-24T19:55:02.224955+05:30"
+  },
+  "department": null,
+  "first_reporting_manager": {
+    "id": 1,
+    "department": null,
+    "date_of_hire": "2021-05-24",
+    "first_reporting_manager": 1,
+    "second_reporting_manager": 1
+  },
+  "second_reporting_manager": {
+    "id": 1,
+    "department": null,
+    "date_of_hire": "2021-05-24",
+    "first_reporting_manager": 1,
+    "second_reporting_manager": 1
+  },
+  "avatar": null,
+  "gender": null,
+  "martial_status": "Single",
+  "date_of_hire": "2021-05-24",
+  "employee_id": null,
+  "employment_type": "Full-Time",
+  "job_title": null,
+  "resign_date": null,
+  "address_1": null,
+  "address_2": null,
+  "skill1": null,
+  "skill2": null,
+  "skill3": null
+}
