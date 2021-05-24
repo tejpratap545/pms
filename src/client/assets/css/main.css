@@ -7,6 +7,11 @@
   text-align: center;
 }
 
+.primary{
+  color: #fff;
+  background-color: rgb(25, 91, 255) !important;
+}
+
 @media only screen and (max-width: 800px) {
   .page {
     margin: 0 20px 0px 70px;

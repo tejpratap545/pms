@@ -2,16 +2,16 @@
   <div class="page">
     <h1>My Appraiasals</h1>
     <div class="center grid" style="margin-top: 50px">
-      <vs-row>
-        <vs-col class="appraisal-lists" w="4">
-          <div class="appraisal-list-item">2021 Appraisal</div>
+      <div class="appraisal-grid">
+        <div class="appraisal-lists">
+          <div class="appraisal-list-item primary">2021 Appraisal</div>
           <div class="appraisal-list-item">2022 Appraisal</div>
           <div class="appraisal-list-item">2023 Appraisal</div>
-        </vs-col>
-        <vs-col class="appraisal-item-open" w="8">
+        </div>
+        <div class="appraisal-item-open">
           <div class="appraisal-item"></div>
-        </vs-col>
-      </vs-row>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +24,12 @@ export default {
 </script>
 
 <style>
+.appraisal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .appraisal-lists {
   width: 300px;
 }
@@ -37,7 +43,6 @@ export default {
   font-weight: 600;
   opacity: 0.7;
   text-align: center;
-  width: 260px;
 }
 
 .appraisal-item {
@@ -49,6 +54,13 @@ export default {
 }
 
 .appraisal-item-open {
-  min-width: 260px;
+  max-width: 800px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 800px) {
+  .appraisal-lists > .appraisal-list-item {
+    margin-right: unset;
+  }
 }
 </style>
