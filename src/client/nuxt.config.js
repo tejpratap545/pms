@@ -1,3 +1,7 @@
+const session = require("express-session");
+const redis = require("redis");
+const redisClient = redis.createClient();
+const redisStore = require("connect-redis")(session);
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -14,7 +18,7 @@ export default {
   css: ["vuesax/dist/vuesax.css", "~/assets/css/main.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["@/plugins/vuesax"],
+  plugins: ["@/plugins/vuesax", "@/plugins/axios.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -28,9 +32,34 @@ export default {
   ],
 
   vite: {
-    ssr: false,
+    ssr: true,
   },
 
+  serverMiddleware: [
+    session({
+      secret:
+        process.env.SESSION_SECRET || "ThisIsHowYouUseRedisSessionStorage",
+      name: "__session_id",
+      resave: false,
+      saveUninitialized: true,
+      // eslint-disable-next-line new-cap
+      store: new redisStore({
+        host: "localhost",
+        port: 6379,
+        client: redisClient,
+        ttl: 86400,
+      }),
+    }),
+    "~/api",
+  ],
+  publicRuntimeConfig: {
+    baseURL: process.env.API_BASE_URL,
+  },
+  privateRuntimeConfig: {
+    apiSecret: process.env.API_SECRET,
+    sessionSecret:
+      process.env.SESSION_SECRET || "ThisIsHowYouUseRedisSessionStorage",
+  },
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ["@nuxtjs/axios", "@nuxtjs/pwa"],
 

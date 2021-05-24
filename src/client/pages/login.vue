@@ -6,7 +6,7 @@
       </template>
 
       <div class="con-form">
-        <vs-input v-model="email">
+        <vs-input v-model="username">
           <template #icon> @ </template>
         </vs-input>
         <vs-input v-model="password" type="password">
@@ -22,7 +22,7 @@
 
       <template #footer>
         <div class="footer-dialog">
-          <vs-button block> Sign In </vs-button>
+          <vs-button block @click="login"> Sign In </vs-button>
 
           <div class="new">New Here? <a href="#">Create New Account</a></div>
         </div>
@@ -35,10 +35,25 @@
 export default {
   data: () => ({
     active: true,
-    email: "",
+    username: "",
     password: "",
     remember: false,
   }),
+  methods: {
+    login() {
+      fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          username: this.username,
+          password: this.password,
+        }),
+      });
+    },
+  },
 };
 </script>
 
