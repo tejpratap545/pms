@@ -56,6 +56,7 @@
 <script>
 export default {
   layout: "dashboard",
+  middleware: ["auth"],
   data: () => ({
     editActive: false,
     edit: null,

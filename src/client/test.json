@@ -1,0 +1,50 @@
+{
+  "id": 1,
+  "user": {
+    "id": 1,
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dVlPREwwQUl6eHhLYnhsMlFhM2NNRA$T9wzFsQY94HzqV9zhqw2UA",
+    "last_login": null,
+    "first_name": null,
+    "username": "ayushkumar121",
+    "last_name": null,
+    "email": "ayushkumar121@outlook.com",
+    "contact_number": "",
+    "is_active": true,
+    "is_admin": true,
+    "is_superuser": true,
+    "is_email_verified": false,
+    "date_joined": "2021-05-24T19:55:02.224955+05:30",
+    "dummy_password": null,
+    "company": 1,
+    "groups": [],
+    "user_permissions": []
+  },
+  "department": null,
+  "first_reporting_manager": {
+    "id": 1,
+    "department": null,
+    "date_of_hire": "2021-05-24",
+    "first_reporting_manager": 1,
+    "second_reporting_manager": 1
+  },
+  "second_reporting_manager": {
+    "id": 1,
+    "department": null,
+    "date_of_hire": "2021-05-24",
+    "first_reporting_manager": 1,
+    "second_reporting_manager": 1
+  },
+  "avatar": null,
+  "gender": null,
+  "martial_status": "Single",
+  "date_of_hire": "2021-05-24",
+  "employee_id": null,
+  "employment_type": "Full-Time",
+  "job_title": null,
+  "resign_date": null,
+  "address_1": null,
+  "address_2": null,
+  "skill1": null,
+  "skill2": null,
+  "skill3": null
+}

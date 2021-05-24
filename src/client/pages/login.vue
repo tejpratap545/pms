@@ -22,7 +22,9 @@
 
       <template #footer>
         <div class="footer-dialog">
-          <vs-button block @click="login"> Sign In </vs-button>
+          <vs-button block :loading="loading" @click="login">
+            Sign In
+          </vs-button>
 
           <div class="new">New Here? <a href="#">Create New Account</a></div>
         </div>
@@ -43,23 +45,28 @@ export default {
     username: "",
     password: "",
     remember: false,
+    loading: false,
   }),
   methods: {
     login() {
-      fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      if (!this.loading) {
+        this.loading = true;
 
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-      }).then((res) => {
-        console.log(res);
-        location.reload();
-      });
+        fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password,
+          }),
+        })
+          .then(() => location.reload())
+          // eslint-disable-next-line no-console
+          .catch((err) => console.log(err));
+      }
     },
   },
 };

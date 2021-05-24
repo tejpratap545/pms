@@ -25,6 +25,8 @@ router.post("/login", async (req, res, next) => {
   } catch (error) {
     res.status(400).json({ msg: "Please check is login details" });
   }
+
+  res.end();
 });
 
 router.post("/logout", (req, res, next) => {
@@ -54,6 +56,8 @@ router.post("/refresh", async (req, res, next) => {
   } catch (error) {
     res.status(400).send();
   }
+
+  res.end();
 });
 
 router.get("/user", (req, res, next) => {
