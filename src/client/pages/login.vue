@@ -56,7 +56,10 @@ export default {
           username: this.username,
           password: this.password,
         }),
-      }).then(() => location.reload());
+      }).then((res) => {
+        console.log(res);
+        location.reload();
+      });
     },
   },
 };

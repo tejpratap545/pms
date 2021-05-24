@@ -28,7 +28,7 @@ export const actions = {
           headers: {
             "Content-Type": "application/json",
           },
-        }).then(() => location.reload());
+        });
       }
 
       commit("SET_USER", req.session.user);

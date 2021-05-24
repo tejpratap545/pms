@@ -12,6 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_admin",
             "is_email_verified",
             "date_joined",
+            "company"
         ]
 
 

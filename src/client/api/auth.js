@@ -20,11 +20,10 @@ router.post("/login", async (req, res, next) => {
     });
 
     req.session.user = user.data;
-    req.session.save();
 
-    res.status(200);
+    res.status(200).json({ msg: "User is sccessfully authenticate" });
   } catch (error) {
-    res.status(400);
+    res.status(400).json({ msg: "Please check is login details" });
   }
 });
 
@@ -50,11 +49,10 @@ router.post("/refresh", async (req, res, next) => {
     });
 
     req.session.user = user.data;
-    req.session.save();
 
-    res.status(200);
+    res.status(200).send();
   } catch (error) {
-    res.status(400);
+    res.status(400).send();
   }
 });
 
