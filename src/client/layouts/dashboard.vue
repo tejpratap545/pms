@@ -4,48 +4,54 @@
       <template #logo>
         <img src="~/assets/img/icon.png" />
       </template>
-
-      <vs-sidebar-item id="home" to="/">
-        <template #icon>
-          <i class="bx bx-home"></i>
-        </template>
-        Home
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="appraisals" to="/sections/my-appraisals">
-        <template #icon>
-          <i class="bx bx-message-square-dots"></i>
-        </template>
-        Appraisals
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="department" to="/sections/department">
-        <template #icon>
-          <i class="bx bx-building-house"></i>
-        </template>
-        Department
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="employee-managment" to="/sections/employee">
-        <template #icon>
-          <i class="bx bx-group"></i>
-        </template>
-        Employee Management
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="appraisal-managment" to="/sections/appraisals">
-        <template #icon>
-          <i class="bx bx-list-check"></i>
-        </template>
-        Appraisal Management
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="records" to="/sections/records">
-        <template #icon>
-          <i class="bx bx-data"></i>
-        </template>
-        Records
-      </vs-sidebar-item>
+      <NuxtLink to="/">
+        <vs-sidebar-item id="home">
+          <template #icon>
+            <i class="bx bx-home"></i>
+          </template>
+          Home
+        </vs-sidebar-item>
+      </NuxtLink>
+      <NuxtLink to="/sections/my-appraisals">
+        <vs-sidebar-item id="appraisals">
+          <template #icon>
+            <i class="bx bx-message-square-dots"></i>
+          </template>
+          Appraisals
+        </vs-sidebar-item>
+      </NuxtLink>
+      <NuxtLink to="/sections/department">
+        <vs-sidebar-item id="department">
+          <template #icon>
+            <i class="bx bx-building-house"></i>
+          </template>
+          Department
+        </vs-sidebar-item>
+      </NuxtLink>
+      <NuxtLink to="/sections/employee">
+        <vs-sidebar-item id="employee-managment">
+          <template #icon>
+            <i class="bx bx-group"></i>
+          </template>
+          Employee Management
+        </vs-sidebar-item>
+      </NuxtLink>
+      <NuxtLink to="/sections/appraisals">
+        <vs-sidebar-item id="appraisal-managment">
+          <template #icon>
+            <i class="bx bx-list-check"></i>
+          </template>
+          Appraisal Management
+        </vs-sidebar-item>
+      </NuxtLink>
+      <NuxtLink to="/sections/records">
+        <vs-sidebar-item id="records">
+          <template #icon>
+            <i class="bx bx-data"></i>
+          </template>
+          Records
+        </vs-sidebar-item>
+      </NuxtLink>
 
       <template #footer>
         <vs-row justify="center">

@@ -27,13 +27,11 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     "@nuxtjs/eslint-module",
-
-    "nuxt-vite",
   ],
 
-  vite: {
-    ssr: true,
-  },
+  // vite: {
+  //   ssr: false,
+  // },
 
   serverMiddleware: [
     session({
@@ -50,7 +48,7 @@ export default {
         ttl: 86400,
       }),
     }),
-    "~/api",
+    { path: "/api", handler: "~/api/index.js" },
   ],
   publicRuntimeConfig: {
     baseURL: process.env.API_BASE_URL,
