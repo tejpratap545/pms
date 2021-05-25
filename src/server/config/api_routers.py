@@ -1,3 +1,4 @@
+from backend.training.api.views import *
 from backend.users.api.views import *
 from backend.users.api.views import CompanyViewSet, DepartmentViewSet
 from django.conf import settings
@@ -14,6 +15,10 @@ router.register("department", DepartmentViewSet, basename="Department")
 router.register("role", RoleViewSet, basename="Role")
 router.register("permission", PermissionViewSet, basename="Permission")
 
-
+router.register("category/goal", GoalCategoryViewSet, basename="GoalCategory")
+router.register(
+    "category/core_value", CoreValueCategoryViewSet, basename="CoreValueCategory"
+)
+router.register("category/skills", SkillsCategoryViewSet, basename="SkillsCategory")
 app_name = "pms"
 urlpatterns = router.urls

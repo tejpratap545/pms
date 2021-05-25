@@ -4,6 +4,7 @@ from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from ..models import *
+from ..permissions import *
 from ..permissions import IsSuperUser
 from .serializers import *
 
@@ -32,7 +33,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsCompanyAdmin]
     serializer_class = DepartmentSerializer
     filterset_fields = ["company", "manager"]
     search_fields = ["name"]
@@ -46,7 +47,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
 
 class RoleViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsCompanyAdmin]
     serializer_class = RoleSerializer
     filterset_fields = ["company"]
     search_fields = ["name"]
@@ -60,7 +61,7 @@ class RoleViewSet(viewsets.ModelViewSet):
 
 
 class PermissionViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsCompanyAdmin]
     serializer_class = PermissionSerializer
     filterset_fields = ["company"]
     search_fields = ["name"]
