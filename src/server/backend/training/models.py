@@ -101,7 +101,7 @@ class KPI(models.Model):
 class CoreValue(models.Model):
     appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
     core_value_category = models.ForeignKey(
-        CoreValue, on_delete=models.SET_NULL, blank=True, null=True
+        CoreValueCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
     summary = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
