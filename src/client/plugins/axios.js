@@ -1,5 +1,5 @@
 import https from "https";
-export default ({ $config: { apiBaseURL }, $axios }) => {
-  $axios.defaults.baseURL = apiBaseURL;
+export default ({ $config: { baseURL }, $axios, store }) => {
+  $axios.defaults.baseURL = baseURL;
   $axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
 };

@@ -66,15 +66,9 @@
           </vs-avatar>
         </div>
 
+        <h2 style="margin-top: 10px; text-align: center">Person details</h2>
         <div class="details">
           <vs-table class="table" striped>
-            <!-- <template #thead>
-              <vs-tr>
-                <vs-th> Name </vs-th>
-                <vs-th> Email </vs-th>
-                <vs-th> Id </vs-th>
-              </vs-tr>
-            </template> -->
             <template #tbody>
               <vs-tr>
                 <vs-td> Firstname </vs-td>
@@ -106,7 +100,11 @@
               </vs-tr>
               <vs-tr>
                 <vs-td> Role </vs-td>
-                <vs-td> Admin </vs-td>
+                <vs-td>
+                  {{
+                    $store.state.user.user.is_superuser ? "Superadmin" : "user"
+                  }}
+                </vs-td>
               </vs-tr>
             </template>
           </vs-table>
@@ -190,7 +188,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .status-user-profile .details .table {

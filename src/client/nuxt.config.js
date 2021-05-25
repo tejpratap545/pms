@@ -1,7 +1,8 @@
+// eslint-disable-next-line nuxt/no-cjs-in-config
 const session = require("express-session");
-const redis = require("redis");
-const redisClient = redis.createClient();
+const redisClient = require("redis").createClient();
 const redisStore = require("connect-redis")(session);
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -17,9 +18,6 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["vuesax/dist/vuesax.css", "~/assets/css/main.css"],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["@/plugins/vuesax", "@/plugins/axios.js"],
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -28,10 +26,6 @@ export default {
     // https://go.nuxtjs.dev/eslint
     "@nuxtjs/eslint-module",
   ],
-
-  // vite: {
-  //   ssr: false,
-  // },
 
   serverMiddleware: [
     session({
@@ -50,14 +44,20 @@ export default {
     }),
     { path: "/api", handler: "~/api/index.js" },
   ],
+
+  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  plugins: ["@/plugins/vuesax", "@/plugins/axios.js"],
+
   publicRuntimeConfig: {
-    baseURL: process.env.API_BASE_URL,
+    baseURL: process.env.API_BASE_URL || "http://127.0.0.1:8000/",
   },
+
   privateRuntimeConfig: {
     apiSecret: process.env.API_SECRET,
     sessionSecret:
       process.env.SESSION_SECRET || "ThisIsHowYouUseRedisSessionStorage",
   },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ["@nuxtjs/axios", "@nuxtjs/pwa"],
 

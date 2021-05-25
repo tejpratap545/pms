@@ -127,16 +127,16 @@ SPECTACULAR_SETTINGS = {
     },
     # General schema metadata. Refer to spec for valid inputs
     # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#openapi-object
-    "TITLE": "Denselight API",
-    "DESCRIPTION": "Api for an Denselight Application build with django and  django rest framework",
+    "TITLE": "PMS API",
+    "DESCRIPTION": "Api for an PMS Application build with django and  django rest framework",
     # Optional: MAY contain "name", "url", "email"
     "CONTACT": {
-        "name": "Denselight developers",
+        "name": "PMS developers",
         "email": "tejpratapsingh545@outlook.com",
     },
     "LICENSE": {
         "name": "MIT",
-        "url": "https://github.com/tejpratap545/denselight_system/blob/main/LICENSE",
+        "url": "https://github.com/tejpratap545/pms/blob/main/LICENSE",
     },
     # Optional: MUST contain "name", MAY contain URL
     "VERSION": "1.0.0",

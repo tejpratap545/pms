@@ -12,14 +12,33 @@
         Home
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="appraisals" to="/sections/my-appraisals">
+      <vs-sidebar-item
+        v-if="$store.state.user.user.is_superuser"
+        id="company"
+        to="/sections/company"
+      >
+        <template #icon>
+          <i class="bx bx-building"></i>
+        </template>
+        Company Management
+      </vs-sidebar-item>
+
+      <vs-sidebar-item
+        v-if="!$store.state.user.user.is_superuser"
+        id="appraisals"
+        to="/sections/my-appraisals"
+      >
         <template #icon>
           <i class="bx bx-message-square-dots"></i>
         </template>
         Appraisals
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="department" to="/sections/department">
+      <vs-sidebar-item
+        v-if="!$store.state.user.user.is_superuser"
+        id="department"
+        to="/sections/department"
+      >
         <template #icon>
           <i class="bx bx-building-house"></i>
         </template>
@@ -40,7 +59,11 @@
         Appraisal Management
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="records" to="/sections/records">
+      <vs-sidebar-item
+        v-if="!$store.state.user.user.is_superuser"
+        id="records"
+        to="/sections/records"
+      >
         <template #icon>
           <i class="bx bx-data"></i>
         </template>
@@ -49,16 +72,6 @@
 
       <template #footer>
         <vs-row justify="center">
-          <vs-avatar
-            badge-color="danger"
-            badge-position="top-right"
-            style="margin-bottom: 10px"
-          >
-            <i class="bx bx-bell"></i>
-
-            <template #badge> 28 </template>
-          </vs-avatar>
-
           <vs-avatar>
             <img
               src="https://randomuser.me/api/portraits/women/83.jpg"
