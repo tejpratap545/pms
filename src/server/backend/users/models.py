@@ -20,7 +20,7 @@ class Company(models.Model):
     login_logo = models.ImageField(
         upload_to="company/login_logo", blank=True, null=True
     )
-    domain = models.URLField(unique=True, blank=False, null=False)
+    domain = models.CharField(max_length=50, unique=True, blank=False, null=False)
     setting = models.JSONField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
