@@ -7,18 +7,53 @@ from ..models import Company, Department, Profile, User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "username",
+        read_only_fields = (
             "is_active",
             "is_admin",
             "is_email_verified",
             "date_joined",
-            "company",
-        ]
+            "is_superuser",
+        )
+        exclude = (
+            "user_permissions",
+            "groups",
+            "dummy_password",
+        )
+
+        extra_kwargs = {"password": {"write_only": True}}
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Profile
+        fields = "__all__"
+
+    def create(self, validated_data):
+        user = dict(validated_data.pop("user"))
+
+        if self.context["request"].user.is_superuser:
+            user = User.objects.create_user(**user)
+        else:
+            user = User.objects.create_user(
+                **dict(user | {"company": self.context["request"].user.company})
+            )
+        return super().create(validated_data | {"user": user})
+
+    def update(self, instance, validated_data):
+        user: User = instance.user
+        user_data: User = validated_data.pop("user")
+
+        user.email = user_data.get("email", user.email)
+        user.first_name = user_data.get("first_name", user.first_name)
+        user.last_name = user_data.get("last_name", user.last_name)
+        user.username = user_data.get("username", user.email)
+        user.contact_number = user_data.get("contact_number", user.contact_number)
+        user.role = user_data.get("role", user.role)
+        user.save()
+
+        return super().update(instance, validated_data)
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -28,7 +63,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if self.context["request"].user.is_superadmin:
+        if self.context["request"].user.is_superuser:
             return super().create(validated_data)
 
         return super().create(
@@ -43,7 +78,7 @@ class PermissionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if self.context["request"].user.is_superadmin:
+        if self.context["request"].user.is_superuser:
             return super().create(validated_data)
 
         return super().create(
@@ -58,7 +93,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if self.context["request"].user.is_superadmin:
+        if self.context["request"].user.is_superuser:
             return super().create(validated_data)
 
         return super().create(
@@ -90,8 +125,24 @@ class ShortProfileSerializer(serializers.ModelSerializer):
         )
 
 
+class RoleInfoSerializer(serializers.ModelSerializer):
+    permissions = PermissionSerializer(many=True)
+
+    class Meta:
+        model = Role
+        fields = "__all__"
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    role = RoleSerializer()
+
+    class Meta:
+        model = User
+        exclude = ("user_permissions", "groups", "password", "dummy_password")
+
+
 class ProfileInfoSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserInfoSerializer()
     department = DepartmentSerializer()
     first_reporting_manager = ShortProfileSerializer()
     second_reporting_manager = ShortProfileSerializer()
@@ -132,7 +183,7 @@ class CompanySerializer(serializers.ModelSerializer):
         company = super().create(validated_data)
 
         # create profile for admin user
-        user = User.objects.create_superadmin(
+        user = User.objects.create_admin_user(
             username=username,
             email=email,
             contact_number=contact_number,
@@ -175,13 +226,11 @@ class CompanySerializer(serializers.ModelSerializer):
         user.role = admin
         user.save()
 
-        
         department = Department.objects.create(
             name="admin", company=company, manager=profile
         )
         profile.department = department
         profile.save()
-       
 
         # create department
 

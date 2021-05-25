@@ -11,6 +11,7 @@ else:
 
 
 router.register("company", CompanyViewSet, basename="Company")
+router.register("user", ProfileViewSet, basename="Pofile")
 router.register("department", DepartmentViewSet, basename="Department")
 router.register("role", RoleViewSet, basename="Role")
 router.register("permission", PermissionViewSet, basename="Permission")

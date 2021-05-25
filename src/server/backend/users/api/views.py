@@ -1,6 +1,7 @@
 from backend.appraisals.models import OverAllAppraisal
 from django.db.models import Count, OuterRef, Subquery
 from rest_framework import generics, status, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
@@ -16,6 +17,34 @@ class ProfileInfoView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsProfilePermission]
+    filterset_fields = [
+        "user__company",
+        "first_reporting_manager",
+        "second_reporting_manager",
+        "department",
+        "gender",
+        "user__role",
+        "user__first_name",
+        "user__username",
+    ]
+    search_fields = ["name"]
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        queryset = Profile.objects.prefetch_related(
+            "user",
+            "user__company",
+            "user__role",
+            "user__role__permissions",
+        ).all()
+        if not self.request.user.is_superuser:
+            queryset = queryset.filter(user__company=self.request.user.company)
+
+        return queryset
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -40,7 +69,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
 
     def get_queryset(self):
-        queryset = Department.objects.filter()
+        queryset = Department.objects.all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(company=self.request.user.company)
 
@@ -54,7 +83,7 @@ class RoleViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
 
     def get_queryset(self):
-        queryset = Role.objects.filter()
+        queryset = Role.objects.all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(company=self.request.user.company)
 
@@ -68,7 +97,7 @@ class PermissionViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
 
     def get_queryset(self):
-        queryset = Permission.objects.filter()
+        queryset = Permission.objects.all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(company=self.request.user.company)
 

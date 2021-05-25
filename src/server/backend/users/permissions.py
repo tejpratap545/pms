@@ -6,15 +6,44 @@ class IsSuperUser(BasePermission):
         return request.user.is_superuser
 
 
+import json
+
+
 class IsCompanyAdmin(BasePermission):
+    def __init__(self):
+        super().__init__()
+
     def has_permission(self, request, view):
         return bool(request.user and request.user.is_admin)
 
-    def has_object_permission(self, request, view, obj):
-        if request.request.method == "GET":
+    def has_object_permission(self, request, view, obj: object):
+        if request.method == "GET":
             return bool(request.user and request.user.is_authenticated)
         return bool(
             request.user
             and request.user.is_authenticated
             and request.user.company == obj.company
         )
+
+    def __call__(self):
+        return self
+
+
+class IsProfilePermission(BasePermission):
+    def __init__(self):
+        super().__init__()
+
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_admin)
+
+    def has_object_permission(self, request, view, obj: object):
+        if request.method == "GET":
+            return bool(request.user and request.user.is_authenticated)
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and request.user.company == obj.user.company
+        )
+
+    def __call__(self):
+        return self

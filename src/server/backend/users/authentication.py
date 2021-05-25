@@ -90,7 +90,12 @@ class JWTAuthentication(authentication.BaseAuthentication):
         token_id = payload.get("token_id")
         try:
             access_token = AccessToken.objects.select_related(
-                "user", "user__profile", "user__profile__department","user__company"
+                "user",
+                "user__profile",
+                "user__profile__department",
+                "user__company",
+                "user__role",
+                "user__role__permissions",
             ).get(id=token_id)
             if access_token.is_valid():
                 return access_token.user
