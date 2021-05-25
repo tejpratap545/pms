@@ -235,3 +235,37 @@ class CompanySerializer(serializers.ModelSerializer):
         # create department
 
         return company
+
+
+class SetPasswordSerializer(serializers.Serializer):
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+
+    def validate(self, attrs):
+        return self.data["password1"] == self.data["password2"]
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+
+    def validate(self, attrs):
+        return self.data["password1"] == self.data["password2"]
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    token = serializers.CharField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+
+    def validate(self, attrs):
+        return self.data["password1"] == self.data["password2"]
+
+
+class ResetPasswordTokenSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+
+class EmptySerializer(serializers.Serializer):
+    pass
