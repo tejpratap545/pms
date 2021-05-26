@@ -10,7 +10,12 @@
                 <i class="bx bx-search"></i>
               </template>
             </vs-input>
-            <vs-button @click="newActive = true"> Add </vs-button>
+            <vs-button
+              data-intro="Click to add new company"
+              @click="newActive = true"
+            >
+              Add
+            </vs-button>
           </div>
         </template>
         <template #thead>
@@ -72,6 +77,9 @@
 </template>
 
 <script>
+import "intro.js/introjs.css";
+import "intro.js/minified/introjs.min.css";
+
 export default {
   layout: "dashboard",
   middleware: ["auth"],
@@ -96,6 +104,10 @@ export default {
         title: "Error fetching companies",
       });
     }
+  },
+  mounted() {
+    const introJS = require("intro.js");
+    introJS.introJs().start();
   },
   methods: {
     deleteCompany(id) {
