@@ -6,8 +6,7 @@ from django.core.mail import send_mail
 from django.db.models import Count, OuterRef, Q, Subquery
 from django.utils.datetime_safe import datetime
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
-                                   extend_schema)
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -29,7 +28,7 @@ class ProfileInfoView(generics.RetrieveAPIView):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsProfilePermission]
+    permission_classes = [IsProfilePermission | IsSuperUser]
     filterset_fields = [
         "user__company",
         "first_reporting_manager",

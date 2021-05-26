@@ -176,7 +176,7 @@ export default {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
           })
-          .then(() => location.reload())
+          .then(() => this.$fetch())
           .catch(() => {
             this.loading = false;
             return this.$vs.notification({
@@ -191,12 +191,12 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$delete(`api/company/${id}`, {
+          .$delete(`api/company/${id}/`, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
           })
-          .then(() => location.reload())
+          .then(() => this.$fetch())
           .catch(() => {
             this.loading = false;
             return this.$vs.notification({
