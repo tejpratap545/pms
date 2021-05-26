@@ -25,7 +25,7 @@
 
       <vs-sidebar-item
         v-if="!$store.state.user.user.is_superuser"
-        id="appraisals"
+        id="my-appraisals"
         to="/sections/my-appraisals"
       >
         <template #icon>
@@ -45,14 +45,14 @@
         Department
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="employee-managment" to="/sections/employee">
+      <vs-sidebar-item id="employee" to="/sections/employee">
         <template #icon>
           <i class="bx bx-group"></i>
         </template>
         Employee Management
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="appraisal-managment" to="/sections/appraisals">
+      <vs-sidebar-item id="appraisal" to="/sections/appraisals">
         <template #icon>
           <i class="bx bx-list-check"></i>
         </template>
@@ -74,8 +74,12 @@
         <vs-row justify="center">
           <vs-avatar>
             <img
-              src="https://randomuser.me/api/portraits/women/83.jpg"
-              alt=""
+              :src="
+                $store.state.user.avatar
+                  ? $store.state.user.avatar
+                  : `https://avatars.dicebear.com/api/jdenticon/${$store.state.user.user.email}.svg`
+              "
+              alt="profile picture"
             />
           </vs-avatar>
         </vs-row>
@@ -93,6 +97,9 @@ export default {
   data: () => ({
     active: "home",
   }),
+  mounted() {
+    this.active = location.pathname.split("/").pop();
+  },
 };
 </script>
 

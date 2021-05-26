@@ -2,7 +2,7 @@
   <div class="page">
     <h1>Employee Management</h1>
     <div class="center" style="margin-top: 50px">
-      <vs-table>
+      <vs-table v-model="selected">
         <template #header>
           <div class="table-header">
             <vs-input v-model="search" placeholder="Search" shadow>
@@ -31,10 +31,19 @@
           <vs-tr
             v-for="(tr, i) in $vs.getSearch(employeeList, search)"
             :key="i"
+            :data="tr"
+            :is-selected="selected == tr"
           >
             <vs-td>
               <vs-avatar>
-                <img :src="`${tr.avatar}`" alt="Avatar" />
+                <img
+                  :src="
+                    tr.avatar
+                      ? tr.avatar
+                      : `https://avatars.dicebear.com/api/jdenticon/${tr.user.email}.svg`
+                  "
+                  alt="Avatar"
+                />
               </vs-avatar>
             </vs-td>
             <vs-td> {{ tr.user.username }} </vs-td>
@@ -68,103 +77,19 @@
       </vs-table>
     </div>
 
-    <vs-dialog v-model="resignActive">
-      <template #header> Resign Employee </template>
+    <!-- Dialogs -->
+    <NewEmployeeDialog
+      v-if="newActive"
+      :dialog="newActive"
+      @close="(newActive = false), $fetch()"
+    />
 
-      <div class="con-form">
-        <vs-input
-          v-model="resignEmployeeData.replace_employee"
-          placeholder="Resign Employee ID"
-        />
-      </div>
-
-      <template #footer>
-        <div class="footer-dialog" style="margin-top: 10px">
-          <vs-button :loading="loading" block @click="resignEmployee">
-            Add New
-          </vs-button>
-        </div>
-      </template>
-    </vs-dialog>
-
-    <vs-dialog v-model="newActive">
-      <template #header>
-        <h4 class="not-margin">Add a new <b>Employee</b></h4>
-      </template>
-
-      <div class="con-form">
-        <vs-select
-          v-if="$store.state.user.user.is_superuser"
-          v-model="newEmployeeData.user.company"
-          placeholder="Select Company"
-          style="display: contents"
-        >
-          <vs-option
-            v-for="company in companyList"
-            :key="company.id"
-            :label="company.name"
-            :value="company.id"
-          >
-            {{ company.name }}
-          </vs-option>
-        </vs-select>
-
-        <vs-input v-model="newEmployeeData.job_title" placeholder="Job title">
-          <template #icon>
-            <i class="bx bxs-user-badge"></i>
-          </template>
-        </vs-input>
-
-        <vs-input
-          v-model="newEmployeeData.user.first_name"
-          placeholder="Firstname"
-        >
-          <template #icon>
-            <i class="bx bx-user"></i>
-          </template>
-        </vs-input>
-
-        <vs-input
-          v-model="newEmployeeData.user.last_name"
-          placeholder="Lastname"
-        >
-          <template #icon>
-            <i class="bx bx-user"></i>
-          </template>
-        </vs-input>
-
-        <vs-input
-          v-model="newEmployeeData.user.username"
-          placeholder="Username"
-        >
-          <template #icon>
-            <i class="bx bx-user"></i>
-          </template>
-        </vs-input>
-
-        <vs-input
-          v-model="newEmployeeData.user.password"
-          type="password"
-          placeholder="User password"
-        >
-          <template #icon>
-            <i class="bx bxs-lock"></i>
-          </template>
-        </vs-input>
-
-        <vs-input v-model="newEmployeeData.user.email" placeholder="User email">
-          <template #icon> @ </template>
-        </vs-input>
-      </div>
-
-      <template #footer>
-        <div class="footer-dialog" style="margin-top: 10px">
-          <vs-button :loading="loading" block @click="createEmployee">
-            Add New
-          </vs-button>
-        </div>
-      </template>
-    </vs-dialog>
+    <ResignEmployeeDialog
+      v-if="resignActive"
+      :dialog="resignActive"
+      :selected-employee="selected"
+      @close="(resignActive = false), $fetch()"
+    />
   </div>
 </template>
 
@@ -176,44 +101,14 @@ export default {
     editActive: false,
     resignActive: false,
     newActive: false,
-    edit: null,
-    editProp: "",
     search: "",
-    allCheck: false,
-    page: 1,
-    max: 3,
-    active: 0,
     loading: false,
-    selected: [],
+    selected: {},
     employeeList: [],
-    singleSelected: 0,
-    resignEmployeeData: {
-      replace_employee: 0,
-    },
-    newEmployeeData: {
-      user: {
-        password: "",
-        first_name: "",
-        username: "",
-        last_name: "",
-        email: "",
-        contact_number: "",
-        company: "",
-      },
-      job_title: "",
-      address_1: "",
-      address_2: "",
-    },
-    companyList: [],
   }),
   async fetch() {
     try {
       this.employeeList = await this.$axios.$get(`api/user/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
-      this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -224,52 +119,6 @@ export default {
         title: "Error fetching employees",
       });
     }
-  },
-  methods: {
-    createEmployee() {
-      if (!this.loading) {
-        this.loading = true;
-
-        this.$axios
-          .$post(`api/user/`, this.newEmployeeData, {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-          })
-          .then(() => location.reload())
-          .catch(() => {
-            this.loading = false;
-            return this.$vs.notification({
-              color: "danger",
-              title: "Error creating employee",
-            });
-          });
-      }
-    },
-    resignEmployee() {
-      if (!this.loading) {
-        this.loading = true;
-
-        this.$axios
-          .$post(
-            `api/user/${this.singleSelected}/resign/`,
-            this.resignEmployeeData,
-            {
-              headers: {
-                Authorization: `Bearer ${this.$store.state.accessToken}`,
-              },
-            }
-          )
-          .then(() => location.reload())
-          .catch(() => {
-            this.loading = false;
-            return this.$vs.notification({
-              color: "danger",
-              title: "Error resigning employee",
-            });
-          });
-      }
-    },
   },
 };
 </script>
