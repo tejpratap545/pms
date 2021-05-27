@@ -72,6 +72,10 @@
 
       <template #footer>
         <vs-row justify="center">
+          <vs-button icon @click="tutorialActive != tutorialActive">
+            <i class="bx bx-help-circle"></i>
+          </vs-button>
+
           <vs-avatar>
             <img
               :src="
@@ -89,16 +93,61 @@
     <div>
       <Nuxt />
     </div>
+
+    <!--Dialogs -->
+
+    <vs-dialog v-model="tutorialActive" width="550px" not-center>
+      <template #header>
+        <h2 class="not-margin">PMS <b>Navigation</b></h2>
+      </template>
+
+      <div class="con-tutorials">
+        <div class="tutorial-item">
+          <p>Create new <b>Company</b></p>
+          <vs-button @click="companyCreateTutorial"> Start </vs-button>
+        </div>
+        <div class="tutorial-item"></div>
+        <div class="tutorial-item"></div>
+        <div class="tutorial-item"></div>
+      </div>
+    </vs-dialog>
   </div>
 </template>
 
 <script>
+import "intro.js/introjs.css";
+import "intro.js/minified/introjs.min.css";
+
 export default {
   data: () => ({
     active: "home",
+    tutorialActive: true,
   }),
   mounted() {
     this.active = location.pathname.split("/").pop();
+  },
+  methods: {
+    companyCreateTutorial() {
+      this.tutorialActive = false;
+      this.$router.replace("/sections/company");
+
+      // console.log(document.querySelector("#newCompanyButton"));
+
+      const introJS = require("intro.js");
+      introJS()
+        .setOptions({
+          steps: [
+            {
+              intro: "Navigator for company creation",
+            },
+            {
+              element: document.querySelector("#newCompanyButton"),
+              intro: "Click add button to create company",
+            },
+          ],
+        })
+        .start();
+    },
   },
 };
 </script>
@@ -150,5 +199,11 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.con-tutorials .tutorial-item {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
 }
 </style>
