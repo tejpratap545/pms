@@ -84,9 +84,10 @@ class TokenView(APIView):
         elif grant_type == "refresh_token":
             refresh_token = decode_jwt_token(request.data.get("refresh_token"))
             token = RefreshToken.objects.get(id=refresh_token["token_id"])
+            user = token.user
             if token.revoked is None:
-                token.revoke()
-                return self._generate_token_response(token.user, grant_type)
+                token.delete()
+                return self._generate_token_response(user, grant_type)
 
             else:
                 return self._invalid_grant_response()

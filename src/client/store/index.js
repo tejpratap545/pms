@@ -23,21 +23,39 @@ export const actions = {
       if (expire - Date.now() < 24 * 60 * 60 * 1000) {
         // if the token expires in less than a day then refresh token
 
-        await fetch("/api/refresh", {
-          method: "POST",
+        try {
+          const response = await this.$axios.$post(`auth/token/`, {
+            grant_type: "refresh_token",
+            refresh_token: req.session.tokens.refresh_token,
+          });
+          const tokens = response.data;
+          req.session.isAuthenticate = true;
+          req.session.tokens = tokens;
+        } catch (error) {
+          req.session.destroy();
+          return;
+        }
+      }
+      try {
+        const user = await this.$axios.get(`api/profile/me`, {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${req.session.tokens.access_token}`,
           },
         });
+
+        req.session.user = user.data;
+
+        commit("SET_USER", req.session.user);
+        commit("SET_TOKEN", req.session.tokens.access_token);
+
+        this.$axios.setHeader(
+          "Authorization",
+          "Bearer " + `${req.session.tokens.access_token}`
+        );
+      } catch (error) {
+        console.log(error);
+        req.session.destroy();
       }
-
-      commit("SET_USER", req.session.user);
-      commit("SET_TOKEN", req.session.tokens.access_token);
-
-      this.$axios.setHeader(
-        "Authorization",
-        "Bearer " + `${req.session.tokens.access_token}`
-      );
     }
   },
 };
