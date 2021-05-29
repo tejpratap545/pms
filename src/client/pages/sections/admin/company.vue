@@ -10,32 +10,33 @@
                 <i class="bx bx-search"></i>
               </template>
             </vs-input>
-            <vs-button id="newCompanyButton" @click="newActive = true">
-              Add
-            </vs-button>
+            <vs-button id="step1" @click="newActive = true"> Add </vs-button>
           </div>
         </template>
         <template #thead>
           <vs-tr>
             <vs-th
               sort
-              @click="company = $vs.sortData($event, company, 'name')"
+              @click="companyList = $vs.sortData($event, companyList, 'name')"
             >
               Name
             </vs-th>
             <vs-th
               sort
-              @click="company = $vs.sortData($event, company, 'domain')"
+              @click="companyList = $vs.sortData($event, companyList, 'domain')"
             >
               Domain
             </vs-th>
-            <vs-th sort @click="company = $vs.sortData($event, company, 'id')">
+            <vs-th
+              sort
+              @click="companyList = $vs.sortData($event, companyList, 'id')"
+            >
               Id
             </vs-th>
           </vs-tr>
         </template>
         <template #tbody>
-          <vs-tr v-for="(tr, i) in $vs.getSearch(company, search)" :key="i">
+          <vs-tr v-for="(tr, i) in $vs.getSearch(companyList, search)" :key="i">
             <vs-td>
               {{ tr.name }}
             </vs-td>
@@ -64,6 +65,8 @@
       </vs-table>
     </div>
 
+    <v-tour name="companyCreateTour" :steps="companyCreateSteps"></v-tour>
+
     <!-- Dialogs -->
     <NewCompanyDialog
       v-if="newActive"
@@ -83,11 +86,20 @@ export default {
     search: "",
     loading: false,
     selected: [],
-    company: [],
+    companyList: [],
+    companyCreateSteps: [
+      {
+        target: "#step1", // We're using document.querySelector() under the hood
+        header: {
+          title: "Get Started",
+        },
+        content: `Discover <strong>Vue Tour</strong>!`,
+      },
+    ],
   }),
   async fetch() {
     try {
-      this.company = await this.$axios.$get(`api/company/`, {
+      this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },

@@ -46,7 +46,7 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["@/plugins/vuesax", "@/plugins/axios.js"],
+  plugins: ["@/plugins/vuesax", "@/plugins/axios.js", "@/plugins/vuetour.js"],
 
   publicRuntimeConfig: {
     baseURL: process.env.API_BASE_URL || "http://127.0.0.1:8000/",

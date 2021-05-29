@@ -12,16 +12,32 @@
         Home
       </vs-sidebar-item>
 
-      <vs-sidebar-item
-        v-if="$store.state.user.user.is_superuser"
-        id="company"
-        to="/sections/company"
+      <vs-sidebar-group
+        v-if="
+          $store.state.user.user.is_superuser || $store.state.user.user.is_admin
+        "
       >
-        <template #icon>
-          <i class="bx bx-building"></i>
+        <template #header>
+          <vs-sidebar-item arrow>
+            <template #icon> <i class="bx bx-user-pin"></i> </template>
+            Admin
+          </vs-sidebar-item>
         </template>
-        Company Management
-      </vs-sidebar-item>
+
+        <vs-sidebar-item id="admin-department" to="/sections/admin/department">
+          <template #icon>
+            <i class="bx bx-tag-alt"></i>
+          </template>
+          Department Management
+        </vs-sidebar-item>
+
+        <vs-sidebar-item id="admin-company" to="/sections/admin/company">
+          <template #icon>
+            <i class="bx bx-building"></i>
+          </template>
+          Company Management
+        </vs-sidebar-item>
+      </vs-sidebar-group>
 
       <vs-sidebar-item
         v-if="!$store.state.user.user.is_superuser"
@@ -115,9 +131,6 @@
 </template>
 
 <script>
-import "intro.js/introjs.css";
-import "intro.js/minified/introjs.min.css";
-
 export default {
   data: () => ({
     active: "home",
@@ -132,21 +145,9 @@ export default {
       this.$router.replace("/sections/company");
 
       // console.log(document.querySelector("#newCompanyButton"));
+      // console.log(this.$tours.companyCreateTour);
 
-      const introJS = require("intro.js");
-      introJS()
-        .setOptions({
-          steps: [
-            {
-              intro: "Navigator for company creation",
-            },
-            {
-              element: document.querySelector("#newCompanyButton"),
-              intro: "Click add button to create company",
-            },
-          ],
-        })
-        .start();
+      this.$tours.companyCreateTour.start();
     },
   },
 };
