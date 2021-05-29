@@ -46,12 +46,6 @@
       <vs-input v-model="newDepartmentData.name" placeholder="Name">
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
-      <!-- 
-      <vs-input v-model="newDepartmentData.logo" type="file">
-        <template #icon>
-          <i class="bx bxs-florist"></i>
-        </template>
-      </vs-input> -->
     </div>
 
     <template #footer>
@@ -69,11 +63,12 @@ export default {
   name: "NewDepartmentDialog",
   props: {
     dialog: Boolean,
+    // eslint-disable-next-line vue/require-default-prop
+    companyList: Array,
   },
   data: () => ({
     active: false,
     loading: false,
-    companyList: [],
     employeeList: [],
     newDepartmentData: {
       name: "",
@@ -83,11 +78,6 @@ export default {
   }),
   async fetch() {
     try {
-      this.companyList = await this.$axios.$get(`api/company/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
       this.employeeList = await this.$axios.$get(`api/user/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,

@@ -26,6 +26,14 @@
             <vs-th
               sort
               @click="
+                departmentList = $vs.sortData($event, departmentList, 'company')
+              "
+            >
+              company
+            </vs-th>
+            <vs-th
+              sort
+              @click="
                 departmentList = $vs.sortData($event, departmentList, 'id')
               "
             >
@@ -40,6 +48,9 @@
           >
             <vs-td>
               {{ tr.name }}
+            </vs-td>
+            <vs-td>
+              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
             </vs-td>
             <vs-td>
               {{ tr.id }}
@@ -63,6 +74,7 @@
     <NewDepartmentDialog
       v-if="newActive"
       :dialog="newActive"
+      :company-list="companyList"
       @close="(newActive = false), $fetch()"
     />
   </div>
@@ -78,10 +90,17 @@ export default {
     search: "",
     loading: false,
     selected: [],
+    companyList: [],
     departmentList: [],
   }),
   async fetch() {
     try {
+      this.companyList = await this.$axios.$get(`api/company/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
       this.departmentList = await this.$axios.$get(`api/department/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
