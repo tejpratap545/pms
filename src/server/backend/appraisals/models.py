@@ -1,4 +1,4 @@
-from backend.users.models import Company
+from backend.users.models import Company, Profile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.datetime_safe import date
@@ -72,6 +72,9 @@ class Appraisal(models.Model):
         (9, "STAGE 3: hod approved year approve stage"),
     )
     overall_appraisal = models.ForeignKey(OverAllAppraisal, on_delete=models.CASCADE)
+    employee: Profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, blank=True, null=True
+    )
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, blank=True)
 
     stage1_employee_comment = models.TextField(blank=True, null=True)

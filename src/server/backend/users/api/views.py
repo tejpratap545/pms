@@ -28,7 +28,7 @@ class ProfileInfoView(generics.RetrieveAPIView):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsProfilePermission | IsSuperUser]
+    permission_classes = [IsPermission(permissions="CAN_MANAGE_EMPLOYEE") | IsSuperUser]
     filterset_fields = [
         "user__company",
         "first_reporting_manager",

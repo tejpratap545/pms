@@ -10,7 +10,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend.users.models import AccessToken, Company, Profile, RefreshToken, User
+from backend.users.models import (AccessToken, Company, Profile, RefreshToken,
+                                  User)
 
 from .backend import decode_jwt_token, encode_jwt_token
 

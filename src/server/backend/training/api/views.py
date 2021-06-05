@@ -1,4 +1,4 @@
-from backend.users.permissions import IsCompanyAdmin
+from backend.users.permissions import *
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
@@ -7,7 +7,9 @@ from .serializers import *
 
 
 class GoalCategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsCompanyAdmin]
+    permission_classes = [
+        IsCompanyAdmin | IsPermission(permissions=["CAN_MANAGE_COMPANY"])
+    ]
     serializer_class = GoalCategorySerializer
     filterset_fields = ["company"]
     search_fields = ["name"]
@@ -21,7 +23,9 @@ class GoalCategoryViewSet(viewsets.ModelViewSet):
 
 
 class CoreValueCategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsCompanyAdmin]
+    permission_classes = [
+        IsCompanyAdmin | IsPermission(permissions=["CAN_MANAGE_COMPANY"])
+    ]
     serializer_class = CoreValueCategorySerializer
     filterset_fields = ["company"]
     search_fields = ["name"]
@@ -35,7 +39,9 @@ class CoreValueCategoryViewSet(viewsets.ModelViewSet):
 
 
 class SkillsCategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsCompanyAdmin]
+    permission_classes = [
+        IsCompanyAdmin | IsPermission(permissions=["CAN_MANAGE_COMPANY"])
+    ]
     serializer_class = SkillsCategorySerializer
     filterset_fields = ["company"]
     search_fields = ["name"]

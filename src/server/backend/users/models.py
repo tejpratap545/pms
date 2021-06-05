@@ -134,7 +134,7 @@ class Profile(models.Model):
     )
 
     # persional information
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user:User = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatar", blank=True, null=True)
 
     gender = models.CharField(
@@ -189,6 +189,11 @@ class Profile(models.Model):
     skill1 = models.CharField(max_length=50, blank=True, null=True)
     skill2 = models.CharField(max_length=50, blank=True, null=True)
     skill3 = models.CharField(max_length=50, blank=True, null=True)
+
+
+    @property
+    def name(self):
+        return f"{self.user.first_name} {self.user.last_name}"  
 
 
 class AccessToken(models.Model):
@@ -256,3 +261,15 @@ class ResetPasswordToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Logs(models.Model):
+    COLOR_CHOCE = (
+        ("info", "INFO"),
+        ("success", "SUCCESSS"),
+        ("errro", "ERROR"),
+    )
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
+    title = models.CharField(max_length=250)
+    description = models.TextField()
+    color = models.CharField(max_length=100, choices=COLOR_CHOCE)

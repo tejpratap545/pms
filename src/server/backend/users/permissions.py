@@ -10,6 +10,8 @@ import json
 
 
 class IsCompanyAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return True
 
     def has_object_permission(self, request, view, obj: object):
         if request.method == "GET":
@@ -18,13 +20,10 @@ class IsCompanyAdmin(BasePermission):
             request.user and request.user.is_authenticated and request.user.is_admin
         )
 
-    def __call__(self):
-        return self
 
-
-class IsProfilePermission(BasePermission):
-    def __init__(self):
-        super().__init__()
+class IsPermission(BasePermission):
+    def __init__(self, permissions):
+        self.permissions = permissions
 
     def has_object_permission(self, request, view, obj: object):
         if request.method == "GET":
@@ -35,7 +34,7 @@ class IsProfilePermission(BasePermission):
                 and request.user.is_authenticated
                 and (
                     request.user.role.permissions.filter(
-                        name="CAN_MANAGE_COMPANY"
+                        name__in=self.permissions
                     ).exists()
                 )
             )
@@ -45,7 +44,7 @@ class IsProfilePermission(BasePermission):
                 and request.user.is_authenticated
                 and (
                     request.user.role.permissions.filter(
-                        name="CAN_MANAGE_COMPANY"
+                        name__in=self.permissions
                     ).exists()
                     or obj == request.profile
                 )

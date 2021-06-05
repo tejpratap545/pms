@@ -1,6 +1,6 @@
+from backend.appraisals.api.views import *
 from backend.training.api.views import *
 from backend.users.api.views import *
-from backend.users.api.views import CompanyViewSet, DepartmentViewSet
 from django.conf import settings
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
@@ -21,5 +21,8 @@ router.register(
     "category/core_value", CoreValueCategoryViewSet, basename="CoreValueCategory"
 )
 router.register("category/skills", SkillsCategoryViewSet, basename="SkillsCategory")
+router.register(
+    "over-all-appraisal", OverAllAppraisalViewSet, basename="OverAllAppraisal"
+)
 app_name = "pms"
 urlpatterns = router.urls
