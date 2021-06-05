@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog v-model="active" not-close prevent-close>
+  <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
       <h4 class="not-margin">
         Resign Employee
@@ -11,7 +11,8 @@
       </vs-button>
     </template>
 
-    <div class="con-form">
+    <div v-if="$fetchState.pending"></div>
+    <div v-else class="con-form">
       <vs-select
         v-model="replace_employee"
         :placeholder="`Employee to replace ${selectedEmployee.user.username}`"
@@ -21,7 +22,7 @@
         <vs-option
           v-for="employee in employeeList"
           :key="employee.id"
-          label="employee.user.username"
+          :placeholder="employee.user.username"
           :value="employee.id"
         >
           {{ employee.user.username }}

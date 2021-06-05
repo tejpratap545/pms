@@ -37,12 +37,19 @@
           </template>
           Company Management
         </vs-sidebar-item>
+
+        <vs-sidebar-item id="admin-appraisals" to="/sections/admin/appraisals">
+          <template #icon>
+            <i class="bx bx-list-check"></i>
+          </template>
+          Appraisal Management
+        </vs-sidebar-item>
       </vs-sidebar-group>
 
       <vs-sidebar-item
         v-if="!$store.state.user.user.is_superuser"
         id="my-appraisals"
-        to="/sections/my-appraisals"
+        to="/sections/appraisals"
       >
         <template #icon>
           <i class="bx bx-message-square-dots"></i>
@@ -66,13 +73,6 @@
           <i class="bx bx-group"></i>
         </template>
         Employee Management
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="appraisal" to="/sections/appraisals">
-        <template #icon>
-          <i class="bx bx-list-check"></i>
-        </template>
-        Appraisal Management
       </vs-sidebar-item>
 
       <vs-sidebar-item
@@ -134,7 +134,7 @@
 export default {
   data: () => ({
     active: "home",
-    tutorialActive: true,
+    tutorialActive: false,
   }),
   mounted() {
     this.active = location.pathname.split("/").pop();

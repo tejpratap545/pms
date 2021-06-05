@@ -19,7 +19,7 @@
         <vs-option
           v-for="company in companyList"
           :key="company.id"
-          :label="company.name"
+          :placeholder="company.name"
           :value="company.id"
         >
           {{ company.name }}

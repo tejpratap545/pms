@@ -88,3 +88,14 @@ a:hover {
     padding: 10px;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 16px;
+  background-color: #eee;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}

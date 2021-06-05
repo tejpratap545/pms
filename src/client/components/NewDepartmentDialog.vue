@@ -20,7 +20,7 @@
         <vs-option
           v-for="company in companyList"
           :key="company.id"
-          :label="company.name"
+          :placeholder="company.name"
           :value="company.id"
         >
           {{ company.name }}
@@ -36,7 +36,7 @@
         <vs-option
           v-for="employee in employeeList"
           :key="employee.id"
-          label="employee.user.username"
+          placeholder="employee.user.username"
           :value="employee.id"
         >
           {{ employee.user.username }}
