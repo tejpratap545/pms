@@ -5,7 +5,7 @@
       <vs-table v-model="selected">
         <template #header>
           <div class="table-header">
-            <vs-input v-model="search" label="Search" shadow>
+            <vs-input v-model="search" placeholder="Search" shadow>
               <template #icon>
                 <i class="bx bx-search"></i>
               </template>

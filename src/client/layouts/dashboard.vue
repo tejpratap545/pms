@@ -1,9 +1,20 @@
 <template>
   <div class="hidden">
-    <vs-sidebar v-model="active" absolute reduce open>
+    <vs-sidebar v-model="active" :reduce="reduce" open>
       <template #logo>
-        <img src="~/assets/img/icon.png" />
+        <vs-button
+          style="margin-left: 10px"
+          icon
+          flat
+          @click="reduce = !reduce"
+        >
+          <i class="bx bx-menu-alt-left"></i>
+        </vs-button>
       </template>
+
+      <div v-if="!reduce" class="hero-image">
+        <img src="~/assets/img/icon.png" class="hero" alt="hero" />
+      </div>
 
       <vs-sidebar-item id="home" to="/">
         <template #icon>
@@ -134,6 +145,7 @@
 export default {
   data: () => ({
     active: "home",
+    reduce: true,
     tutorialActive: false,
   }),
   mounted() {
@@ -206,5 +218,15 @@ html {
   display: flex;
   justify-content: space-between;
   margin-left: 10px;
+}
+
+.hero-image {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-image img {
+  height: 100px;
 }
 </style>
