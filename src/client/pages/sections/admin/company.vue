@@ -2,7 +2,7 @@
   <div class="page">
     <h1>Company Management</h1>
     <div class="center" style="margin-top: 50px">
-      <vs-table>
+      <vs-table v-model="selected">
         <template #header>
           <div class="table-header">
             <vs-input v-model="search" placeholder="Search" shadow>
@@ -36,7 +36,12 @@
           </vs-tr>
         </template>
         <template #tbody>
-          <vs-tr v-for="(tr, i) in $vs.getSearch(companyList, search)" :key="i">
+          <vs-tr
+            v-for="(tr, i) in $vs.getSearch(companyList, search)"
+            :key="i"
+            :data="selected"
+            :is-selected="selected == tr"
+          >
             <vs-td>
               {{ tr.name }}
             </vs-td>
@@ -50,10 +55,14 @@
             <template #expand>
               <div class="con-content">
                 <div>
-                  <vs-button flat icon>
-                    <i class="bx bx-lock-open-alt"></i>
+                  <vs-button
+                    color="success"
+                    flat
+                    icon
+                    @click="editActive = true"
+                  >
+                    <i class="bx bx-edit-alt"></i>
                   </vs-button>
-                  <vs-button flat icon> Send Email </vs-button>
                   <vs-button border danger @click="deleteCompany(tr.id)">
                     Delete company
                   </vs-button>
@@ -73,6 +82,13 @@
       :dialog="newActive"
       @close="(newActive = false), $fetch()"
     />
+
+    <EditCompanyDialog
+      v-if="editActive"
+      :dialog="editActive"
+      :selected-company="selected"
+      @close="(editActive = false), $fetch()"
+    />
   </div>
 </template>
 
@@ -85,7 +101,7 @@ export default {
     newActive: false,
     search: "",
     loading: false,
-    selected: [],
+    selected: {},
     companyList: [],
     companyCreateSteps: [
       {

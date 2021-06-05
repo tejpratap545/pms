@@ -1,7 +1,7 @@
 <template>
   <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
-      <h4 class="not-margin">Add a new <b>Department</b></h4>
+      <h4 class="not-margin">Update <b>Employee</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>
@@ -12,9 +12,8 @@
     <div v-else class="con-form">
       <vs-select
         v-if="$store.state.user.user.is_superuser"
-        v-model="newDepartmentData.company"
+        v-model="employeeData.user.company"
         placeholder="Select Company"
-        style="margin-bottom: 10px"
         block
         filter
       >
@@ -28,31 +27,53 @@
         </vs-option>
       </vs-select>
 
-      <vs-select
-        v-model="newDepartmentData.manager"
-        placeholder="Manager"
-        block
-        filter
-      >
-        <vs-option
-          v-for="employee in employeeList"
-          :key="employee.id"
-          :label="employee.user.username"
-          :value="employee.id"
-        >
-          {{ employee.user.username }}
-        </vs-option>
-      </vs-select>
+      <vs-input v-model="employeeData.job_title" placeholder="Job title">
+        <template #icon>
+          <i class="bx bxs-user-badge"></i>
+        </template>
+      </vs-input>
 
-      <vs-input v-model="newDepartmentData.name" placeholder="Name">
-        <template #icon> <i class="bx bx-tag-alt"></i> </template>
+      <vs-input v-model="employeeData.user.first_name" placeholder="Firstname">
+        <template #icon>
+          <i class="bx bx-user"></i>
+        </template>
+      </vs-input>
+
+      <vs-input v-model="employeeData.user.last_name" placeholder="Lastname">
+        <template #icon>
+          <i class="bx bx-user"></i>
+        </template>
+      </vs-input>
+
+      <vs-input v-model="employeeData.user.username" placeholder="Username">
+        <template #icon>
+          <i class="bx bx-user"></i>
+        </template>
+      </vs-input>
+
+      <vs-input
+        v-model="employeeData.user.password"
+        type="password"
+        placeholder="User password"
+      >
+        <template #icon>
+          <i class="bx bxs-lock"></i>
+        </template>
+      </vs-input>
+
+      <vs-input v-model="employeeData.user.email" placeholder="User email">
+        <template #icon> @ </template>
       </vs-input>
     </div>
 
     <template #footer>
       <div class="footer-dialog">
-        <vs-button :loading="loading" block @click="createDepartment">
-          Add New
+        <vs-button
+          :loading="loading"
+          block
+          @click="updateEmployee(employeeData.id)"
+        >
+          Update
         </vs-button>
       </div>
     </template>
@@ -61,26 +82,22 @@
 
 <script>
 export default {
-  name: "NewDepartmentDialog",
+  name: "EditEmployeeDialog",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
-    companyList: Array,
+    selectedEmployee: Object,
   },
   data: () => ({
     active: false,
     loading: false,
-    employeeList: [],
-    newDepartmentData: {
-      name: "",
-      company: 0,
-      manager: 0,
-    },
+    companyList: [],
+    employeeData: {},
   }),
   async fetch() {
     this.loading = true;
     try {
-      this.employeeList = await this.$axios.$get(`api/user/`, {
+      this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -95,17 +112,18 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
+    this.employeeData = this.selectedEmployee;
   },
   methods: {
     closeDialog() {
       this.$emit("close");
     },
-    createDepartment() {
+    updateEmployee(id) {
       if (!this.loading) {
         this.loading = true;
 
         this.$axios
-          .$post(`api/department/`, this.newDepartmentData, {
+          .$patch(`api/user/${id}`, this.employeeData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
@@ -115,7 +133,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating department",
+              title: "Error updating employee",
             });
           });
       }

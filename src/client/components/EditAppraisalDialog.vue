@@ -7,7 +7,7 @@
     width="500px"
   >
     <template #header>
-      <h4 class="not-margin">Add a new <b>Appraisal</b></h4>
+      <h4 class="not-margin">Update <b>Appraisal</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>
@@ -18,7 +18,7 @@
     <div v-else class="con-form">
       <vs-select
         v-if="$store.state.user.user.is_superuser"
-        v-model="newAppraisalData.company"
+        v-model="appraisalData.company"
         placeholder="Select Company"
         style="margin-bottom: 10px"
         block
@@ -35,7 +35,7 @@
       </vs-select>
 
       <vs-select
-        v-model="newAppraisalData.individual_employees"
+        v-model="appraisalData.individual_employees"
         placeholder="Select Employees"
         style="margin-bottom: 10px"
         block
@@ -43,9 +43,9 @@
         multiple
       >
         <vs-option
-          v-for="employee in newAppraisalData.company
+          v-for="employee in appraisalData.company
             ? employeeList.filter(
-                (x) => x.user.company == newAppraisalData.company
+                (x) => x.user.company == appraisalData.company
               )
             : employeeList"
           :key="employee.id"
@@ -58,7 +58,7 @@
 
       <vs-select
         v-if="departmentList != null"
-        v-model="newAppraisalData.departments"
+        v-model="appraisalData.departments"
         placeholder="Select Departments"
         style="margin-bottom: 10px"
         block
@@ -66,10 +66,8 @@
         multiple
       >
         <vs-option
-          v-for="department in newAppraisalData.company
-            ? departmentList.filter(
-                (x) => x.company == newAppraisalData.company
-              )
+          v-for="department in appraisalData.company
+            ? departmentList.filter((x) => x.company == appraisalData.company)
             : departmentList"
           :key="department.id"
           :label="department.name"
@@ -79,14 +77,14 @@
         </vs-option>
       </vs-select>
 
-      <vs-input v-model="newAppraisalData.name" placeholder="Appraisal Name">
+      <vs-input v-model="appraisalData.name" placeholder="Appraisal Name">
         <template #icon>
           <i class="bx bx-building"></i>
         </template>
       </vs-input>
 
       <vs-select
-        v-model="newAppraisalData.stage"
+        v-model="appraisalData.stage"
         placeholder="Select Stage"
         style="margin-bottom: 10px"
         block
@@ -99,56 +97,56 @@
 
       <div class="con-form-control">
         <p>Stage 1 Start date</p>
-        <vs-input v-model="newAppraisalData.stage1_start_date" type="date">
+        <vs-input v-model="appraisalData.stage1_start_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Stage 1 End date</p>
-        <vs-input v-model="newAppraisalData.stage1_end_date" type="date">
+        <vs-input v-model="appraisalData.stage1_end_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Stage 2 Start date</p>
-        <vs-input v-model="newAppraisalData.stage2_start_date" type="date">
+        <vs-input v-model="appraisalData.stage2_start_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Stage 2 End date</p>
-        <vs-input v-model="newAppraisalData.stage2_end_date" type="date">
+        <vs-input v-model="appraisalData.stage2_end_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Stage 3 Start date</p>
-        <vs-input v-model="newAppraisalData.stage3_start_date" type="date">
+        <vs-input v-model="appraisalData.stage3_start_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Stage 3 End date</p>
-        <vs-input v-model="newAppraisalData.stage3_end_date" type="date">
+        <vs-input v-model="appraisalData.stage3_end_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Reports End date</p>
-        <vs-input v-model="newAppraisalData.reports_end_date" type="date">
+        <vs-input v-model="appraisalData.reports_end_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
 
       <div class="con-form-control">
         <p>Calibration End date</p>
-        <vs-input v-model="newAppraisalData.calibration_end_date" type="date">
+        <vs-input v-model="appraisalData.calibration_end_date" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
@@ -156,8 +154,12 @@
 
     <template #footer>
       <div class="footer-dialog">
-        <vs-button :loading="loading" block @click="createAppraisal">
-          Add New
+        <vs-button
+          :loading="loading"
+          block
+          @click="updateAppraisal(appraisalData.id)"
+        >
+          Update
         </vs-button>
       </div>
     </template>
@@ -166,36 +168,20 @@
 
 <script>
 export default {
-  name: "NewAppraisalDialog",
+  name: "EditAppraisalDialog",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     companyList: Array,
+    // eslint-disable-next-line vue/require-default-prop
+    selectedAppraisal: Object,
   },
   data: () => ({
     active: false,
     loading: false,
     employeeList: [],
     departmentList: [],
-    newAppraisalData: {
-      individual_employees: [],
-      departments: [],
-      is_company: false,
-      name: "",
-      stage: 0,
-      goal_weightage: 0,
-      core_value_weightage: 0,
-      skill_weightage: 0,
-      stage1_start_date: "",
-      stage1_end_date: "",
-      stage2_start_date: "",
-      stage2_end_date: "",
-      stage3_start_date: "",
-      stage3_end_date: "",
-      reports_end_date: "",
-      calibration_end_date: "",
-      company: 0,
-    },
+    appraisalData: {},
   }),
   async fetch() {
     this.loading = true;
@@ -221,17 +207,18 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
+    this.appraisalData = this.selectedAppraisal;
   },
   methods: {
     closeDialog() {
       this.$emit("close");
     },
-    createAppraisal() {
+    updateAppraisal(id) {
       if (!this.loading) {
         this.loading = true;
 
         this.$axios
-          .$post(`api/over-all-appraisal/`, this.newAppraisalData, {
+          .$patch(`api/over-all-appraisal/${id}`, this.appraisalData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },

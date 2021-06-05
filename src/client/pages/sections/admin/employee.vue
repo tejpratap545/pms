@@ -58,15 +58,15 @@
             <template #expand>
               <div class="con-content">
                 <div>
-                  <vs-button flat icon>
-                    <i class="bx bx-lock-open-alt"></i>
-                  </vs-button>
-                  <vs-button flat icon> Send Email </vs-button>
                   <vs-button
-                    border
-                    danger
-                    @click="(resignActive = true), (singleSelected = tr.id)"
+                    color="success"
+                    flat
+                    icon
+                    @click="editActive = true"
                   >
+                    <i class="bx bx-edit-alt"></i>
+                  </vs-button>
+                  <vs-button border danger @click="resignActive = true">
                     Resign employee
                   </vs-button>
                 </div>
@@ -82,6 +82,13 @@
       v-if="newActive"
       :dialog="newActive"
       @close="(newActive = false), $fetch()"
+    />
+
+    <EditEmployeeDialog
+      v-if="editActive"
+      :dialog="editActive"
+      :selected-employee="selected"
+      @close="(editActive = false), $fetch()"
     />
 
     <ResignEmployeeDialog

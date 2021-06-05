@@ -2,7 +2,7 @@
   <div class="page">
     <h1>Overall Appraisal Management</h1>
     <div class="center" style="margin-top: 50px">
-      <vs-table>
+      <vs-table v-model="selected">
         <template #header>
           <div class="table-header">
             <vs-input v-model="search" placeholder="Search" shadow>
@@ -43,6 +43,8 @@
           <vs-tr
             v-for="(tr, i) in $vs.getSearch(appraisalList, search)"
             :key="i"
+            :data="tr"
+            :is-selected="selected == tr"
           >
             <vs-td>
               {{ tr.name }}
@@ -57,6 +59,14 @@
             <template #expand>
               <div class="con-content">
                 <div>
+                  <vs-button
+                    color="success"
+                    flat
+                    icon
+                    @click="editActive = true"
+                  >
+                    <i class="bx bx-edit-alt"></i>
+                  </vs-button>
                   <vs-button border danger @click="deleteAppraisal(tr.id)">
                     Delete appraisal
                   </vs-button>
@@ -75,6 +85,14 @@
       :company-list="companyList"
       @close="(newActive = false), $fetch()"
     />
+
+    <EditAppraisalDiaglog
+      v-if="editActive"
+      :dialog="editActive"
+      :company-list="companyList"
+      :selected-appraisal="selected"
+      @close="(editActive = false), $fetch()"
+    />
   </div>
 </template>
 
@@ -87,7 +105,7 @@ export default {
     newActive: false,
     search: "",
     loading: false,
-    selected: [],
+    selected: {},
     companyList: [],
     appraisalList: [],
   }),

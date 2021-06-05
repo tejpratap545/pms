@@ -44,6 +44,13 @@
           </template>
           Appraisal Management
         </vs-sidebar-item>
+
+        <vs-sidebar-item id="admin-employee" to="/sections/admin/employee">
+          <template #icon>
+            <i class="bx bx-group"></i>
+          </template>
+          Employee Management
+        </vs-sidebar-item>
       </vs-sidebar-group>
 
       <vs-sidebar-item
@@ -66,13 +73,6 @@
           <i class="bx bx-building-house"></i>
         </template>
         Department
-      </vs-sidebar-item>
-
-      <vs-sidebar-item id="employee" to="/sections/employee">
-        <template #icon>
-          <i class="bx bx-group"></i>
-        </template>
-        Employee Management
       </vs-sidebar-item>
 
       <vs-sidebar-item

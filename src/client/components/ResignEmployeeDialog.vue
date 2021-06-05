@@ -22,7 +22,7 @@
         <vs-option
           v-for="employee in employeeList"
           :key="employee.id"
-          :placeholder="employee.user.username"
+          :label="employee.user.username"
           :value="employee.id"
         >
           {{ employee.user.username }}
@@ -55,6 +55,7 @@ export default {
     replace_employee: 0,
   }),
   async fetch() {
+    this.loading = true;
     try {
       this.employeeList = await this.$axios.$get(`api/user/`, {
         headers: {
@@ -67,6 +68,7 @@ export default {
         title: "Error fetching employees",
       });
     }
+    this.loading = false;
   },
   mounted() {
     this.active = this.dialog;

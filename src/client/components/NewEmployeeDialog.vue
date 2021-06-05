@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog v-model="active" not-close prevent-close>
+  <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
       <h4 class="not-margin">Add a new <b>Employee</b></h4>
 
@@ -8,7 +8,8 @@
       </vs-button>
     </template>
 
-    <div class="con-form">
+    <div v-if="$fetchState.pending"></div>
+    <div v-else class="con-form">
       <vs-select
         v-if="$store.state.user.user.is_superuser"
         v-model="newEmployeeData.user.company"
@@ -19,7 +20,7 @@
         <vs-option
           v-for="company in companyList"
           :key="company.id"
-          :placeholder="company.name"
+          :label="company.name"
           :value="company.id"
         >
           {{ company.name }}
@@ -104,6 +105,7 @@ export default {
     },
   }),
   async fetch() {
+    this.loading = true;
     try {
       this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
@@ -116,6 +118,7 @@ export default {
         title: "Error fetching employees",
       });
     }
+    this.loading = false;
   },
   mounted() {
     this.active = this.dialog;
