@@ -39,7 +39,7 @@ services:
     env_file:
       - ./.envs/.nuxt
     volumes:
-      - ./src/Client:/app
+      - ./src/client:/app
     ports:
       - 3000:3000
     command: /start
