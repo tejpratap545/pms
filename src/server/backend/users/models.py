@@ -134,7 +134,7 @@ class Profile(models.Model):
     )
 
     # persional information
-    user:User = models.OneToOneField(User, on_delete=models.CASCADE)
+    user: User = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatar", blank=True, null=True)
 
     gender = models.CharField(
@@ -190,10 +190,9 @@ class Profile(models.Model):
     skill2 = models.CharField(max_length=50, blank=True, null=True)
     skill3 = models.CharField(max_length=50, blank=True, null=True)
 
-
     @property
     def name(self):
-        return f"{self.user.first_name} {self.user.last_name}"  
+        return f"{self.user.first_name} {self.user.last_name}"
 
 
 class AccessToken(models.Model):

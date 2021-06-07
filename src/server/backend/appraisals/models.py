@@ -64,12 +64,12 @@ class Appraisal(models.Model):
         (6, "STAGE 2: Manager mid year approve stage"),
         (7, "STAGE 2: Manager Approved mid year review"),
         # stage 3
-        (4, "STAGE 3: Employee end year review stage"),
-        (5, "STAGE 3: Employee end year submit stage"),
-        (6, "STAGE 3: Manager end year approve stage"),
-        (7, "STAGE 3: Manager Approved end year review"),
-        (8, "STAGE 3: hod end year approve stage"),
-        (9, "STAGE 3: hod approved year approve stage"),
+        (8, "STAGE 3: Employee end year review stage"),
+        (9, "STAGE 3: Employee end year submit stage"),
+        (10, "STAGE 3: Manager end year approve stage"),
+        (11, "STAGE 3: Manager Approved end year review"),
+        (12, "STAGE 3: hod end year approve stage"),
+        (13, "STAGE 3: hod approved year approve stage"),
     )
     overall_appraisal = models.ForeignKey(OverAllAppraisal, on_delete=models.CASCADE)
     employee: Profile = models.ForeignKey(
@@ -91,3 +91,6 @@ class Appraisal(models.Model):
     stage3_rejection_comment = models.TextField(blank=True, null=True)
 
     other_properties = models.JSONField(blank=True, null=True)
+
+    # def is_all_goal_approaved(self):
+    #     if self.goals_set.all()
