@@ -43,7 +43,7 @@ services:
     ports:
       - 3000:3000
     command: /start
-    depends_on:
+    depends_on: 
       - redis
 
   nginx:
@@ -59,7 +59,9 @@ services:
     depends_on:
       - django
       - nuxt
-#   redis:
-#     image: redis
-#     ports:
-#       - 6379:6379
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
