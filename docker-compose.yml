@@ -37,7 +37,7 @@ services:
       dockerfile: ./compose/nuxt/Dockerfile
     container_name: denselight_nuxt
     env_file:
-      - ./.envs/production/.nuxt
+      - ./.envs/.nuxt
     volumes:
       - ./src/Client:/app
     ports:
