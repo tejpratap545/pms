@@ -1,7 +1,6 @@
 import logging
 
 import sentry_sdk
-from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
@@ -93,7 +92,7 @@ LOGGING = {
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "backend.Profile.authentication.JWTAuthentication",
+        "backend.users.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
@@ -134,7 +133,7 @@ sentry_logging = LoggingIntegration(
 )
 sentry_sdk.init(
     dsn=SENTRY_DSN,
-    integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
+    integrations=[sentry_logging, DjangoIntegration()],
 )
 
 

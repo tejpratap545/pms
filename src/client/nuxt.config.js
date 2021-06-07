@@ -36,7 +36,7 @@ export default {
       saveUninitialized: true,
       // eslint-disable-next-line new-cap
       store: new redisStore({
-        host: "localhost",
+        host: process.env.REDIS_HOST || "localhost",
         port: 6379,
         client: redisClient,
         ttl: 86400,

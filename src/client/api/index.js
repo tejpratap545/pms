@@ -21,7 +21,7 @@ app.use(
     cookie: { secure: false }, // Note that the cookie-parser module is no longer needed
     // eslint-disable-next-line new-cap
     store: new redisStore({
-      host: "localhost",
+      host: process.env.REDIS_HOST || "localhost",
       port: 6379,
       client: redisClient,
       ttl: 86400,

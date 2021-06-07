@@ -1,0 +1,64 @@
+version: "3"
+
+volumes:
+  pgdata:
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - ./.env/.postgres
+    ports:
+      - 5432:5432
+
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    image: pms_django_image
+    container_name: denselight_django
+    depends_on:
+      - postgres
+
+    volumes:
+      - ./src/server:/app
+    env_file:
+      - ./.env/.django
+    ports:
+      - 8001:8000
+    command: /start
+
+  nuxt:
+    build:
+      context: .
+      dockerfile: ./compose/nuxt/Dockerfile
+    container_name: denselight_nuxt
+    env_file:
+      - ./.env/production/.nuxt
+    volumes:
+      - ./src/Client:/app
+    ports:
+      - 3000:3000
+    command: /start
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/nginx/Dockerfile
+    image: pms_nginx_image
+    container_name: denselight_nginx
+    ports:
+      - 80:80
+      - 443:443
+      - 8000:8000
+    depends_on:
+      - denselightdjango
+      - denselightnuxt
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
