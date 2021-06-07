@@ -6,7 +6,7 @@ volumes:
 services:
   postgres:
     image: postgres
-    container_name: postgres
+    container_name: pms_postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file:
@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: ./compose/django/Dockerfile
     image: pms_django_image
-    container_name: denselight_django
+    container_name: pms_django
     depends_on:
       - postgres
 
@@ -35,7 +35,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/nuxt/Dockerfile
-    container_name: denselight_nuxt
+    container_name: pms_nuxt
     env_file:
       - ./.envs/.nuxt
     volumes:
@@ -49,14 +49,14 @@ services:
       context: .
       dockerfile: ./compose/nginx/Dockerfile
     image: pms_nginx_image
-    container_name: denselight_nginx
+    container_name: pms_nginx
     ports:
       - 80:80
       - 443:443
       - 8000:8000
     depends_on:
-      - denselightdjango
-      - denselightnuxt
+      - django
+      - nuxt
 
   redis:
     image: redis
