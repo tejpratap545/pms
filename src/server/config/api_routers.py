@@ -24,5 +24,8 @@ router.register("category/skills", SkillsCategoryViewSet, basename="SkillsCatego
 router.register(
     "over-all-appraisal", OverAllAppraisalViewSet, basename="OverAllAppraisal"
 )
+router.register("goal", GoalViewSET, basename="Goal")
+router.register("skill", SkillViewSET, basename="Skill")
+router.register("core-value", CoreValueViewSET, basename="CoreValue")
 app_name = "pms"
 urlpatterns = router.urls

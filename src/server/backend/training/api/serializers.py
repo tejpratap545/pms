@@ -46,3 +46,21 @@ class SkillsCategorySerializer(serializers.ModelSerializer):
         return super().create(
             validated_data | {"company": self.context["request"].user.company}
         )
+
+
+class GoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Goal
+        fields = "__all__"
+
+
+class CoreValueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoreValue
+        fields = "__all__"
+
+
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = "__all__"
