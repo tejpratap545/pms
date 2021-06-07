@@ -16,7 +16,7 @@ RUN pip install --upgrade pip
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./src/server/requirement.txt /requirement.txt
-RUN pip install -r /requirements/requirement.txt --no-cache
+RUN pip install -r /requirement.txt --no-cache
 
 #copy django start script
 COPY ./compose/django/start /start
