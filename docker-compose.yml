@@ -10,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file:
-      - ./.env/.postgres
+      - ./.envs/.postgres
     ports:
       - 5432:5432
 
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./src/server:/app
     env_file:
-      - ./.env/.django
+      - ./.envs/.django
     ports:
       - 8001:8000
     command: /start
@@ -37,7 +37,7 @@ services:
       dockerfile: ./compose/nuxt/Dockerfile
     container_name: denselight_nuxt
     env_file:
-      - ./.env/production/.nuxt
+      - ./.envs/production/.nuxt
     volumes:
       - ./src/Client:/app
     ports:
