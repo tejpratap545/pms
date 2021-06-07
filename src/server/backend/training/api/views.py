@@ -1,6 +1,11 @@
 from backend.users.api.serializers import EmptySerializer
 from backend.users.permissions import *
-from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+)
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -64,7 +69,13 @@ class GoalViewSET(viewsets.ModelViewSet):
 
     @extend_schema(
         request=EmptySerializer,
-        responses={204: None},
+        responses={
+            201: OpenApiResponse(
+                response=None,
+                description="Goal is successfully Approvaed",
+            ),
+            400: OpenApiResponse(description="Bad request (something invalid)"),
+        },
     )
     @action(detail=True, methods=["post"])
     def approve(self, request, pk=None):
@@ -76,10 +87,16 @@ class GoalViewSET(viewsets.ModelViewSet):
 
     @extend_schema(
         request=EmptySerializer,
-        responses={204: None},
+        responses={
+            201: OpenApiResponse(
+                response=None,
+                description="Goal is successfully Rejected",
+            ),
+            400: OpenApiResponse(description="Bad request (something invalid)"),
+        },
     )
     @action(detail=True, methods=["post"])
-    def approve(self, request, pk=None):
+    def reject(self, request, pk=None):
         goal: Goal = self.get_object()
         goal.status = -1
         goal.save()

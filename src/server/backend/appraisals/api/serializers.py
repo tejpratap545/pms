@@ -179,3 +179,9 @@ class ShortOverallAppraisalSerSerializer(serializers.ModelSerializer):
             "stage",
             "calibration_end_date",
         )
+
+
+class AppraisalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appraisal
+        fields = "__all__"
