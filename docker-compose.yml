@@ -43,6 +43,8 @@ services:
     ports:
       - 3000:3000
     command: /start
+    depends_on:
+      - redis
 
   nginx:
     build:
