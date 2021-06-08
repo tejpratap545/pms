@@ -1,0 +1,228 @@
+<template>
+  <div class="page">
+    <h1>Category Management</h1>
+    <div class="center" style="margin-top: 50px">
+      <vs-table v-model="selected">
+        <template #header>
+          <div class="table-header">
+            <vs-input v-model="search" placeholder="Search" shadow>
+              <template #icon>
+                <i class="bx bx-search"></i>
+              </template>
+            </vs-input>
+            <vs-button @click="newActive = true"> Add </vs-button>
+          </div>
+        </template>
+        <template #thead>
+          <vs-tr>
+            <vs-th> Name </vs-th>
+            <vs-th> Type </vs-th>
+            <vs-th> Company </vs-th>
+            <vs-th> Id </vs-th>
+          </vs-tr>
+        </template>
+        <template #tbody>
+          <vs-tr
+            v-for="(tr, i) in $vs.getSearch(coreValueList, search)"
+            :key="i"
+            :data="(selected, (selectedType = 'core_value'))"
+            :is-selected="selected == tr"
+          >
+            <vs-td>
+              {{ tr.name }}
+            </vs-td>
+            <vs-td> Core Values </vs-td>
+            <vs-td>
+              {{ tr.company }}
+            </vs-td>
+            <vs-td>
+              {{ tr.id }}
+            </vs-td>
+
+            <template #expand>
+              <div class="con-content">
+                <div>
+                  <vs-button
+                    color="success"
+                    flat
+                    icon
+                    @click="editActive = true"
+                  >
+                    <i class="bx bx-edit-alt"></i>
+                  </vs-button>
+                  <vs-button border danger @click="deleteCategory(tr.id)">
+                    Delete category
+                  </vs-button>
+                </div>
+              </div>
+            </template>
+          </vs-tr>
+          <vs-tr
+            v-for="(tr, i) in $vs.getSearch(goalList, search)"
+            :key="i"
+            :data="(selected, (selectedType = 'goal'))"
+            :is-selected="selected == tr"
+          >
+            <vs-td>
+              {{ tr.name }}
+            </vs-td>
+            <vs-td> Goals </vs-td>
+            <vs-td>
+              {{ tr.company }}
+            </vs-td>
+            <vs-td>
+              {{ tr.id }}
+            </vs-td>
+
+            <template #expand>
+              <div class="con-content">
+                <div>
+                  <vs-button
+                    color="success"
+                    flat
+                    icon
+                    @click="editActive = true"
+                  >
+                    <i class="bx bx-edit-alt"></i>
+                  </vs-button>
+                  <vs-button border danger @click="deleteCategory(tr.id)">
+                    Delete category
+                  </vs-button>
+                </div>
+              </div>
+            </template>
+          </vs-tr>
+          <vs-tr
+            v-for="(tr, i) in $vs.getSearch(skillList, search)"
+            :key="i"
+            :data="(selected, (selectedType = 'skills'))"
+            :is-selected="selected == tr"
+          >
+            <vs-td>
+              {{ tr.name }}
+            </vs-td>
+            <vs-td> Skills </vs-td>
+            <vs-td>
+              {{ tr.company }}
+            </vs-td>
+            <vs-td>
+              {{ tr.id }}
+            </vs-td>
+
+            <template #expand>
+              <div class="con-content">
+                <div>
+                  <vs-button
+                    color="success"
+                    flat
+                    icon
+                    @click="editActive = true"
+                  >
+                    <i class="bx bx-edit-alt"></i>
+                  </vs-button>
+                  <vs-button border danger @click="deleteCategory(tr.id)">
+                    Delete category
+                  </vs-button>
+                </div>
+              </div>
+            </template>
+          </vs-tr>
+        </template>
+      </vs-table>
+    </div>
+
+    <!-- Dialogs -->
+    <NewCategoryDialog
+      v-if="newActive"
+      :dialog="newActive"
+      :company-list="companyList"
+      @close="(newActive = false), $fetch()"
+    />
+
+    <EditCategoryDialog
+      v-if="editActive"
+      :dialog="editActive"
+      :selected-category="selected"
+      :selected-category-type="selectedType"
+      @close="(editActive = false), $fetch()"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  layout: "dashboard",
+  middleware: ["auth"],
+  data: () => ({
+    editActive: false,
+    newActive: false,
+    search: "",
+    loading: false,
+    selected: {},
+    selectedType: "",
+
+    companyList: [],
+    coreValueList: [],
+    goalList: [],
+    skillList: [],
+  }),
+  async fetch() {
+    try {
+      if (this.$store.state.user.user.is_superuser) {
+        this.companyList = await this.$axios.$get(`api/company/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        });
+      }
+
+      this.coreValueList = await this.$axios.$get(`api/category/core_value/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
+      this.goalList = await this.$axios.$get(`api/category/goal/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
+      this.skillList = await this.$axios.$get(`api/category/skills/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+    } catch (err) {
+      return this.$vs.notification({
+        color: "danger",
+        title: "Error fetching categories",
+      });
+    }
+  },
+  methods: {
+    deleteCategory(id) {
+      if (!this.loading) {
+        this.loading = true;
+
+        this.$axios
+          .$delete(`api/category/${this.selectedType}/${id}/`, {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+          })
+          .then(() => this.$fetch())
+          .catch(() => {
+            this.loading = false;
+            return this.$vs.notification({
+              color: "danger",
+              title: "Error deleting company",
+            });
+          });
+      }
+    },
+  },
+};
+</script>
+
+<style></style>

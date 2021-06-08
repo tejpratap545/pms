@@ -1,6 +1,9 @@
 // eslint-disable-next-line nuxt/no-cjs-in-config
 const session = require("express-session");
-const redisClient = require("redis").createClient();
+const redisClient = require("redis").createClient({
+  host: process.env.REDIS_HOST || "localhost",
+  port: 6379,
+});
 const redisStore = require("connect-redis")(session);
 
 export default {
@@ -12,7 +15,14 @@ export default {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { hid: "description", name: "description", content: "" },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com" },
+      {
+        rel: "stylehseet",
+        href: "https://fonts.googleapis.com/css2?family=Poppins&display=swap",
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -28,6 +38,7 @@ export default {
   ],
 
   serverMiddleware: [
+    { path: "/api", handler: "~/api/index.js" },
     session({
       secret:
         process.env.SESSION_SECRET || "ThisIsHowYouUseRedisSessionStorage",
@@ -42,7 +53,6 @@ export default {
         ttl: 86400,
       }),
     }),
-    { path: "/api", handler: "~/api/index.js" },
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

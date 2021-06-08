@@ -10,7 +10,7 @@
                 <i class="bx bx-search"></i>
               </template>
             </vs-input>
-            <vs-button id="step1" @click="newActive = true"> Add </vs-button>
+            <vs-button @click="newActive = true"> Add </vs-button>
           </div>
         </template>
         <template #thead>

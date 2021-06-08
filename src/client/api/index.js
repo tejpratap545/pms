@@ -1,7 +1,11 @@
 const express = require("express");
 const session = require("express-session");
 const redis = require("redis");
-const redisClient = redis.createClient();
+console.log(process.env.REDIS_HOST || "localhost")
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOST || "localhost",
+  port: 6379
+})
 const redisStore = require("connect-redis")(session);
 const bodyParser = require("body-parser");
 
