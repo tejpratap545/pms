@@ -111,13 +111,13 @@ export default {
   }),
   async fetch() {
     try {
-      this.companyList = await this.$axios.$get(`api/company/`, {
+      this.appraisalList = await this.$axios.$get(`api/over-all-appraisal/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
       });
 
-      this.appraisalList = await this.$axios.$get(`api/over-all-appraisal/`, {
+      this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
