@@ -61,6 +61,61 @@
         </template>
       </vs-input>
 
+      <vs-input v-model="employeeData.employee_id" placeholder="Employee Id">
+        <template #icon>
+          <i class="bx bxs-user-badge"></i>
+        </template>
+      </vs-input>
+
+      <!-- <vs-select
+        v-model="employeeData.gender"
+        placeholder="Select gender"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(gender, index) in genderList"
+          :key="index"
+          :label="gender"
+          :value="gender"
+        >
+          {{ gender }}
+        </vs-option>
+      </vs-select> -->
+
+      <vs-select
+        v-model="employeeData.martial_status"
+        placeholder="Select martial status"
+        style="margin-bottom: 10px"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(martial, index) in martialStatus"
+          :key="index"
+          :label="martial"
+          :value="martial"
+        >
+          {{ martial }}
+        </vs-option>
+      </vs-select>
+
+      <vs-select
+        v-model="employeeData.employment_type"
+        placeholder="Select employee type"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(employee, index) in employmentType"
+          :key="index"
+          :label="employee"
+          :value="employee"
+        >
+          {{ employee }}
+        </vs-option>
+      </vs-select>
+
       <vs-input v-model="employeeData.user.email" placeholder="User email">
         <template #icon> @ </template>
       </vs-input>
@@ -92,6 +147,9 @@ export default {
     active: false,
     loading: false,
     companyList: [],
+    // genderList: ["Male", "Female"],
+    martialStatus: ["Single", "Married", "Divorced", "Separated", "Widowed"],
+    employmentType: ["Contractor", "Full-Time", "Part-Time", "Internship"],
     employeeData: {},
   }),
   async fetch() {

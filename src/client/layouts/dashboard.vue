@@ -35,6 +35,13 @@
           </vs-sidebar-item>
         </template>
 
+        <vs-sidebar-item id="admin-category" to="/sections/admin/category">
+          <template #icon>
+            <i class="bx bx-library"></i>
+          </template>
+          Category Management
+        </vs-sidebar-item>
+
         <vs-sidebar-item id="admin-department" to="/sections/admin/department">
           <template #icon>
             <i class="bx bx-tag-alt"></i>
@@ -102,17 +109,6 @@
           <vs-button icon @click="tutorialActive != tutorialActive">
             <i class="bx bx-help-circle"></i>
           </vs-button>
-
-          <vs-avatar>
-            <img
-              :src="
-                $store.state.user.avatar
-                  ? $store.state.user.avatar
-                  : `https://avatars.dicebear.com/api/jdenticon/${$store.state.user.user.email}.svg`
-              "
-              alt="profile picture"
-            />
-          </vs-avatar>
         </vs-row>
       </template>
     </vs-sidebar>
