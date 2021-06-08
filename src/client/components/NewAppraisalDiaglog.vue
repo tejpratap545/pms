@@ -204,6 +204,7 @@ export default {
       stage3_end_date: "",
       reports_end_date: "",
       calibration_end_date: "",
+      company: 0,
     },
   }),
   async fetch() {
