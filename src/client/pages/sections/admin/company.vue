@@ -115,11 +115,13 @@ export default {
   }),
   async fetch() {
     try {
-      this.companyList = await this.$axios.$get(`api/company/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
+      if (this.$store.state.user.user.is_superuser) {
+        this.companyList = await this.$axios.$get(`api/company/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        });
+      }
     } catch (err) {
       return this.$vs.notification({
         color: "danger",

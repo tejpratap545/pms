@@ -34,10 +34,19 @@
         </vs-option>
       </vs-select>
 
+      <vs-select v-model="appriasalType" block>
+        <vs-option label="Entire Company" :value="0">
+          Entire Company
+        </vs-option>
+        <vs-option label="Employees" :value="1"> Employees </vs-option>
+        <vs-option label="Department" :value="2"> Department </vs-option>
+      </vs-select>
+
       <vs-select
+        v-if="appriasalType == 1"
         v-model="newAppraisalData.individual_employees"
         placeholder="Select Employees"
-        style="margin-bottom: 10px"
+        style="margin-top: 10px"
         block
         filter
         multiple
@@ -57,10 +66,10 @@
       </vs-select>
 
       <vs-select
-        v-if="departmentList != null"
+        v-if="departmentList != null && appriasalType == 2"
         v-model="newAppraisalData.departments"
         placeholder="Select Departments"
-        style="margin-bottom: 10px"
+        style="margin-top: 10px"
         block
         filter
         multiple
@@ -177,6 +186,7 @@ export default {
     loading: false,
     employeeList: [],
     departmentList: [],
+    appriasalType: 0,
     newAppraisalData: {
       individual_employees: [],
       departments: [],
@@ -221,6 +231,10 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
+
+    if (!this.$store.state.user.user.is_superuser) {
+      this.newAppraisalData.company = this.$store.state.user.user.company;
+    }
   },
   methods: {
     closeDialog() {
@@ -229,6 +243,8 @@ export default {
     createAppraisal() {
       if (!this.loading) {
         this.loading = true;
+
+        this.newAppraisalData.is_company = this.appriasalType === 0;
 
         this.$axios
           .$post(`api/over-all-appraisal/`, this.newAppraisalData, {

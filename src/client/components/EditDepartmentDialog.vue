@@ -108,7 +108,7 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$patch(`api/department/${id}`, this.departmentData, {
+          .$patch(`api/department/${id}/`, this.departmentData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },

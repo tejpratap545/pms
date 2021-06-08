@@ -17,23 +17,23 @@
           <vs-tr>
             <vs-th> Name </vs-th>
             <vs-th> Type </vs-th>
-            <vs-th> Company </vs-th>
+            <vs-th v-if="$store.state.user.user.is_superuser"> Company </vs-th>
             <vs-th> Id </vs-th>
           </vs-tr>
         </template>
         <template #tbody>
           <vs-tr
             v-for="(tr, i) in $vs.getSearch(coreValueList, search)"
-            :key="i"
-            :data="(selected, (selectedType = 'core_value'))"
+            :key="`core${i}`"
+            :data="tr"
             :is-selected="selected == tr"
           >
             <vs-td>
               {{ tr.name }}
             </vs-td>
             <vs-td> Core Values </vs-td>
-            <vs-td>
-              {{ tr.company }}
+            <vs-td v-if="$store.state.user.user.is_superuser">
+              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
             </vs-td>
             <vs-td>
               {{ tr.id }}
@@ -46,7 +46,7 @@
                     color="success"
                     flat
                     icon
-                    @click="editActive = true"
+                    @click="(editActive = true), (selectedType = 'core_value')"
                   >
                     <i class="bx bx-edit-alt"></i>
                   </vs-button>
@@ -59,16 +59,16 @@
           </vs-tr>
           <vs-tr
             v-for="(tr, i) in $vs.getSearch(goalList, search)"
-            :key="i"
-            :data="(selected, (selectedType = 'goal'))"
+            :key="`goal${i}`"
+            :data="tr"
             :is-selected="selected == tr"
           >
             <vs-td>
               {{ tr.name }}
             </vs-td>
             <vs-td> Goals </vs-td>
-            <vs-td>
-              {{ tr.company }}
+            <vs-td v-if="$store.state.user.user.is_superuser">
+              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
             </vs-td>
             <vs-td>
               {{ tr.id }}
@@ -81,7 +81,7 @@
                     color="success"
                     flat
                     icon
-                    @click="editActive = true"
+                    @click="(editActive = true), (selectedType = 'goal')"
                   >
                     <i class="bx bx-edit-alt"></i>
                   </vs-button>
@@ -94,16 +94,16 @@
           </vs-tr>
           <vs-tr
             v-for="(tr, i) in $vs.getSearch(skillList, search)"
-            :key="i"
-            :data="(selected, (selectedType = 'skills'))"
+            :key="`skill${i}`"
+            :data="tr"
             :is-selected="selected == tr"
           >
             <vs-td>
               {{ tr.name }}
             </vs-td>
             <vs-td> Skills </vs-td>
-            <vs-td>
-              {{ tr.company }}
+            <vs-td v-if="$store.state.user.user.is_superuser">
+              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
             </vs-td>
             <vs-td>
               {{ tr.id }}
@@ -116,7 +116,7 @@
                     color="success"
                     flat
                     icon
-                    @click="editActive = true"
+                    @click="(editActive = true), (selectedType = 'skills')"
                   >
                     <i class="bx bx-edit-alt"></i>
                   </vs-button>
@@ -216,7 +216,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error deleting company",
+              title: "Error deleting category",
             });
           });
       }

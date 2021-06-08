@@ -218,7 +218,7 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$patch(`api/over-all-appraisal/${id}`, this.appraisalData, {
+          .$patch(`api/over-all-appraisal/${id}/`, this.appraisalData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },

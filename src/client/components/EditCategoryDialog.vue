@@ -2,7 +2,7 @@
   <vs-dialog v-model="active" not-close prevent-close>
     <template #header>
       <h4 class="not-margin">
-        Edit Category {{ selectedCategoryType }} <b>Category</b>
+        Edit category {{ selectedCategoryType }} <b>Category</b>
       </h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
@@ -81,7 +81,7 @@ export default {
 
         this.$axios
           .$patch(
-            `api/category/${this.selectedCategoryType}/${id}`,
+            `api/category/${this.selectedCategoryType}/${id}/`,
             this.categoryData,
             {
               headers: {
@@ -94,7 +94,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating category",
+              title: "Error updating category",
             });
           });
       }

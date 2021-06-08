@@ -93,7 +93,7 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$patch(`api/company/${id}`, this.companyData, {
+          .$patch(`api/company/${id}/`, this.companyData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },

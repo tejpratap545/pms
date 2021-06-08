@@ -170,11 +170,13 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      this.companyList = await this.$axios.$get(`api/company/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
+      if (this.$store.state.user.user.is_superuser) {
+        this.companyList = await this.$axios.$get(`api/company/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        });
+      }
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
@@ -185,6 +187,10 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
+
+    if (!this.$store.state.user.user.is_superuser) {
+      this.newEmployeeData.user.company = this.$store.state.user.user.company;
+    }
   },
   methods: {
     closeDialog() {

@@ -20,6 +20,28 @@
 export default {
   layout: "dashboard",
   middleware: ["auth"],
+  data: () => ({
+    active: false,
+    loading: false,
+    apprisalList: {},
+  }),
+  async fetch() {
+    try {
+      this.apprisalList = await this.$axios.$get(`api/appraisal/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
+      // eslint-disable-next-line no-console
+      console.log(this.apprisalList);
+    } catch (err) {
+      return this.$vs.notification({
+        color: "danger",
+        title: "Error fetching appriasals",
+      });
+    }
+  },
 };
 </script>
 

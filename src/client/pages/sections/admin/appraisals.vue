@@ -24,6 +24,7 @@
               Name
             </vs-th>
             <vs-th
+              v-if="$store.state.user.user.is_superuser"
               sort
               @click="
                 appraisalList = $vs.sortData($event, appraisalList, 'company')
@@ -49,7 +50,7 @@
             <vs-td>
               {{ tr.name }}
             </vs-td>
-            <vs-td>
+            <vs-td v-if="$store.state.user.user.is_superuser">
               {{ companyList.filter((x) => x.id == tr.company)[0].name }}
             </vs-td>
             <vs-td>
@@ -111,11 +112,13 @@ export default {
   }),
   async fetch() {
     try {
-      this.companyList = await this.$axios.$get(`api/company/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
+      if (this.$store.state.user.user.is_superuser) {
+        this.companyList = await this.$axios.$get(`api/company/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        });
+      }
 
       this.appraisalList = await this.$axios.$get(`api/over-all-appraisal/`, {
         headers: {

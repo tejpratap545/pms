@@ -95,6 +95,10 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
+
+    if (!this.$store.state.user.user.is_superuser) {
+      this.newDepartmentData.company = this.$store.state.user.user.company;
+    }
   },
   methods: {
     closeDialog() {

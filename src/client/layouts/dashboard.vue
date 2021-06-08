@@ -49,7 +49,11 @@
           Department Management
         </vs-sidebar-item>
 
-        <vs-sidebar-item id="admin-company" to="/sections/admin/company">
+        <vs-sidebar-item
+          v-if="$store.state.user.user.is_superuser"
+          id="admin-company"
+          to="/sections/admin/company"
+        >
           <template #icon>
             <i class="bx bx-building"></i>
           </template>
