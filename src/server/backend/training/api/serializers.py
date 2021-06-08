@@ -10,7 +10,7 @@ class GoalCategorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if self.context["request"].user.is_superadmin:
+        if self.context["request"].user.is_superuser:
             return super().create(validated_data)
 
         return super().create(
@@ -25,7 +25,7 @@ class CoreValueCategorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if self.context["request"].user.is_superadmin:
+        if self.context["request"].user.is_superuser:
             return super().create(validated_data)
 
         return super().create(
@@ -40,7 +40,7 @@ class SkillsCategorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        if self.context["request"].user.is_superadmin:
+        if self.context["request"].user.is_superuser:
             return super().create(validated_data)
 
         return super().create(
@@ -63,4 +63,35 @@ class CoreValueSerializer(serializers.ModelSerializer):
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
+        fields = "__all__"
+
+
+class KPISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KPI
+        fields = "__all__"
+
+
+class DetailCoreValueSerializer(serializers.ModelSerializer):
+    core_value_category = CoreValueCategorySerializer()
+
+    class Meta:
+        model = CoreValue
+        fields = "__all__"
+
+
+class DetailSkillSerializer(serializers.ModelSerializer):
+    skill_category = SkillsCategorySerializer()
+
+    class Meta:
+        model = Skill
+        fields = "__all__"
+
+
+class DetailGoalSerializer(serializers.ModelSerializer):
+    kpi_set = KPISerializer(many=True)
+    goal_category = GoalCategorySerializer()
+
+    class Meta:
+        model = Goal
         fields = "__all__"

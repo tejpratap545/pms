@@ -112,3 +112,8 @@ class CoreValueViewSET(viewsets.ModelViewSet):
 class SkillViewSET(viewsets.ModelViewSet):
     querset = Skill.objects.all()
     serializer_class = SkillSerializer
+
+
+class KPIViewSet(viewsets.ModelViewSet):
+    querset = KPI.objects.all()
+    serializer_class = KPISerializer

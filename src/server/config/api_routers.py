@@ -28,5 +28,6 @@ router.register("goal", GoalViewSET, basename="Goal")
 router.register("skill", SkillViewSET, basename="Skill")
 router.register("core-value", CoreValueViewSET, basename="CoreValue")
 router.register("appraisal", AppraisalViewset, basename="Appraisal")
+router.register("kpi", KPIViewSet, basename="KPI")
 app_name = "pms"
 urlpatterns = router.urls

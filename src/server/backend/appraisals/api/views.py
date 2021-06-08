@@ -31,11 +31,13 @@ class OverAllAppraisalViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class AppraisalViewset(
-    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
-):
-    serializer_class = AppraisalSerializer
+class AppraisalViewset(viewsets.ModelViewSet):
     queryset = Appraisal.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "get":
+            return DetailAppraisalSerializer
+        return AppraisalSerializer
 
     @extend_schema(
         request=EmptySerializer,
