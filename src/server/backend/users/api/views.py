@@ -144,9 +144,9 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
 
     def get_queryset(self):
-        appraisals_count = OverAllAppraisal.objects.filter(company=OuterRef("pk")).only(
-            "pk"
-        )
+        appraisals_count = OverAllAppraisal.objects.filter(
+            company=OuterRef("pk")
+        ).values("pk")
         return Company.objects.exclude(name="admin").annotate(
             employees_count=Count("user", distinct=True),
             departments_count=Count("department", distinct=True),
