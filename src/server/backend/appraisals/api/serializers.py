@@ -37,6 +37,10 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
             is_company = validated_data.pop("is_company", False)
             individual_employees = validated_data.pop("individual_employees", [])
             departments = validated_data.pop("departments", [])
+            company = validated_data.pop("company", 1)
+            if not self.context["request"].user.is_superuser:
+                company = self.context["request"].user.company
+
             overall_appraisal = OverAllAppraisal.objects.create(
                 company=self.context["request"].user.company,
                 **validated_data,
@@ -48,7 +52,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
 
                 # filter employee of current admin company
                 for profile in Profile.objects.select_related("user").filter(
-                    user__company=self.context["request"].user.company
+                    user__company=company
                 ):
                     appraisal_bulk_data.append(
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
@@ -87,7 +91,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
             elif len(departments) > 0:
                 for profile in Profile.objects.select_related("user").filter(
                     department__in=departments,
-                    user__company=self.context["request"].user.company,
+                    user__company=company,
                 ):
                     appraisal_bulk_data.append(
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
@@ -126,7 +130,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
 
                 for profile in Profile.objects.select_related("user").filter(
                     id__in=individual_employees,
-                    user__company=self.context["request"].user.company,
+                    user__company=company,
                 ):
                     appraisal_bulk_data.append(
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
