@@ -120,7 +120,7 @@ export default {
         });
       }
 
-      this.appraisalList = await this.$axios.$get(`api/over-all-appraisal/`, {
+      this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },

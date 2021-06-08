@@ -82,7 +82,9 @@ export default {
         this.$axios
           .$patch(
             `api/category/${this.selectedCategoryType}/${id}/`,
-            this.categoryData,
+            {
+              name: this.categoryData.name,
+            },
             {
               headers: {
                 Authorization: `Bearer ${this.$store.state.accessToken}`,

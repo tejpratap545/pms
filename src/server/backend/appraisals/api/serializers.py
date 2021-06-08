@@ -39,7 +39,6 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
             departments = validated_data.pop("departments", [])
             overall_appraisal = OverAllAppraisal.objects.create(
                 company=self.context["request"].user.company,
-                stage=0,
                 **validated_data,
             )
             appraisal_bulk_data = []
@@ -86,7 +85,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                         pass
 
             elif len(departments) > 0:
-                for profile in Profile.objects.prefech_related("user").filter(
+                for profile in Profile.objects.select_related("user").filter(
                     department__in=departments,
                     user__company=self.context["request"].user.company,
                 ):
@@ -125,7 +124,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
 
             elif len(individual_employees) > 0:
 
-                for profile in Profile.objects.prefech_related("user").filter(
+                for profile in Profile.objects.select_related("user").filter(
                     id__in=individual_employees,
                     user__company=self.context["request"].user.company,
                 ):
