@@ -42,7 +42,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                 company = self.context["request"].user.company
 
             overall_appraisal = OverAllAppraisal.objects.create(
-                company=self.context["request"].user.company,
+                company=company,
                 **validated_data,
             )
             appraisal_bulk_data = []
