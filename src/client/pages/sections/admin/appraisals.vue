@@ -119,6 +119,12 @@ export default {
           },
         });
       }
+
+      this.appraisalList = await this.$axios.$get(`api/over-all-appraisal/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
