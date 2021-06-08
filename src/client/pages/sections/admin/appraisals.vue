@@ -24,6 +24,14 @@
               Name
             </vs-th>
             <vs-th
+              sort
+              @click="
+                appraisalList = $vs.sortData($event, appraisalList, 'status')
+              "
+            >
+              Stage
+            </vs-th>
+            <vs-th
               v-if="$store.state.user.user.is_superuser"
               sort
               @click="
@@ -49,6 +57,9 @@
           >
             <vs-td>
               {{ tr.name }}
+            </vs-td>
+            <vs-td>
+              {{ `Stage ${tr.status}` }}
             </vs-td>
             <vs-td v-if="$store.state.user.user.is_superuser">
               {{ companyList.filter((x) => x.id == tr.company)[0].name }}
