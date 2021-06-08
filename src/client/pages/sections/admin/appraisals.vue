@@ -119,12 +119,6 @@ export default {
           },
         });
       }
-
-      this.companyList = await this.$axios.$get(`api/company/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
