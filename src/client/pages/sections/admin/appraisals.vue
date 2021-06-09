@@ -59,7 +59,7 @@
               {{ tr.name }}
             </vs-td>
             <vs-td>
-              {{ `Stage ${tr.status}` }}
+              {{ `Stage ${tr.stage}` }}
             </vs-td>
             <vs-td v-if="$store.state.user.user.is_superuser">
               {{ companyList.filter((x) => x.id == tr.company)[0].name }}
@@ -91,17 +91,16 @@
     </div>
 
     <!-- Dialogs -->
-    <NewAppraisalDiaglog
+    <NewAppraisalDialog
       v-if="newActive"
       :dialog="newActive"
       :company-list="companyList"
       @close="(newActive = false), $fetch()"
     />
 
-    <EditAppraisalDiaglog
+    <EditAppraisalDialog
       v-if="editActive"
       :dialog="editActive"
-      :company-list="companyList"
       :selected-appraisal="selected"
       @close="(editActive = false), $fetch()"
     />

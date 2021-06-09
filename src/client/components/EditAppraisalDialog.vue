@@ -17,24 +17,6 @@
     <div v-if="$fetchState.pending"></div>
     <div v-else class="con-form">
       <vs-select
-        v-if="$store.state.user.user.is_superuser"
-        v-model="appraisalData.company"
-        placeholder="Select Company"
-        style="margin-bottom: 10px"
-        block
-        filter
-      >
-        <vs-option
-          v-for="company in companyList"
-          :key="company.id"
-          :label="company.name"
-          :value="company.id"
-        >
-          {{ company.name }}
-        </vs-option>
-      </vs-select>
-
-      <vs-select
         v-model="appraisalData.individual_employees"
         placeholder="Select Employees"
         style="margin-bottom: 10px"
@@ -172,8 +154,6 @@ export default {
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
-    companyList: Array,
-    // eslint-disable-next-line vue/require-default-prop
     selectedAppraisal: Object,
   },
   data: () => ({
@@ -207,7 +187,12 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
-    this.appraisalData = this.selectedAppraisal;
+    this.appraisalData = {
+      individual_employees: [],
+      departments: [],
+      is_company: false,
+      ...this.selectedAppraisal,
+    };
   },
   methods: {
     closeDialog() {
@@ -228,7 +213,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating Appraisal",
+              title: "Error updating Appraisal",
             });
           });
       }
