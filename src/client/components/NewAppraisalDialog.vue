@@ -204,6 +204,7 @@ export default {
       stage3_end_date: "",
       reports_end_date: "",
       calibration_end_date: "",
+      company: 0,
     },
   }),
   async fetch() {
@@ -230,10 +231,6 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
-
-    if (!this.$store.state.user.user.is_superuser) {
-      this.newAppraisalData.company = this.$store.state.user.user.company;
-    }
   },
   methods: {
     closeDialog() {
