@@ -48,12 +48,15 @@ class AppraisalViewset(viewsets.ModelViewSet):
     search_fields = [
         "overall_appraisal__name",
         "employee__department__name",
-        "employee__user__name",
+        "employee__user__first_name",
         "employee__user__email",
-        "employee__first_reporting_manager__name",
-        "employee__second_reporting_manager__name",
-        "employee__first_reporting_manager__email",
-        "employee__second_reporting_manager__email",
+        "employee__user__username",
+        "employee__first_reporting_manager__user__first_name",
+        "employee__second_reporting_manager__user__first_name",
+        "employee__first_reporting_manager__user__username",
+        "employee__second_reporting_manager__user__username",
+        "employee__first_reporting_manager__user__email",
+        "employee__second_reporting_manager__user__email",
     ]
 
     def get_serializer_class(self):
@@ -66,21 +69,26 @@ class AppraisalViewset(viewsets.ModelViewSet):
 
     queryset = Appraisal.objects.all()
 
-    def get_queryset(self):
-        if not self.request.user.is_superuser:
-            return super().get_queryset().filter(company=self.request.user.company)
+    # def get_queryset(self):
+    #     if not self.request.user.is_superuser:
+    #         return super().get_queryset().filter(company=self.request.user.company)
 
-        return super().get_queryset()
+    #     return super().get_queryset()
 
     def get_queryset(self):
         if self.action == "list":
             return (
-                Appraisal.objects.select_related(
+                super()
+                .get_queryset()
+                .select_related(
                     "overall_appraisal",
                     "employee",
+                    "employee__user",
                     "employee__department",
                     "employee__first_reporting_manager",
+                    "employee__first_reporting_manager__user",
                     "employee__second_reporting_manager",
+                    "employee__second_reporting_manager__user",
                 )
                 .only(
                     "overall_appraisal__name",

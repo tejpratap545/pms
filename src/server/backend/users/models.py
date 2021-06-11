@@ -198,6 +198,9 @@ class Profile(models.Model):
     def email(self):
         return self.user.email
 
+    def __str__(self):
+        return f"{self.name} {self.email}"
+
 
 class AccessToken(models.Model):
     token = models.CharField(max_length=128, blank=True, unique=True)

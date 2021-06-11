@@ -17,11 +17,11 @@ from backend.users.views import TokenView, create_admin_user
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
+
 # from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("api/", include("config.api_routers")),
     path("api/", include("config.api_urls")),
     path("auth/token/", TokenView.as_view()),
@@ -29,14 +29,18 @@ urlpatterns = [
 ]
 
 
-from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
-                                   SpectacularSwaggerView)
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 if settings.DEBUG:
     import debug_toolbar
     from django.contrib import admin
 
     urlpatterns += [
+        path("api-auth/", include("rest_framework.urls")),
         url(r"^__debug__/", include(debug_toolbar.urls)),
         path(
             "",
@@ -50,5 +54,5 @@ if settings.DEBUG:
             SpectacularSwaggerView.as_view(url_name="schema"),
             name="swagger-ui",
         ),
-        # path("admin/", admin.site.urls),
+        path("admin/", admin.site.urls),
     ]
