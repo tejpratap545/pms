@@ -17,6 +17,8 @@ class StandardResultsSetPagination(PageNumberPagination):
                 },
                 "count": self.page.paginator.count,
                 "total_pages": self.page.paginator.num_pages,
+                "is_next": self.page.has_next(),
+                "is_previous": self.page.has_previous(),
                 "results": data,
             }
         )
@@ -53,6 +55,14 @@ class StandardResultsSetPagination(PageNumberPagination):
                 "total_pages": {
                     "type": "integer",
                     "example": 13,
+                },
+                "is_previous": {
+                    "type": "bool",
+                    "example": False,
+                },
+                "is_next": {
+                    "type": "bool",
+                    "example": True,
                 },
                 "results": schema,
             },
