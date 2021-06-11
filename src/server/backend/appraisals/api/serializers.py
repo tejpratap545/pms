@@ -1,4 +1,5 @@
 from backend.training.api.serializers import *
+from backend.users.api.serializers import ShortProfileSerializer
 from backend.users.models import Logs, Profile
 from django.core.mail import send_mail
 from django.db import transaction
@@ -192,10 +193,14 @@ class AppraisalSerializer(serializers.ModelSerializer):
 
 
 class DetailAppraisalSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
     overall_appraisal = OverAllAppraisalSerializer()
     goal_set = DetailGoalSerializer(many=True)
     corevalue_set = DetailCoreValueSerializer(many=True)
     skill_set = DetailSkillSerializer(many=True)
+    goal_count = serializers.IntegerField()
+    corevalue_count = serializers.IntegerField()
+    skill_count = serializers.IntegerField()
 
     class Meta:
         model = Appraisal
@@ -203,10 +208,21 @@ class DetailAppraisalSerializer(serializers.ModelSerializer):
 
 
 class ShortAppraisalSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    employee = ShortProfileSerializer()
     goal_count = serializers.IntegerField()
-    core_value_count = serializers.IntegerField()
+    corevalue_count = serializers.IntegerField()
     skill_count = serializers.IntegerField()
+    stage = serializers.IntegerField(source="overall_appraisal.stage")
 
-    class Mata:
+    class Meta:
         model = Appraisal
-        fields = "__all__"
+        fields = (
+            "name",
+            "goal_count",
+            "corevalue_count",
+            "skill_count",
+            "stage",
+            "status",
+            "employee",
+        )

@@ -71,7 +71,9 @@ class Appraisal(models.Model):
         (12, "STAGE 3: hod end year approve stage"),
         (13, "STAGE 3: hod approved year approve stage"),
     )
-    overall_appraisal = models.ForeignKey(OverAllAppraisal, on_delete=models.CASCADE)
+    overall_appraisal: OverAllAppraisal = models.ForeignKey(
+        OverAllAppraisal, on_delete=models.CASCADE
+    )
     employee: Profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -94,3 +96,7 @@ class Appraisal(models.Model):
 
     # def is_all_goal_approaved(self):
     #     if self.goals_set.all()
+    
+    @property
+    def name(self):
+        return self.overall_appraisal.name

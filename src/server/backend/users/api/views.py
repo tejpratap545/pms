@@ -6,8 +6,7 @@ from django.core.mail import send_mail
 from django.db.models import Count, OuterRef, Q, Subquery
 from django.utils.datetime_safe import datetime
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
-                                   extend_schema)
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -26,6 +25,17 @@ class ProfileInfoView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class ShortEmployeeView(generics.ListAPIView):
+    serializer_class = ShortEmployeeSerializer
+
+    def get_queryset(self):
+        return Profile.objects.select_related("user").only(
+            "user__email",
+            "user__first_name",
+            "user__last_name",
+        )
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -143,7 +153,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class CompanyViewSet(viewsets.ModelViewSet):
     permission_classes = [IsSuperUser]
     serializer_class = CompanySerializer
-
 
     def get_queryset(self):
         # appraisals_count = OverAllAppraisal.objects.filter(
