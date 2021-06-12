@@ -71,6 +71,23 @@
       </vs-input>
 
       <vs-select
+        v-model="newEmployeeData.user.role"
+        placeholder="Select Role"
+        style="margin-bottom: 10px"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(role, index) in roleList"
+          :key="index"
+          :label="role.name"
+          :value="role.id"
+        >
+          {{ role.name }}
+        </vs-option>
+      </vs-select>
+
+      <vs-select
         v-model="newEmployeeData.gender"
         placeholder="Select gender"
         style="margin-bottom: 10px"
@@ -148,6 +165,7 @@ export default {
     genderList: ["Male", "Female"],
     martialStatus: ["Single", "Married", "Divorced", "Separated", "Widowed"],
     employmentType: ["Contractor", "Full-Time", "Part-Time", "Internship"],
+    roleList: [],
     newEmployeeData: {
       user: {
         password: "",
@@ -157,6 +175,7 @@ export default {
         email: "",
         contact_number: "",
         company: "",
+        role: 0,
       },
       gender: "",
       martial_status: "",
@@ -177,6 +196,12 @@ export default {
           },
         });
       }
+
+      this.roleList = await this.$axios.$get(`api/role/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",

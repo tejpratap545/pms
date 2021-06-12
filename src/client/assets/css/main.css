@@ -2,6 +2,14 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.my-5{
+  margin: 20px 0;
+}
+
+.ma-5{
+  margin: 20px;
+}
+
 .page {
   margin: 0 130px;
   padding: 20px;

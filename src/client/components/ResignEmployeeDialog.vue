@@ -22,10 +22,10 @@
         <vs-option
           v-for="employee in employeeList"
           :key="employee.id"
-          :label="employee.user.username"
+          :label="employee.name"
           :value="employee.id"
         >
-          {{ employee.user.username }}
+          {{ employee.name }}
         </vs-option>
       </vs-select>
     </div>
@@ -57,7 +57,7 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      this.employeeList = await this.$axios.$get(`api/user/`, {
+      this.employeeList = await this.$axios.$get(`api/user/short`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },

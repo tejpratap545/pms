@@ -67,8 +67,9 @@
         </template>
       </vs-input>
 
-      <!-- <vs-select
+      <vs-select
         v-model="employeeData.gender"
+        style="margin-bottom: 10px"
         placeholder="Select gender"
         block
         filter
@@ -81,7 +82,24 @@
         >
           {{ gender }}
         </vs-option>
-      </vs-select> -->
+      </vs-select>
+
+      <vs-select
+        v-model="employeeData.user.role"
+        placeholder="Select Role"
+        style="margin-bottom: 10px"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(role, index) in roleList"
+          :key="index"
+          :label="role.name"
+          :value="role.id"
+        >
+          {{ role.name }}
+        </vs-option>
+      </vs-select>
 
       <vs-select
         v-model="employeeData.martial_status"
@@ -147,19 +165,33 @@ export default {
     active: false,
     loading: false,
     companyList: [],
-    // genderList: ["Male", "Female"],
+    genderList: ["Male", "Female"],
     martialStatus: ["Single", "Married", "Divorced", "Separated", "Widowed"],
     employmentType: ["Contractor", "Full-Time", "Part-Time", "Internship"],
+    roleList: [],
     employeeData: {},
   }),
   async fetch() {
     this.loading = true;
     try {
-      this.companyList = await this.$axios.$get(`api/company/`, {
+      if (this.$store.state.user.user.is_superuser) {
+        this.companyList = await this.$axios.$get(`api/company/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        });
+      }
+
+      this.roleList = await this.$axios.$get(`api/role/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
       });
+
+      if (this.employeeData.gender == null)
+        this.employeeData.gender = this.genderList[0];
+
+      this.employeeData.user.role = this.roleList[0].id;
     } catch (err) {
       return this.$vs.notification({
         color: "danger",

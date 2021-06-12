@@ -73,6 +73,13 @@
           </template>
           Employee Management
         </vs-sidebar-item>
+
+        <vs-sidebar-item id="admin-roles" to="/sections/admin/roles">
+          <template #icon>
+            <i class="bx bxs-user-badge"></i>
+          </template>
+          Roles Management
+        </vs-sidebar-item>
       </vs-sidebar-group>
 
       <vs-sidebar-item

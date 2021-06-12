@@ -11,18 +11,99 @@
             class="appraisal-list-item"
             @click="() => (selectedAppraisal = a)"
           >
-            Appraisal
+            {{ a.name }}
           </div>
         </div>
         <div class="appraisal-item-open">
           <div class="appraisal-item">
             <div v-if="selectedAppraisal != null">
-              <div class="appraisal-property">
-                <div class="appraisal-property-key">
-                  <b>Stage 1 : </b> Employee Comment
-                </div>
-                <div class="appraisal-property-value">Sample Text</div>
-              </div>
+              <vs-table class="my-5">
+                <template #header>
+                  <div>
+                    <h3 style="text-align: center">Goals</h3>
+                  </div>
+                </template>
+                <template #thead>
+                  <vs-tr>
+                    <vs-th> Summary </vs-th>
+                    <vs-th> Description </vs-th>
+                    <vs-th> Due </vs-th>
+                  </vs-tr>
+                </template>
+                <template #tbody>
+                  <vs-tr v-for="(tr, i) in selectedAppraisal.goal_set" :key="i">
+                    <vs-td>
+                      {{ tr.summary }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.description }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.due }}
+                    </vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+              <vs-table class="my-5">
+                <template #header>
+                  <div>
+                    <h3 style="text-align: center">Core Values</h3>
+                  </div>
+                </template>
+                <template #thead>
+                  <vs-tr>
+                    <vs-th> Summary </vs-th>
+                    <vs-th> Description </vs-th>
+                    <vs-th> Due </vs-th>
+                  </vs-tr>
+                </template>
+                <template #tbody>
+                  <vs-tr
+                    v-for="(tr, i) in selectedAppraisal.corevalue_set"
+                    :key="i"
+                  >
+                    <vs-td>
+                      {{ tr.summary }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.description }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.due }}
+                    </vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+              <vs-table class="my-5">
+                <template #header>
+                  <div>
+                    <h3 style="text-align: center">Skills</h3>
+                  </div>
+                </template>
+                <template #thead>
+                  <vs-tr>
+                    <vs-th> Summary </vs-th>
+                    <vs-th> Description </vs-th>
+                    <vs-th> Due </vs-th>
+                  </vs-tr>
+                </template>
+                <template #tbody>
+                  <vs-tr
+                    v-for="(tr, i) in selectedAppraisal.skill_set"
+                    :key="i"
+                  >
+                    <vs-td>
+                      {{ tr.summary }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.description }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.due }}
+                    </vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
             </div>
           </div>
         </div>
@@ -43,11 +124,14 @@ export default {
   }),
   async fetch() {
     try {
-      this.apprisalList = await this.$axios.$get(`api/appraisal/`, {
+      this.apprisalList = await this.$axios.$get(`api/appraisal/me`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
       });
+
+      if (this.apprisalList.length !== 0)
+        this.selectedAppraisal = this.apprisalList[0];
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
@@ -88,7 +172,7 @@ export default {
 .appraisal-item {
   width: 100%;
   min-height: 600px;
-  background: #f2f2f2;
+  background: #fff;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, var(--vs-shadow-opacity));
   border-radius: 16px;
   padding: 30px;
