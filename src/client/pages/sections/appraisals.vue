@@ -8,7 +8,9 @@
           <div
             v-for="a in apprisalList"
             :key="a.id"
-            class="appraisal-list-item"
+            :class="`appraisal-list-item ${
+              selectedAppraisal.id == a.id ? `active` : ``
+            }`"
             @click="() => (selectedAppraisal = a)"
           >
             {{ a.name }}
@@ -19,8 +21,12 @@
             <div v-if="selectedAppraisal != null">
               <vs-table class="my-5">
                 <template #header>
-                  <div>
-                    <h3 style="text-align: center">Goals</h3>
+                  <div
+                    class="table-header"
+                    style="justify-content: space-between"
+                  >
+                    <h3>Goals</h3>
+                    <vs-button @click="newGoal = true"> Add </vs-button>
                   </div>
                 </template>
                 <template #thead>
@@ -46,8 +52,12 @@
               </vs-table>
               <vs-table class="my-5">
                 <template #header>
-                  <div>
-                    <h3 style="text-align: center">Core Values</h3>
+                  <div
+                    class="table-header"
+                    style="justify-content: space-between"
+                  >
+                    <h3>Core values</h3>
+                    <vs-button @click="newCoreValue = true"> Add </vs-button>
                   </div>
                 </template>
                 <template #thead>
@@ -76,8 +86,12 @@
               </vs-table>
               <vs-table class="my-5">
                 <template #header>
-                  <div>
-                    <h3 style="text-align: center">Skills</h3>
+                  <div
+                    class="table-header"
+                    style="justify-content: space-between"
+                  >
+                    <h3>Skills</h3>
+                    <vs-button @click="newSkill = true"> Add </vs-button>
                   </div>
                 </template>
                 <template #thead>
@@ -109,6 +123,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Dialogs -->
+    <NewGoalDialog
+      v-if="newGoal"
+      :dialog="newGoal"
+      :selected-appraisal="selectedAppraisal"
+      @close="(newGoal = false), $fetch()"
+    />
   </div>
 </template>
 
@@ -117,7 +139,9 @@ export default {
   layout: "dashboard",
   middleware: ["auth"],
   data: () => ({
-    active: false,
+    newGoal: false,
+    newCoreValue: false,
+    newSkill: false,
     loading: false,
     apprisalList: [],
     selectedAppraisal: {},
@@ -161,6 +185,12 @@ export default {
   margin-bottom: 10px;
   opacity: 0.7;
   text-align: center;
+}
+
+.appraisal-lists > .appraisal-list-item.active {
+  cursor: pointer;
+  color: #fff;
+  background: #195bff;
 }
 
 .appraisal-lists > .appraisal-list-item:hover {

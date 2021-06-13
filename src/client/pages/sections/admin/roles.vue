@@ -76,20 +76,20 @@
     </div>
 
     <!-- Dialogs -->
-    <!-- <NewDepartmentDialog
+    <NewRoleDialog
       v-if="newActive"
       :dialog="newActive"
       :company-list="companyList"
       @close="(newActive = false), $fetch()"
     />
 
-    <EditDepartmentDialog
+    <EditRoleDialog
       v-if="editActive"
       :dialog="editActive"
-      :selected-department="selected"
+      :selected-role="selected"
       :company-list="companyList"
       @close="(editActive = false), $fetch()"
-    /> -->
+    />
   </div>
 </template>
 
@@ -134,7 +134,7 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$delete(`api/department/${id}/`, {
+          .$delete(`api/role/${id}/`, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
