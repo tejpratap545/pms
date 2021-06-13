@@ -64,7 +64,7 @@ class SkillsCategoryViewSet(viewsets.ModelViewSet):
 
 
 class GoalViewSET(viewsets.ModelViewSet):
-    querset = Goal.objects.all()
+    queryset = Goal.objects.all()
     serializer_class = GoalSerializer
 
     @extend_schema(
@@ -105,15 +105,15 @@ class GoalViewSET(viewsets.ModelViewSet):
 
 
 class CoreValueViewSET(viewsets.ModelViewSet):
-    querset = CoreValue.objects.all()
+    queryset = CoreValue.objects.all()
     serializer_class = CoreValueSerializer
 
 
 class SkillViewSET(viewsets.ModelViewSet):
-    querset = Skill.objects.all()
+    queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
 
 class KPIViewSet(viewsets.ModelViewSet):
-    querset = KPI.objects.all()
+    queryset = KPI.objects.all()
     serializer_class = KPISerializer
