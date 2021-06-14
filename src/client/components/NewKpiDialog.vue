@@ -1,44 +1,39 @@
 <template>
   <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
-      <h4 class="not-margin">Add a new <b>Goal</b></h4>
+      <h4 class="not-margin">Add a new <b>Kpi</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>
       </vs-button>
     </template>
 
-    <div v-if="$fetchState.pending"></div>
-    <div v-else class="con-form">
-      <vs-input v-model="newGoalData.summary" placeholder="Summary">
-        <template #icon> <i class="bx bx-tag-alt"></i> </template>
-      </vs-input>
-
-      <vs-input v-model="newGoalData.description" placeholder="Description">
+    <!-- <div v-if="$fetchState.pending"></div> -->
+    <div class="con-form">
+      <vs-input v-model="newKpiData.summary" placeholder="Summary">
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
       <vs-select
-        v-if="goalCategoryList.length != 0"
-        v-model="newGoalData.category"
-        placeholder="Select goal category"
+        v-model="newKpiData.progress"
+        placeholder="Progress"
         style="margin-bottom: 10px"
         block
         filter
       >
         <vs-option
-          v-for="(category, index) in goalCategoryList"
+          v-for="(progress, index) in progressList"
           :key="index"
-          :label="category.name"
-          :value="category.id"
+          :label="progress"
+          :value="progress"
         >
-          {{ category.name }}
+          {{ progress }}
         </vs-option>
       </vs-select>
 
       <div class="con-form-control my-2">
-        <p>Goal due date</p>
-        <vs-input v-model="newGoalData.due" type="date">
+        <p>Due date</p>
+        <vs-input v-model="newKpiData.due" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
@@ -46,7 +41,7 @@
 
     <template #footer>
       <div class="footer-dialog">
-        <vs-button :loading="loading" block @click="createGoal">
+        <vs-button :loading="loading" block @click="createKpi">
           Add New
         </vs-button>
       </div>
@@ -56,57 +51,37 @@
 
 <script>
 export default {
-  name: "NewGoalDialog",
+  name: "NewKpiDialog",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
-    selectedAppraisal: Object,
+    selectedGoal: Object,
   },
   data: () => ({
     active: false,
     loading: false,
-    goalCategoryList: [],
-    newGoalData: {
+    progressList: ["Working", "Completed"],
+    newKpiData: {
       summary: "",
-      description: "",
       due: "",
-      weightage: 1,
-      // status: -1,
-      // tracking_status: "null",
-      appraisal: 0,
-      category: 0,
+      progress: "Working",
+      goal: 0,
     },
   }),
-  async fetch() {
-    this.loading = true;
-    try {
-      this.goalCategoryList = await this.$axios.$get(`api/category/goal/`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
-    } catch (err) {
-      return this.$vs.notification({
-        color: "danger",
-        title: "Error fetching employees",
-      });
-    }
-    this.loading = false;
-  },
   mounted() {
     this.active = this.dialog;
-    this.newGoalData.appraisal = this.selectedAppraisal.id;
+    this.newKpiData.goal = this.selectedGoal.id;
   },
   methods: {
     closeDialog() {
       this.$emit("close");
     },
-    createGoal() {
+    createKpi() {
       if (!this.loading) {
         this.loading = true;
 
         this.$axios
-          .$post(`api/goal/`, this.newGoalData, {
+          .$post(`api/kpi/`, this.newKpiData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
@@ -116,7 +91,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating Goal",
+              title: "Error creating Kpi",
             });
           });
       }
