@@ -226,3 +226,9 @@ class ShortAppraisalSerializer(serializers.ModelSerializer):
             "status",
             "employee",
         )
+
+
+class StatusSerializer(serializers.Serializer):
+    a1 = serializers.CharField()
+    a2 = serializers.CharField()
+    a3 = serializers.CharField()

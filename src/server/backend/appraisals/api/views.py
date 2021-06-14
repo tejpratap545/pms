@@ -1,6 +1,6 @@
 from backend.users.api.serializers import EmptySerializer
 from backend.users.permissions import *
-from django.db.models import Count
+from django.db.models import Count, Q
 from drf_spectacular.utils import (
     OpenApiExample,
     OpenApiParameter,
@@ -10,6 +10,7 @@ from drf_spectacular.utils import (
 from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ..models import *
@@ -69,11 +70,11 @@ class AppraisalViewset(viewsets.ModelViewSet):
 
     queryset = Appraisal.objects.all()
 
-    # def get_queryset(self):
-    #     if not self.request.user.is_superuser:
-    #         return super().get_queryset().filter(company=self.request.user.company)
+    def get_queryset(self):
+        if not self.request.user.is_superuser:
+            return super().get_queryset().filter(company=self.request.user.company)
 
-    #     return super().get_queryset()
+        return super().get_queryset()
 
     def get_queryset(self):
         if self.action == "list":
@@ -204,3 +205,35 @@ class ManagerAppraisalView(generics.ListAPIView):
             )
             .filter(employee__first_reporting_manager=self.request.user.profile)
         )
+
+
+@extend_schema(
+    responses={
+        201: OpenApiResponse(
+            response=StatusSerializer,
+            description="Employee current appraisal status",
+        ),
+        400: OpenApiResponse(description="Bad request (something invalid)"),
+        401: OpenApiResponse(
+            description="Authentication credentials were not provided."
+        ),
+    },
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def appraisal_status(request):
+
+    queryset = (
+        Appraisal.objects.select_related("overall_appraisal")
+        .filter(employee=request.user.profile)
+        .only("id", "overall_appraisal__stage")
+        .aggregate(
+            a1=Count("id", filter=Q(overall_appraisal__stage=0)),
+            a2=Count("id", filter=Q(overall_appraisal__stage=1)),
+            a3=Count("id", filter=Q(overall_appraisal__stage=2)),
+        )
+    )
+
+    serializer = StatusSerializer(queryset)
+
+    return Response(serializer.data)

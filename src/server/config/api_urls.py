@@ -12,4 +12,5 @@ urlpatterns = [
     path("appraisal/me", MyAppraisalView.as_view()),
     path("appraisal/manager", ManagerAppraisalView.as_view()),
     path("user/short", ShortEmployeeView.as_view()),
+    path("appraisal/status", appraisal_status),
 ]
