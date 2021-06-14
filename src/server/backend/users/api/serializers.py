@@ -1,4 +1,6 @@
 from backend.users.models import Permission, Role
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import *
 from rest_framework import serializers
 
 from ..models import Company, Department, Profile, User
@@ -273,3 +275,19 @@ class ResetPasswordTokenSerializer(serializers.Serializer):
 
 class EmptySerializer(serializers.Serializer):
     pass
+
+
+class CheckUsernameSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+
+class CheckEmailSerializer(serializers.Serializer):
+    email = serializers.CharField()
+
+
+class CheckPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+
+
+class CheckContactNumberSerializer(serializers.Serializer):
+    contact_number = serializers.CharField()

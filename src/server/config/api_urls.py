@@ -6,6 +6,7 @@ urlpatterns = [
     path("profile/me", ProfileInfoView.as_view()),
     path("check/username", check_username),
     path("check/email", check_email),
+    path("check/contact_number", check_contact_number),
     path("check/password", check_password),
     path("user/reset_password", reset_password),
     path("user/get_token", get_token),

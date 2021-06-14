@@ -88,7 +88,6 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
@@ -101,12 +100,14 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework_xml.renderers.XMLRenderer",
     ],
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.FileUploadParser",
+        "rest_framework_xml.parsers.XMLParser",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": [
@@ -145,6 +146,7 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
     "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@3.36.0",  # default
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAuthenticated"],
     # "SWAGGER_UI_FAVICON_HREF": STATIC_URL + "shopit.png",  # default is swagger favicon
     # Oauth2 related settings. used for example by django-oauth2-toolkit.
     # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#oauth-flows-object

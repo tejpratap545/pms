@@ -62,3 +62,4 @@ XlsxWriter==1.4.3
 zipp==3.4.1
 zope.interface==5.4.0
 zxcvbn==4.4.28
+djangorestframework-xml==2.0.0

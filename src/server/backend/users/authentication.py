@@ -113,7 +113,7 @@ from drf_spectacular.extensions import OpenApiAuthenticationExtension
 
 
 class TokenScheme(OpenApiAuthenticationExtension):
-    target_class = "backend.Profile.authentication.JWTAuthentication"
+    target_class = "backend.users.authentication.JWTAuthentication"
     name = "JWTAuth"
     match_subclasses = True
     priority = 1
@@ -122,5 +122,5 @@ class TokenScheme(OpenApiAuthenticationExtension):
         return {
             "type": "http",
             "scheme": "bearer",
-            "bearerFormat": "password access_token",
+            "bearerFormat": "Bearer access_token",
         }

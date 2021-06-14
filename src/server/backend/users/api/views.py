@@ -6,7 +6,8 @@ from django.core.mail import send_mail
 from django.db.models import Count, OuterRef, Q, Subquery
 from django.utils.datetime_safe import datetime
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
+from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
+                                   extend_schema)
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -67,7 +68,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         request=SetPasswordSerializer,
-        responses={204: None},
+        responses={
+            200: OpenApiResponse(
+                description="Password is sccuessfully set",
+            ),
+            400: OpenApiResponse(description="Bad Request (Something Invalid)"),
+            401: OpenApiResponse(
+                description="Authentication credentials were not provided."
+            ),
+        },
     )
     @action(detail=True, methods=["post"])
     def set_password(self, request, pk=None):
@@ -76,13 +85,22 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             user.set_password(serializer.validated_data["password1"])
             user.save()
-            return Response({"status": "password set"})
+            return Response("Password is sccuessfully set")
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
         request=ChangePasswordSerializer,
-        responses={204: None},
+        responses={
+            200: OpenApiResponse(
+                description="Password is Successfully Changed",
+            ),
+            400: OpenApiResponse(description="Bad Request (Something Invalid)"),
+            400: OpenApiResponse(description="Wrong Password"),
+            401: OpenApiResponse(
+                description="Authentication credentials were not provided."
+            ),
+        },
     )
     @action(detail=True, methods=["post"])
     def change_password(self, request, pk=None):
@@ -92,9 +110,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
             if user.check_password(serializer.validated_data["password"]):
                 user.set_password(serializer.validated_data["password1"])
                 user.save()
-                return Response({"status": "password set"})
+                return Response("Password is Successfully Changed")
             return Response(
-                {"status": "wrong  password"}, status=status.HTTP_400_BAD_REQUEST
+                {"status": "Wrong  Password"}, status=status.HTTP_400_BAD_REQUEST
             )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -111,7 +129,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
             )
         ],
         request=EmptySerializer,
-        responses={204: None},
+        responses={
+            200: OpenApiResponse(
+                description="User is successfully resignd",
+            ),
+            400: OpenApiResponse(description="Bad Request (Something Invalid)"),
+            401: OpenApiResponse(
+                description="Authentication credentials were not provided."
+            ),
+        },
     )
     @action(detail=True, methods=["post"])
     def resign(self, request, pk=None):
@@ -132,11 +158,19 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
         user.save()
 
-        return Response({"status": "User is successfully resignd"})
+        return Response("User is successfully resignd")
 
     @extend_schema(
         request=EmptySerializer,
-        responses={204: None},
+        responses={
+            200: OpenApiResponse(
+                description="User is successfully Revieve",
+            ),
+            400: OpenApiResponse(description="Bad Request (Something Invalid)"),
+            401: OpenApiResponse(
+                description="Authentication credentials were not provided."
+            ),
+        },
     )
     @action(detail=True, methods=["post"])
     def revieve(self, request, pk=None):
@@ -147,7 +181,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         profile.save()
         user.save()
 
-        return Response({"status": "User is successfully Revieve"})
+        return Response( "User is successfully Revieve")
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -214,7 +248,13 @@ class PermissionViewSet(viewsets.ModelViewSet):
 
 @extend_schema(
     request=ResetPasswordTokenSerializer,
-    responses={204: None},
+    responses={
+        200: OpenApiResponse(
+            description="Token succcessfully send to  user@email.com . Please check your email.",
+        ),
+        400: OpenApiResponse(description="error sending  token"),
+    },
+    auth=None,
 )
 @api_view(["POST"])
 def get_token(request):
@@ -239,9 +279,7 @@ def get_token(request):
             )
 
             return Response(
-                {
-                    "msg": f"Token succcessfully send to  {user.email}. Please check your email."
-                }
+                f"Token succcessfully send to  {user.email}. Please check your email."
             )
         except:
             return Response({"msg": "Errors"}, status=status.HTTP_400_BAD_REQUEST)
@@ -252,7 +290,13 @@ def get_token(request):
 
 @extend_schema(
     request=ResetPasswordSerializer,
-    responses={204: None},
+    responses={
+        200: OpenApiResponse(
+            description="password  is successfully reset",
+        ),
+        400: OpenApiResponse(description="error reset password"),
+    },
+    auth=None,
 )
 @api_view(["POST"])
 def reset_password(request):
@@ -270,12 +314,24 @@ def reset_password(request):
             ).delete()
             user.set_password(serializer.validated_data["password1"])
             user.save()
-            return Response("Success")
-        return Response({"msg": "Errors"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response("password  is successfully reset")
+        return Response("error reset password", status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    request=CheckUsernameSerializer,
+    responses={
+        200: OpenApiResponse(
+            description="username is available",
+        ),
+        400: OpenApiResponse(description="username is not available"),
+        401: OpenApiResponse(
+            description="Authentication credentials were not provided."
+        ),
+    },
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def check_username(request):
@@ -283,20 +339,44 @@ def check_username(request):
         username = request.data.get("username")
         if not User.objects.filter(username=username).exists():
             return Response("username is available")
-        return Response("username not is available", status=status.HTTP_400_BAD_REQUEST)
+        return Response("username is not available", status=status.HTTP_400_BAD_REQUEST)
     except:
-        return Response("username not is available", status=status.HTTP_400_BAD_REQUEST)
+        return Response("username is not available", status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    request=ChangePasswordSerializer,
+    responses={
+        200: OpenApiResponse(
+            description="Password is strong",
+        ),
+        400: OpenApiResponse(description="Password is Weak"),
+        401: OpenApiResponse(
+            description="Authentication credentials were not provided."
+        ),
+    },
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def check_password(request):
     password = request.data.get("password")
     if check_password_strength(password):
         return Response("Password is good")
-    return Response("Weak Password", status=status.HTTP_400_BAD_REQUEST)
+    return Response("Password is Weak", status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    request=CheckEmailSerializer,
+    responses={
+        200: OpenApiResponse(
+            description="email is available",
+        ),
+        400: OpenApiResponse(description="email is not available"),
+        401: OpenApiResponse(
+            description="Authentication credentials were not provided."
+        ),
+    },
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def check_email(request):
@@ -304,18 +384,34 @@ def check_email(request):
         email = request.data.get("email")
         if not User.objects.filter(email=email).exists():
             return Response("email is available")
-        return Response("email not is available", status=status.HTTP_400_BAD_REQUEST)
+        return Response("email is not available", status=status.HTTP_400_BAD_REQUEST)
     except:
-        return Response("email not is available", status=status.HTTP_400_BAD_REQUEST)
+        return Response("email is not available", status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    request=CheckContactNumberSerializer,
+    responses={
+        200: OpenApiResponse(
+            description="Contact Numbe is available",
+        ),
+        400: OpenApiResponse(description="Contact Number is not available"),
+        401: OpenApiResponse(
+            description="Authentication credentials were not provided."
+        ),
+    },
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def check_contact_number(request):
     try:
         contact_number = request.data.get("contact_number")
         if not User.objects.filter(contact_number=contact_number).exists():
-            return Response("email is available")
-        return Response("email not is available", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Contact Number is available")
+        return Response(
+            "Contact Number is not available", status=status.HTTP_400_BAD_REQUEST
+        )
     except:
-        return Response("email not is available", status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            "Contact Number is not  available", status=status.HTTP_400_BAD_REQUEST
+        )

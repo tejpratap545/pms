@@ -3,6 +3,8 @@ from typing import Optional
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models, transaction
 from django.utils import timezone
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 
 from .backend import check_password_strength
 from .manager import UserManager
@@ -191,10 +193,12 @@ class Profile(models.Model):
     skill3 = models.CharField(max_length=50, blank=True, null=True)
 
     @property
+    @extend_schema_field(OpenApiTypes.STR)
     def name(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
     @property
+    @extend_schema_field(OpenApiTypes.EMAIL)
     def email(self):
         return self.user.email
 
