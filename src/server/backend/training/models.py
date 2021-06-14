@@ -37,7 +37,7 @@ class SkillsCategory(models.Model):
 
 class Goal(models.Model):
     appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
-    goal_category = models.ForeignKey(
+    category = models.ForeignKey(
         GoalCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
     summary = models.TextField(blank=True, null=True)
@@ -100,7 +100,7 @@ class KPI(models.Model):
 
 class CoreValue(models.Model):
     appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
-    core_value_category = models.ForeignKey(
+    category = models.ForeignKey(
         CoreValueCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
     summary = models.TextField(blank=True, null=True)
@@ -116,7 +116,7 @@ class CoreValue(models.Model):
 
 class Skill(models.Model):
     appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
-    skill_category = models.ForeignKey(
+    category = models.ForeignKey(
         SkillsCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
     summary = models.TextField(blank=True, null=True)

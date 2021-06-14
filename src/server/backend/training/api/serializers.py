@@ -73,7 +73,7 @@ class KPISerializer(serializers.ModelSerializer):
 
 
 class DetailCoreValueSerializer(serializers.ModelSerializer):
-    core_value_category = CoreValueCategorySerializer()
+    category = CoreValueCategorySerializer()
 
     class Meta:
         model = CoreValue
@@ -81,7 +81,7 @@ class DetailCoreValueSerializer(serializers.ModelSerializer):
 
 
 class DetailSkillSerializer(serializers.ModelSerializer):
-    skill_category = SkillsCategorySerializer()
+    category = SkillsCategorySerializer()
 
     class Meta:
         model = Skill
@@ -90,7 +90,7 @@ class DetailSkillSerializer(serializers.ModelSerializer):
 
 class DetailGoalSerializer(serializers.ModelSerializer):
     kpi_set = KPISerializer(many=True)
-    goal_category = GoalCategorySerializer()
+    category = GoalCategorySerializer()
 
     class Meta:
         model = Goal

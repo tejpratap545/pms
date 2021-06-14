@@ -110,8 +110,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
                 .prefetch_related(
                     "overall_appraisal",
                     "goal_set",
-                    "goal_set__goal__category",
-                    "goal_set__kpi",
+                    "goal_set__category",
+                    "goal_set__kpi_set",
                     "corevalue_set",
                     "corevalue_set__category",
                     "skill_set",
@@ -158,8 +158,8 @@ def appraisal_query():
     return Appraisal.objects.prefetch_related(
         "overall_appraisal",
         "goal_set",
-        "goal_set__goal__category",
-        "goal_set__kpi",
+        "goal_set__category",
+        "goal_set__kpi_set",
         "corevalue_set",
         "corevalue_set__category",
         "skill_set",
