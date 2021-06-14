@@ -182,12 +182,16 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
 class RoleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsCompanyAdmin]
-    serializer_class = RoleSerializer
     filterset_fields = ["company"]
     search_fields = ["name"]
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return RoleInfoSerializer
+        return RoleSerializer
+
     def get_queryset(self):
-        queryset = Role.objects.all()
+        queryset = Role.objects.prefetch_related("permissions").all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(company=self.request.user.company)
 
