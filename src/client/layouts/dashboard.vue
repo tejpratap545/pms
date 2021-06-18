@@ -23,6 +23,17 @@
         Home
       </vs-sidebar-item>
 
+      <vs-sidebar-item
+        v-if="!$store.state.user.user.is_superuser"
+        id="my-appraisals"
+        to="/sections/appraisals"
+      >
+        <template #icon>
+          <i class="bx bx-message-square-dots"></i>
+        </template>
+        Appraisals
+      </vs-sidebar-item>
+
       <vs-sidebar-group
         v-if="
           $store.state.user.user.is_superuser || $store.state.user.user.is_admin
@@ -81,17 +92,6 @@
           Roles Management
         </vs-sidebar-item>
       </vs-sidebar-group>
-
-      <vs-sidebar-item
-        v-if="!$store.state.user.user.is_superuser"
-        id="my-appraisals"
-        to="/sections/appraisals"
-      >
-        <template #icon>
-          <i class="bx bx-message-square-dots"></i>
-        </template>
-        Appraisals
-      </vs-sidebar-item>
 
       <vs-sidebar-item
         v-if="!$store.state.user.user.is_superuser"
