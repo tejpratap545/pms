@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-v-html */
 <template>
   <div class="page">
     <h1>My Appraiasals Management</h1>
@@ -43,7 +44,7 @@
                       {{ tr.summary }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.description }}
+                      <span v-html="tr.description"></span>
                     </vs-td>
                     <vs-td>
                       {{ tr.due }}
@@ -127,7 +128,7 @@
                       {{ tr.summary }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.description }}
+                      <span v-html="tr.description"></span>
                     </vs-td>
                     <vs-td>
                       {{ tr.due }}
@@ -175,7 +176,7 @@
                       {{ tr.summary }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.description }}
+                      <span v-html="tr.description"></span>
                     </vs-td>
                     <vs-td>
                       {{ tr.due }}

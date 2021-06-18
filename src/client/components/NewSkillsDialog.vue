@@ -14,9 +14,10 @@
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
-      <vs-input v-model="newSkillsData.description" placeholder="Description">
-        <template #icon> <i class="bx bx-tag-alt"></i> </template>
-      </vs-input>
+      <Editor
+        :data="newSkillsData.description"
+        @changeData="(value) => (newSkillsData.description = value)"
+      />
 
       <vs-select
         v-if="skillsCategoryList.length != 0"

@@ -14,12 +14,10 @@
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
-      <vs-input
-        v-model="newCoreValueData.description"
-        placeholder="Description"
-      >
-        <template #icon> <i class="bx bx-tag-alt"></i> </template>
-      </vs-input>
+      <Editor
+        :data="newCoreValueData.description"
+        @changeData="(value) => (newCoreValueData.description = value)"
+      />
 
       <vs-select
         v-if="coreValueCategoryList.length != 0"

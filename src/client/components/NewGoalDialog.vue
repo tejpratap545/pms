@@ -14,9 +14,10 @@
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
-      <vs-input v-model="newGoalData.description" placeholder="Description">
-        <template #icon> <i class="bx bx-tag-alt"></i> </template>
-      </vs-input>
+      <Editor
+        :data="newGoalData.description"
+        @changeData="(value) => (newGoalData.description = value)"
+      />
 
       <vs-select
         v-if="goalCategoryList.length != 0"
