@@ -23,7 +23,7 @@
         v-if="goalCategoryList.length != 0"
         v-model="newGoalData.category"
         placeholder="Select goal category"
-        style="margin-bottom: 10px"
+        style="margin: 10px 0"
         block
         filter
       >

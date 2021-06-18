@@ -1,9 +1,9 @@
 /* eslint-disable vue/no-v-html */
 <template>
   <div class="page">
-    <h1>My Appraiasals Management</h1>
+    <h1>My Appraiasal Management</h1>
     <div v-if="$fetchState.pending"></div>
-    <div v-else class="center grid" style="margin-top: 50px">
+    <div v-else class="center grid">
       <div class="appraisal-lists">
         <h3>My Appraisals</h3>
         <div
@@ -18,190 +18,35 @@
         </div>
       </div>
       <div class="appraisal-grid">
+        <div class="mobile-appraisal-select">
+          <vs-select
+            v-model="selectedAppraisalId"
+            placeholder="Select Appraisal"
+            style="margin-bottom: 10px; width: 100%"
+            block
+            filter
+          >
+            <vs-option
+              v-for="a in apprisalList"
+              :key="a.id"
+              :label="a.name"
+              :value="a.id"
+              @click="() => (selectedAppraisal = a)"
+            >
+              {{ a.name }}
+            </vs-option>
+          </vs-select>
+        </div>
         <div class="appraisal-item-open">
           <div class="appraisal-item">
-            <div v-if="selectedAppraisal != null">
-              <vs-table class="my-5">
-                <template #header>
-                  <div
-                    class="table-header"
-                    style="justify-content: space-between"
-                  >
-                    <h3>Goals</h3>
-                    <vs-button @click="newGoal = true"> Add </vs-button>
-                  </div>
-                </template>
-                <template #thead>
-                  <vs-tr>
-                    <vs-th> Summary </vs-th>
-                    <vs-th> Description </vs-th>
-                    <vs-th> Due </vs-th>
-                  </vs-tr>
-                </template>
-                <template #tbody>
-                  <vs-tr v-for="(tr, i) in selectedAppraisal.goal_set" :key="i">
-                    <vs-td>
-                      {{ tr.summary }}
-                    </vs-td>
-                    <vs-td>
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.description"></span>
-                    </vs-td>
-                    <vs-td>
-                      {{ tr.due }}
-                    </vs-td>
-
-                    <template #expand>
-                      <div>
-                        <div class="con-content">
-                          <vs-button
-                            border
-                            danger
-                            @click="deleteItem('goal', tr.id)"
-                          >
-                            Delete
-                          </vs-button>
-                        </div>
-                        <vs-table class="my-5">
-                          <template #header>
-                            <div
-                              class="table-header"
-                              style="justify-content: space-between"
-                            >
-                              <h3>KPIs</h3>
-                              <vs-button
-                                color="success"
-                                flat
-                                icon
-                                @click="(newKpi = true), (selectedGoal = tr)"
-                              >
-                                <i class="bx bx-plus"></i>
-                              </vs-button>
-                            </div>
-                          </template>
-                          <template #thead>
-                            <vs-tr>
-                              <vs-th> Summary </vs-th>
-                              <vs-th> Due </vs-th>
-                              <vs-th> Progress </vs-th>
-                            </vs-tr>
-                          </template>
-                          <template #tbody>
-                            <vs-tr
-                              v-for="(kpi, j) in tr.kpi_set"
-                              :key="j"
-                              class="kpi-container-item"
-                            >
-                              <vs-td>{{ kpi.summary }}</vs-td>
-                              <vs-td>{{ kpi.due }}</vs-td>
-                              <vs-td>{{ kpi.progress }}</vs-td>
-                            </vs-tr>
-                          </template>
-                        </vs-table>
-                      </div>
-                    </template>
-                  </vs-tr>
-                </template>
-              </vs-table>
-              <vs-table class="my-5">
-                <template #header>
-                  <div
-                    class="table-header"
-                    style="justify-content: space-between"
-                  >
-                    <h3>Core values</h3>
-                    <vs-button @click="newCoreValue = true"> Add </vs-button>
-                  </div>
-                </template>
-                <template #thead>
-                  <vs-tr>
-                    <vs-th> Summary </vs-th>
-                    <vs-th> Description </vs-th>
-                    <vs-th> Due </vs-th>
-                  </vs-tr>
-                </template>
-                <template #tbody>
-                  <vs-tr
-                    v-for="(tr, i) in selectedAppraisal.corevalue_set"
-                    :key="i"
-                  >
-                    <vs-td>
-                      {{ tr.summary }}
-                    </vs-td>
-                    <vs-td>
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.description"></span>
-                    </vs-td>
-                    <vs-td>
-                      {{ tr.due }}
-                    </vs-td>
-
-                    <template #expand>
-                      <div>
-                        <div class="con-content">
-                          <vs-button
-                            border
-                            danger
-                            @click="deleteItem('core-value', tr.id)"
-                          >
-                            Delete
-                          </vs-button>
-                        </div>
-                      </div>
-                    </template>
-                  </vs-tr>
-                </template>
-              </vs-table>
-              <vs-table class="my-5">
-                <template #header>
-                  <div
-                    class="table-header"
-                    style="justify-content: space-between"
-                  >
-                    <h3>Skills</h3>
-                    <vs-button @click="newSkill = true"> Add </vs-button>
-                  </div>
-                </template>
-                <template #thead>
-                  <vs-tr>
-                    <vs-th> Summary </vs-th>
-                    <vs-th> Description </vs-th>
-                    <vs-th> Due </vs-th>
-                  </vs-tr>
-                </template>
-                <template #tbody>
-                  <vs-tr
-                    v-for="(tr, i) in selectedAppraisal.skill_set"
-                    :key="i"
-                  >
-                    <vs-td>
-                      {{ tr.summary }}
-                    </vs-td>
-                    <vs-td>
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.description"></span>
-                    </vs-td>
-                    <vs-td>
-                      {{ tr.due }}
-                    </vs-td>
-
-                    <template #expand>
-                      <div>
-                        <div class="con-content">
-                          <vs-button
-                            border
-                            danger
-                            @click="deleteItem('skill', tr.id)"
-                          >
-                            Delete
-                          </vs-button>
-                        </div>
-                      </div>
-                    </template>
-                  </vs-tr>
-                </template>
-              </vs-table>
-            </div>
+            <Appraisal
+              v-if="selectedAppraisal != null"
+              :selected-appraisal="
+                selectedAppraisalId == 0
+                  ? selectedAppraisal
+                  : apprisalList.find((x) => x.id == selectedAppraisalId)
+              "
+            />
           </div>
         </div>
       </div>
@@ -251,6 +96,7 @@ export default {
     apprisalList: [],
     selectedGoal: {},
     selectedAppraisal: {},
+    selectedAppraisalId: 0,
   }),
   async fetch() {
     try {
@@ -307,8 +153,9 @@ export default {
   justify-content: center;
 }
 
-.kpi-container-item {
-  padding: 10px;
+.mobile-appraisal-select {
+  display: none;
+  width: 100%;
 }
 
 .appraisal-lists {
@@ -382,8 +229,16 @@ export default {
 }
 
 @media only screen and (max-width: 800px) {
-  .appraisal-lists > .appraisal-list-item {
-    margin-right: unset;
+  .appraisal-item-open {
+    margin-left: unset;
+  }
+
+  .appraisal-lists {
+    display: none;
+  }
+
+  .mobile-appraisal-select {
+    display: block;
   }
 }
 </style>

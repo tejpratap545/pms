@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <h1>Home</h1>
-    <div class="center" style="margin-top: 50px">
+    <div class="center">
       <div class="status-cards-group">
         <div
           class="card"
