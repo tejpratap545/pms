@@ -44,6 +44,7 @@
                       {{ tr.summary }}
                     </vs-td>
                     <vs-td>
+                      <!-- eslint-disable-next-line vue/no-v-html -->
                       <span v-html="tr.description"></span>
                     </vs-td>
                     <vs-td>
@@ -128,6 +129,7 @@
                       {{ tr.summary }}
                     </vs-td>
                     <vs-td>
+                      <!-- eslint-disable-next-line vue/no-v-html -->
                       <span v-html="tr.description"></span>
                     </vs-td>
                     <vs-td>
@@ -176,6 +178,7 @@
                       {{ tr.summary }}
                     </vs-td>
                     <vs-td>
+                      <!-- eslint-disable-next-line vue/no-v-html -->
                       <span v-html="tr.description"></span>
                     </vs-td>
                     <vs-td>
@@ -268,6 +271,7 @@ export default {
   },
   methods: {
     deleteItem(item, id) {
+      // eslint-disable-next-line no-console
       console.log(item, id);
       this.loading = true;
 
