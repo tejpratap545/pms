@@ -52,7 +52,11 @@
                     <template #expand>
                       <div>
                         <div class="con-content">
-                          <vs-button border danger @click="deleteGoal(tr.id)">
+                          <vs-button
+                            border
+                            danger
+                            @click="deleteItem('goal', tr.id)"
+                          >
                             Delete
                           </vs-button>
                         </div>
@@ -128,6 +132,20 @@
                     <vs-td>
                       {{ tr.due }}
                     </vs-td>
+
+                    <template #expand>
+                      <div>
+                        <div class="con-content">
+                          <vs-button
+                            border
+                            danger
+                            @click="deleteItem('core-value', tr.id)"
+                          >
+                            Delete
+                          </vs-button>
+                        </div>
+                      </div>
+                    </template>
                   </vs-tr>
                 </template>
               </vs-table>
@@ -162,6 +180,20 @@
                     <vs-td>
                       {{ tr.due }}
                     </vs-td>
+
+                    <template #expand>
+                      <div>
+                        <div class="con-content">
+                          <vs-button
+                            border
+                            danger
+                            @click="deleteItem('skill', tr.id)"
+                          >
+                            Delete
+                          </vs-button>
+                        </div>
+                      </div>
+                    </template>
                   </vs-tr>
                 </template>
               </vs-table>
@@ -234,25 +266,30 @@ export default {
     }
   },
   methods: {
-    deleteGoal(id) {
-      if (!this.loading) {
-        this.loading = true;
+    deleteItem(item, id) {
+      console.log(item, id);
+      this.loading = true;
 
-        this.$axios
-          .$delete(`api/goal/${id}/`, {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-          })
-          .then(() => this.$fetch())
-          .catch(() => {
-            this.loading = false;
-            return this.$vs.notification({
-              color: "danger",
-              title: "Error deleting goal",
-            });
+      this.$axios
+        .$delete(`api/${item}/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        })
+        .then(() => {
+          this.$fetch();
+          return this.$vs.notification({
+            color: "success",
+            title: `Successfully deleted ${item}`,
           });
-      }
+        })
+        .catch(() => {
+          this.loading = false;
+          return this.$vs.notification({
+            color: "danger",
+            title: `Error deleting ${item}`,
+          });
+        });
     },
   },
 };

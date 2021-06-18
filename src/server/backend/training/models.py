@@ -1,5 +1,5 @@
 from backend.appraisals.models import Appraisal
-from backend.users.models import Company
+from backend.users.models import Company, Profile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.datetime_safe import date
@@ -127,4 +127,30 @@ class Skill(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(100)],
         blank=True,
         null=False,
+    )
+
+
+class DepartmentalGoal(models.Model):
+    summary = models.CharField(max_length=150)
+    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    due = models.DateField(null=True, blank=True)
+    description = models.CharField(max_length=150, null=True, blank=True)
+    category = models.ForeignKey(
+        GoalCategory, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    manager = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+
+class DepartmentalCoreValue(models.Model):
+    summary = models.CharField(max_length=150)
+    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    due = models.DateField(null=True, blank=True)
+    description = models.CharField(max_length=150, null=True, blank=True)
+    category = models.ForeignKey(
+        CoreValueCategory, on_delete=models.SET_NULL, blank=True, null=True
+    )
+    manager = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, null=True, blank=True
     )
