@@ -8,7 +8,7 @@
       </vs-button>
     </template>
 
-    <div class="con-form">Are you sure want to Upstage Appraisal</div>
+    <div class="con-form">Are you sure you want to Upstage Appraisal</div>
 
     <template #footer>
       <div class="footer-dialog">

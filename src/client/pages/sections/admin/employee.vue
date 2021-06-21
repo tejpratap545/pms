@@ -1,7 +1,9 @@
 <template>
   <div class="page">
     <h1>Employee Management</h1>
-    <div class="center">
+
+    <div v-if="$fetchState.pending"></div>
+    <div v-else class="center">
       <vs-table v-model="selected">
         <template #header>
           <div class="table-header">
