@@ -10,6 +10,7 @@
       <template #thead>
         <vs-tr>
           <vs-th> Summary </vs-th>
+          <vs-th> Weightage </vs-th>
           <vs-th> Due </vs-th>
         </vs-tr>
       </template>
@@ -17,6 +18,9 @@
         <vs-tr v-for="(tr, i) in selectedAppraisal.goal_set" :key="i">
           <vs-td>
             {{ tr.summary }}
+          </vs-td>
+          <vs-td>
+            {{ tr.weightage }}
           </vs-td>
           <vs-td>
             {{ tr.due }}
@@ -179,6 +183,35 @@
         </vs-tr>
       </template>
     </vs-table>
+
+    <!-- Dialogs -->
+    <NewGoalDialog
+      v-if="newGoal"
+      :dialog="newGoal"
+      :selected-appraisal="selectedAppraisal"
+      @close="(newGoal = false), $emit('refresh')"
+    />
+
+    <NewCoreValueDialog
+      v-if="newCoreValue"
+      :dialog="newCoreValue"
+      :selected-appraisal="selectedAppraisal"
+      @close="(newCoreValue = false), $emit('refresh')"
+    />
+
+    <NewSkillsDialog
+      v-if="newSkill"
+      :dialog="newSkill"
+      :selected-appraisal="selectedAppraisal"
+      @close="(newSkill = false), $emit('refresh')"
+    />
+
+    <NewKpiDialog
+      v-if="newKpi"
+      :dialog="newKpi"
+      :selected-goal="selectedGoal"
+      @close="(newKpi = false), $emit('refresh')"
+    />
   </div>
 </template>
 
@@ -189,6 +222,33 @@ export default {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     selectedAppraisal: Object,
+  },
+  data: () => ({
+    newGoal: false,
+    newCoreValue: false,
+    newSkill: false,
+    newKpi: false,
+  }),
+  methods: {
+    deleteItem(item, id) {
+      // eslint-disable-next-line no-console
+      console.log(item, id);
+      this.loading = true;
+
+      this.$axios
+        .$delete(`api/${item}/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        })
+        .then(() => {
+          this.$emit("refresh");
+          return this.$vs.notification({
+            color: "success",
+            title: `Successfully deleted ${item}`,
+          });
+        });
+    },
   },
 };
 </script>

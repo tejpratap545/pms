@@ -46,40 +46,12 @@
                   ? selectedAppraisal
                   : apprisalList.find((x) => x.id == selectedAppraisalId)
               "
+              @refresh="$fetch()"
             />
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Dialogs -->
-    <NewGoalDialog
-      v-if="newGoal"
-      :dialog="newGoal"
-      :selected-appraisal="selectedAppraisal"
-      @close="(newGoal = false), $fetch()"
-    />
-
-    <NewCoreValueDialog
-      v-if="newCoreValue"
-      :dialog="newCoreValue"
-      :selected-appraisal="selectedAppraisal"
-      @close="(newCoreValue = false), $fetch()"
-    />
-
-    <NewSkillsDialog
-      v-if="newSkill"
-      :dialog="newSkill"
-      :selected-appraisal="selectedAppraisal"
-      @close="(newSkill = false), $fetch()"
-    />
-
-    <NewKpiDialog
-      v-if="newKpi"
-      :dialog="newKpi"
-      :selected-goal="selectedGoal"
-      @close="(newKpi = false), $fetch()"
-    />
   </div>
 </template>
 
@@ -88,10 +60,6 @@ export default {
   layout: "dashboard",
   middleware: ["auth"],
   data: () => ({
-    newGoal: false,
-    newCoreValue: false,
-    newSkill: false,
-    newKpi: false,
     loading: false,
     apprisalList: [],
     selectedGoal: {},
@@ -114,34 +82,6 @@ export default {
         title: "Error fetching appriasals",
       });
     }
-  },
-  methods: {
-    deleteItem(item, id) {
-      // eslint-disable-next-line no-console
-      console.log(item, id);
-      this.loading = true;
-
-      this.$axios
-        .$delete(`api/${item}/${id}/`, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.accessToken}`,
-          },
-        })
-        .then(() => {
-          this.$fetch();
-          return this.$vs.notification({
-            color: "success",
-            title: `Successfully deleted ${item}`,
-          });
-        })
-        .catch(() => {
-          this.loading = false;
-          return this.$vs.notification({
-            color: "danger",
-            title: `Error deleting ${item}`,
-          });
-        });
-    },
   },
 };
 </script>
