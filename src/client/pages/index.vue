@@ -11,7 +11,7 @@
             <i class="bx bx-rocket"></i>
           </div>
           <div class="status">
-            <h1>1</h1>
+            <h1>{{ apprisalStatus.a1 }}</h1>
           </div>
           <div class="status-description">Appraisals in goal setting stage</div>
         </div>
@@ -24,7 +24,7 @@
             <i class="bx bx-calendar-alt"></i>
           </div>
           <div class="status">
-            <h1>0</h1>
+            <h1>{{ apprisalStatus.a2 }}</h1>
           </div>
           <div class="status-description">Appraisals in mid year review</div>
         </div>
@@ -37,7 +37,7 @@
             <i class="bx bx-calendar-event"></i>
           </div>
           <div class="status">
-            <h1>0</h1>
+            <h1>{{ apprisalStatus.a3 }}</h1>
           </div>
           <div class="status-description">Appraisals in end year review</div>
         </div>
@@ -111,10 +111,20 @@
         </div>
 
         <div class="action-buttons">
-          <vs-button :loading="loading" @click="logout"> Logout </vs-button>
+          <vs-button @click="logout"> Logout </vs-button>
+          <vs-button @click="passwordActive = true">
+            Change password
+          </vs-button>
         </div>
       </div>
     </div>
+
+    <!-- Dialogs -->
+    <ChangePassword
+      v-if="passwordActive"
+      :dialog="passwordActive"
+      @close="passwordActive = false"
+    />
   </div>
 </template>
 
@@ -124,7 +134,27 @@ export default {
   middleware: ["auth"],
   data: () => ({
     loading: false,
+    passwordActive: false,
+    apprisalStatus: {
+      a1: 0,
+      a2: 0,
+      a3: 0,
+    },
   }),
+  async fetch() {
+    try {
+      this.apprisalStatus = await this.$axios.$get(`api/appraisal/status`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+    } catch (err) {
+      return this.$vs.notification({
+        color: "danger",
+        title: "Error fetching appriasal status",
+      });
+    }
+  },
   methods: {
     logout() {
       if (!this.loading) {

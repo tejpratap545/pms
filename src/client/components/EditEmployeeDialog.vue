@@ -33,6 +33,19 @@
         </template>
       </vs-input>
 
+      <vs-input
+        v-model="employeeData.user.contact_number"
+        placeholder="Contact number"
+        @change="checkContactNumber(employeeData.user.contact_number)"
+      >
+        <template #icon>
+          <i class="bx bxs-phone"></i>
+        </template>
+        <template v-if="!validContactNumber" #message-danger>
+          Contact number must be unique
+        </template>
+      </vs-input>
+
       <vs-input v-model="employeeData.user.first_name" placeholder="Firstname">
         <template #icon>
           <i class="bx bx-user"></i>
@@ -45,9 +58,16 @@
         </template>
       </vs-input>
 
-      <vs-input v-model="employeeData.user.username" placeholder="Username">
+      <vs-input
+        v-model="employeeData.user.username"
+        placeholder="Username"
+        @change="checkUsername(employeeData.user.username)"
+      >
         <template #icon>
           <i class="bx bx-user"></i>
+        </template>
+        <template v-if="!validUsername" #message-danger>
+          Username must be unique
         </template>
       </vs-input>
 
@@ -121,6 +141,7 @@
       <vs-select
         v-model="employeeData.employment_type"
         placeholder="Select employee type"
+        style="margin-bottom: 10px"
         block
         filter
       >
@@ -134,13 +155,54 @@
         </vs-option>
       </vs-select>
 
-      <vs-input v-model="employeeData.user.email" placeholder="User email">
+      <vs-select
+        v-model="employeeData.first_reporting_manager"
+        placeholder="First reporting manager"
+        style="margin-bottom: 10px"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(user, index) in userList"
+          :key="index"
+          :label="user.name"
+          :value="user.id"
+        >
+          {{ user.name }}
+        </vs-option>
+      </vs-select>
+
+      <vs-select
+        v-model="employeeData.second_reporting_manager"
+        placeholder="Second reporting manager"
+        style="margin-bottom: 10px"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(user, index) in userList"
+          :key="index"
+          :label="user.name"
+          :value="user.id"
+        >
+          {{ user.name }}
+        </vs-option>
+      </vs-select>
+
+      <vs-input
+        v-model="employeeData.user.email"
+        placeholder="User email"
+        @change="checkEmail(employeeData.user.email)"
+      >
         <template #icon> @ </template>
+        <template v-if="!validEmail" #message-danger>
+          Email must be unique
+        </template>
       </vs-input>
     </div>
 
     <template #footer>
-      <div class="footer-dialog">
+      <div v-if="validEmail && validUsername" class="footer-dialog">
         <vs-button
           :loading="loading"
           block
@@ -148,6 +210,9 @@
         >
           Update
         </vs-button>
+      </div>
+      <div v-else>
+        <vs-alert color="danger"> Some of the fields are invalid </vs-alert>
       </div>
     </template>
   </vs-dialog>
@@ -169,6 +234,10 @@ export default {
     martialStatus: ["Single", "Married", "Divorced", "Separated", "Widowed"],
     employmentType: ["Contractor", "Full-Time", "Part-Time", "Internship"],
     roleList: [],
+    userList: [],
+    validEmail: true,
+    validUsername: true,
+    validContactNumber: true,
     employeeData: {},
   }),
   async fetch() {
@@ -183,6 +252,12 @@ export default {
       }
 
       this.roleList = await this.$axios.$get(`api/role/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
+      this.userList = await this.$axios.$get(`api/user/short`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -203,8 +278,68 @@ export default {
   mounted() {
     this.active = this.dialog;
     this.employeeData = this.selectedEmployee;
+
+    if (!this.$store.state.user.user.is_superuser) {
+      this.userList = this.userList.filter(
+        (x) => x.user.company === this.$store.state.user.user.company
+      );
+    }
   },
   methods: {
+    checkEmail(email) {
+      this.$axios
+        .$post(
+          `api/check/email`,
+          {
+            email,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+          }
+        )
+        .then(() => (this.validEmail = true))
+        .catch(() => {
+          this.validEmail = false;
+        });
+    },
+    checkContactNumber(contactNumber) {
+      this.$axios
+        .$post(
+          `api/check/contact_number`,
+          {
+            contact_number: contactNumber,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+          }
+        )
+        .then(() => (this.validContactNumber = true))
+        .catch(() => {
+          this.validContactNumber = false;
+        });
+    },
+    checkUsername(username) {
+      this.$axios
+        .$post(
+          `api/check/username`,
+          {
+            username,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+          }
+        )
+        .then(() => (this.validUsername = true))
+        .catch(() => {
+          this.validUsername = false;
+        });
+    },
     closeDialog() {
       this.$emit("close");
     },
@@ -231,3 +366,18 @@ export default {
   },
 };
 </script>
+
+<style>
+.con-form {
+  padding: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 500px;
+}
+
+.con-form-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>

@@ -19,6 +19,10 @@
             <vs-th> Username </vs-th>
             <vs-th> Fullname </vs-th>
             <vs-th> Email </vs-th>
+            <vs-th> Date of Hire </vs-th>
+            <vs-th> Department </vs-th>
+            <vs-th> Position </vs-th>
+            <vs-th> Supervisor </vs-th>
             <vs-th
               sort
               @click="employeeList = $vs.sortData($event, employeeList, 'id')"
@@ -50,6 +54,25 @@
             <vs-td> {{ tr.user.first_name }} {{ tr.user.last_name }} </vs-td>
             <vs-td>
               {{ tr.user.email }}
+            </vs-td>
+            <vs-td>
+              {{ tr.date_of_hire }}
+            </vs-td>
+            <vs-td>
+              {{
+                tr.department
+                  ? departmentList.find((x) => x.id == tr.department).name
+                  : ``
+              }}
+            </vs-td>
+            <vs-td> {{ tr.job_title }} </vs-td>
+            <vs-td>
+              {{
+                tr.first_reporting_manager
+                  ? employeeList.find((x) => x.id == tr.first_reporting_manager)
+                      .user.username
+                  : ``
+              }}
             </vs-td>
             <vs-td>
               {{ tr.id }}
@@ -112,10 +135,17 @@ export default {
     loading: false,
     selected: {},
     employeeList: [],
+    departmentList: [],
   }),
   async fetch() {
     try {
       this.employeeList = await this.$axios.$get(`api/user/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
+      this.departmentList = await this.$axios.$get(`api/department/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },

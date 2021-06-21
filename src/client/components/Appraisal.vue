@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div class="my-5 pa-2">
+      <vs-row>
+        <vs-col w="4"> Actions </vs-col>
+        <vs-col w="8" style="display: flex; justify-content: flex-end">
+          <vs-button @click="upstageAppraisal = true">
+            Upstage Apraisal {{ selectedAppraisal.stage }}
+          </vs-button>
+        </vs-col>
+      </vs-row>
+    </div>
     <vs-table class="my-5">
       <template #header>
         <div class="table-header" style="justify-content: space-between">
@@ -185,6 +195,13 @@
     </vs-table>
 
     <!-- Dialogs -->
+    <UpstageAppraisal
+      v-if="upstageAppraisal"
+      :dialog="upstageAppraisal"
+      :selected-appraisal-id="selectedAppraisal.id"
+      @close="(upstageAppraisal = false), $emit('refresh')"
+    />
+
     <NewGoalDialog
       v-if="newGoal"
       :dialog="newGoal"
@@ -228,6 +245,7 @@ export default {
     newCoreValue: false,
     newSkill: false,
     newKpi: false,
+    upstageAppraisal: false,
   }),
   methods: {
     deleteItem(item, id) {
