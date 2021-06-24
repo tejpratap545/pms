@@ -1,3 +1,5 @@
+from typing import List
+
 from backend.appraisals.models import Appraisal
 from backend.users.models import Company, Profile
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -33,6 +35,24 @@ class SkillsCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class KPI(models.Model):
+    PROGRESS_CHOICES = (("Working", "Working"), ("Completed", "Completed"))
+    goal = models.ForeignKey("Goal", on_delete=models.CASCADE)
+    summary = models.TextField(blank=True, null=True)
+    due = models.DateField(blank=True, null=True)
+    date_created = models.DateField(null=True, default=date.today)
+    progress = models.CharField(
+        max_length=20,
+        blank=True,
+        null=False,
+        choices=PROGRESS_CHOICES,
+        default="Working",
+    )
+
+    def __str__(self):
+        return self.summary
 
 
 class Goal(models.Model):
@@ -79,23 +99,11 @@ class Goal(models.Model):
     stage3_employee_comment = models.TextField(blank=True, null=True)
     stage3_manager_comment = models.TextField(blank=True, null=True)
 
+    def kpi(self) -> List[KPI]:
+        return self.kpi_set.all()
 
-class KPI(models.Model):
-    PROGRESS_CHOICES = (("Working", "Working"), ("Completed", "Completed"))
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
-    summary = models.TextField(blank=True, null=True)
-    due = models.DateField(blank=True, null=True)
-    date_created = models.DateField(null=True, default=date.today)
-    progress = models.CharField(
-        max_length=20,
-        blank=True,
-        null=False,
-        choices=PROGRESS_CHOICES,
-        default="Working",
-    )
-
-    def __str__(self):
-        return self.summary
+    def kpi_count(self):
+        return self.kpi().count()
 
 
 class CoreValue(models.Model):

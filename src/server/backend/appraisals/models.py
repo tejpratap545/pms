@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, List
+
 from backend.users.models import Company, Profile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.datetime_safe import date
 
+if TYPE_CHECKING:
+    from backend.training.models import CoreValue, Goal, Skill
 # Create your models here.
 
 
@@ -94,9 +100,52 @@ class Appraisal(models.Model):
 
     other_properties = models.JSONField(blank=True, null=True)
 
-    # def is_all_goal_approaved(self):
-    #     if self.goals_set.all()
-    
+    # appraisal goals properties
+    def goals(self) -> List[Goal]:
+        return self.goal_set.all()
+
+    def goals_weightage(self) -> int:
+        return sum(x.weightage for x in self.goals())
+
+    def goals_count(self) -> int:
+        return self.goals().count()
+
+    # appraisal core value properties
+    def core_values(self) -> List[CoreValue]:
+        return self.core_value_set.all()
+
+    def core_values_count(self) -> int:
+        return self.core_values.count()
+
+    def core_values_weightage(self) -> int:
+        return sum(x.weightage for x in self.core_values())
+
+    # appraisal skills properties
+    def skills(self) -> List[Skill]:
+        return self.skill_set.all()
+
+    def skills_weightage(self) -> int:
+        return sum(x.weightage for x in self.skills())
+
+    def skills_count(self) -> int:
+        return self.skills().count()
+
     @property
-    def name(self):
+    def is_100_weightage(self) -> bool:
+        return (
+            self.goals_weightage() == 100
+            and self.core_values_weightage() == 100
+            and self.skills_weightage() == 100
+        )
+
+    @property
+    def is_all_goal_approved(self) -> bool:
+        return all(goal.status == 1 for goal in self.goals())
+
+    @property
+    def is_at_least_one_kpi(self) -> bool:
+        return any(goal.kpi_count == 0 for goal in self.goals())
+
+    @property
+    def name(self) -> string:
         return self.overall_appraisal.name
