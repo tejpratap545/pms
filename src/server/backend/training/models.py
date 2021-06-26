@@ -8,8 +8,8 @@ from django.utils.datetime_safe import date
 
 
 class GoalCategory(models.Model):
-    name = models.CharField(max_length=70, blank=True, null=False)
-    company = models.ForeignKey(
+    name: str = models.CharField(max_length=70, blank=True, null=False)
+    company: Company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=False
     )
 
@@ -18,8 +18,8 @@ class GoalCategory(models.Model):
 
 
 class CoreValueCategory(models.Model):
-    name = models.CharField(max_length=70, blank=True, null=False)
-    company = models.ForeignKey(
+    name: str = models.CharField(max_length=70, blank=True, null=False)
+    company: Company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=False
     )
 
@@ -28,8 +28,8 @@ class CoreValueCategory(models.Model):
 
 
 class SkillsCategory(models.Model):
-    name = models.CharField(max_length=70, blank=True, null=False)
-    company = models.ForeignKey(
+    name: str = models.CharField(max_length=70, blank=True, null=False)
+    company: Company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=False
     )
 
@@ -39,10 +39,10 @@ class SkillsCategory(models.Model):
 
 class KPI(models.Model):
     PROGRESS_CHOICES = (("Working", "Working"), ("Completed", "Completed"))
-    goal = models.ForeignKey("Goal", on_delete=models.CASCADE)
-    summary = models.TextField(blank=True, null=True)
-    due = models.DateField(blank=True, null=True)
-    date_created = models.DateField(null=True, default=date.today)
+    goal: Goal = models.ForeignKey("Goal", on_delete=models.CASCADE)
+    summary: str = models.TextField(blank=True, null=True)
+    due: date = models.DateField(blank=True, null=True)
+    date_created: date = models.DateField(null=True, default=date.today)
     progress = models.CharField(
         max_length=20,
         blank=True,
@@ -56,15 +56,15 @@ class KPI(models.Model):
 
 
 class Goal(models.Model):
-    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
-    category = models.ForeignKey(
+    appraisal: Appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    category: GoalCategory = models.ForeignKey(
         GoalCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
-    summary = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    due = models.DateField()
+    summary: str = models.TextField(blank=True, null=True)
+    description: str = models.TextField(blank=True, null=True)
+    due: date = models.DateField()
 
-    weightage = models.IntegerField(
+    weightage: int = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)],
         blank=True,
         null=False,
@@ -75,14 +75,14 @@ class Goal(models.Model):
         (0, "PENDINGD"),
         (1, "APPROVED"),
     )
-    status = models.CharField(
+    status: str = models.CharField(
         max_length=100, blank=True, null=True, choices=STATUS_CHOICE
     )
 
-    stage1_employee_comment = models.TextField(blank=True, null=True)
-    stage1_manager_comment = models.TextField(blank=True, null=True)
+    stage1_employee_comment: str = models.TextField(blank=True, null=True)
+    stage1_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage2_employee_comment = models.TextField(blank=True, null=True)
+    stage2_employee_comment: str = models.TextField(blank=True, null=True)
 
     TRACKING_CHOICES = [
         ("null", "null"),
@@ -90,14 +90,14 @@ class Goal(models.Model):
         ("Not On Track", "Not On Track"),
     ]
 
-    tracking_status = models.CharField(
+    tracking_status: str = models.CharField(
         max_length=50, blank=True, null=True, default="null", choices=TRACKING_CHOICES
     )
 
-    stage2_manager_comment = models.TextField(blank=True, null=True)
+    stage2_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage3_employee_comment = models.TextField(blank=True, null=True)
-    stage3_manager_comment = models.TextField(blank=True, null=True)
+    stage3_employee_comment: str = models.TextField(blank=True, null=True)
+    stage3_manager_comment: str = models.TextField(blank=True, null=True)
 
     def kpi(self) -> List[KPI]:
         return self.kpi_set.all()
@@ -107,15 +107,15 @@ class Goal(models.Model):
 
 
 class CoreValue(models.Model):
-    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
-    category = models.ForeignKey(
+    appraisal: Appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    category: CoreValueCategory = models.ForeignKey(
         CoreValueCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
-    summary = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    due = models.DateField()
+    summary: str = models.TextField(blank=True, null=True)
+    description: str = models.TextField(blank=True, null=True)
+    due: date = models.DateField()
 
-    weightage = models.IntegerField(
+    weightage: int = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)],
         blank=True,
         null=False,
@@ -123,15 +123,15 @@ class CoreValue(models.Model):
 
 
 class Skill(models.Model):
-    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
-    category = models.ForeignKey(
+    appraisal: Appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    category: SkillsCategory = models.ForeignKey(
         SkillsCategory, on_delete=models.SET_NULL, blank=True, null=True
     )
-    summary = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    due = models.DateField()
+    summary: str = models.TextField(blank=True, null=True)
+    description: str = models.TextField(blank=True, null=True)
+    due: date = models.DateField()
 
-    weightage = models.IntegerField(
+    weightage: int = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)],
         blank=True,
         null=False,

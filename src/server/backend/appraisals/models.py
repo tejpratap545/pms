@@ -22,11 +22,11 @@ class OverAllAppraisal(models.Model):
         (5, "STAGE 5 :Calibration"),
         (6, "STAGE 6 :Completed"),
     )
-    name = models.CharField(max_length=50, blank=False, null=False)
-    company = models.ForeignKey(
+    name: str = models.CharField(max_length=50, blank=False, null=False)
+    company: Company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=False
     )
-    stage = models.IntegerField(choices=STAGES_CHOICES, default=0, blank=True)
+    stage : int = models.IntegerField(choices=STAGES_CHOICES, default=0, blank=True)
 
     goal_weightage = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)],
@@ -61,21 +61,20 @@ class Appraisal(models.Model):
     STATUS_CHOICES = (
         # stage 1
         (0, "STAGE 1: Employee Goal settings stage"),
-        (1, "STAGE 1: Employee goal submit stage"),
-        (2, "STAGE 1: Manager Goal apprave stage"),
-        (3, "STAGE 1: Manager Approved the goal"),
+        (1, "STAGE 1: Manager Goal apprave stage"),
+        (2, "STAGE 1: Manager Approved the goal"),
         # satge 2
-        (4, "STAGE 2: Employee mid year review stage"),
-        (5, "STAGE 2: Employee mid year submit stage"),
-        (6, "STAGE 2: Manager mid year approve stage"),
-        (7, "STAGE 2: Manager Approved mid year review"),
+        (3, "STAGE 2: Employee mid year review stage"),
+        (4, "STAGE 2: Employee mid year submit stage"),
+        (5, "STAGE 2: Manager mid year approve stage"),
+        (6, "STAGE 2: Manager Approved mid year review"),
         # stage 3
-        (8, "STAGE 3: Employee end year review stage"),
-        (9, "STAGE 3: Employee end year submit stage"),
-        (10, "STAGE 3: Manager end year approve stage"),
-        (11, "STAGE 3: Manager Approved end year review"),
-        (12, "STAGE 3: hod end year approve stage"),
-        (13, "STAGE 3: hod approved year approve stage"),
+        (7, "STAGE 3: Employee end year review stage"),
+        (8, "STAGE 3: Employee end year submit stage"),
+        (9, "STAGE 3: Manager end year approve stage"),
+        (10, "STAGE 3: Manager Approved end year review"),
+        (11, "STAGE 3: hod end year approve stage"),
+        (12, "STAGE 3: hod approved year approve stage"),
     )
     overall_appraisal: OverAllAppraisal = models.ForeignKey(
         OverAllAppraisal, on_delete=models.CASCADE
@@ -85,18 +84,18 @@ class Appraisal(models.Model):
     )
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, blank=True)
 
-    stage1_employee_comment = models.TextField(blank=True, null=True)
-    stage1_manager_comment = models.TextField(blank=True, null=True)
+    stage1_employee_comment: str = models.TextField(blank=True, null=True)
+    stage1_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage2_employee_comment = models.TextField(blank=True, null=True)
-    stage2_manager_comment = models.TextField(blank=True, null=True)
+    stage2_employee_comment: str = models.TextField(blank=True, null=True)
+    stage2_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage3_employee_comment = models.TextField(blank=True, null=True)
-    stage3_manager_comment = models.TextField(blank=True, null=True)
+    stage3_employee_comment: str = models.TextField(blank=True, null=True)
+    stage3_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage1_rejection_comment = models.TextField(blank=True, null=True)
-    stage2_rejection_comment = models.TextField(blank=True, null=True)
-    stage3_rejection_comment = models.TextField(blank=True, null=True)
+    stage1_rejection_comment: str = models.TextField(blank=True, null=True)
+    stage2_rejection_comment: str = models.TextField(blank=True, null=True)
+    stage3_rejection_comment: str = models.TextField(blank=True, null=True)
 
     other_properties = models.JSONField(blank=True, null=True)
 
@@ -149,3 +148,65 @@ class Appraisal(models.Model):
     @property
     def name(self) -> string:
         return self.overall_appraisal.name
+
+    # status in which employee can up stage the apprisal
+    @classmethod
+    def employee_stages(cls) -> List[int]:
+        return [0, 3, 4, 7, 8]
+
+    # status in which manager can upstage the appraisal
+    @classmethod
+    def manager_stages(cls) -> List[int]:
+        return [1, 5, 9]
+
+    # appraisal status for overall appraisal stage 1
+    @classmethod
+    def stage_1(cls) -> List[int]:
+        return range(0, 3)
+
+    # appraisal status for overall appraisal stage 2
+    @classmethod
+    def stage_2(cls) -> List[int]:
+        return range(3, 7)
+
+    # appraisal status for overall appraisal stage 3
+    @classmethod
+    def stage_3(cls) -> List[int]:
+        return range(7, 13)
+
+    """
+    Which users and in which satge they can up status the appraisal.
+    Employee can upsatge the appraisal in employee stages
+
+    For status 0 ----> status 1
+       1. At least one goal , core value and skill 
+       2. All goals have at least one kpi
+       3. All gols , core value and skill have 100 weightage
+       4. user must be employee
+       5. Overall Appraisal must in stage 1
+
+    for status 1 -----> status 2
+       1. user must be first reporting manager of employee 
+       2. Overall Appraisal must in stage 1
+       3. Must be all goal approved by the first reporting manager
+
+
+    """
+
+    def can_upsatus(self, user: Profile) -> bool:
+        if (self.employee.id == user.id and self.status in self.employee_stages()) or (
+            self.employee.first_reporting_manager.id == user.id
+        ):
+
+            if (
+                self.status == 0
+                and self.is_100_weightage()
+                and self.is_at_least_one_kpi()
+            ):
+                return True
+
+            if self.status == 1 and self.is_all_goal_approved():
+                return True
+            pass
+
+        return False

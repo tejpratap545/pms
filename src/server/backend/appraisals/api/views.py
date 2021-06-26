@@ -12,6 +12,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from ..models import *
 from .pagination import *
 from .serializers import *
@@ -138,8 +139,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], url_path="up-stage")
     def up_stage(self, request, pk=None):
         appraisal: Appraisal = self.get_object()
-        employee_stage = [0, 1, 4, 5, 8, 9]
-        manager_stage = [2, 6, 10]
+        employee_stage = appraisal.employee_stages()
+        manager_stage = appraisal.manager_stage()
         stage_1 = [0, 1, 2, 3]
         stage: int = appraisal.status
 
