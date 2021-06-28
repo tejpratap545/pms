@@ -8,7 +8,7 @@
       </vs-button>
     </template>
 
-    <div v-if="$fetchState.pending"></div>
+    <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="con-form">
       <vs-input v-model="newGoalData.summary" placeholder="Summary">
         <template #icon> <i class="bx bx-tag-alt"></i> </template>

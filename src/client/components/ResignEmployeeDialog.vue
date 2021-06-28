@@ -11,7 +11,7 @@
       </vs-button>
     </template>
 
-    <div v-if="$fetchState.pending"></div>
+    <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="con-form">
       <vs-select
         v-model="replace_employee"
