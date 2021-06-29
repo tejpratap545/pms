@@ -1,8 +1,7 @@
-/* eslint-disable vue/no-v-html */
 <template>
   <div class="page">
     <h1>My Appraiasal Management</h1>
-    <div v-if="$fetchState.pending"></div>
+    <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="center grid">
       <div class="appraisal-lists">
         <h3>My Appraisals</h3>

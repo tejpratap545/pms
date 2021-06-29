@@ -14,7 +14,7 @@
       </vs-button>
     </template>
 
-    <div v-if="$fetchState.pending"></div>
+    <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="con-form">
       <vs-select
         v-if="$store.state.user.user.is_superuser"
