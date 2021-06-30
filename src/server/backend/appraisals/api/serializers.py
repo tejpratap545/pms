@@ -241,3 +241,17 @@ class StatusSerializer(serializers.Serializer):
     a1 = serializers.CharField()
     a2 = serializers.CharField()
     a3 = serializers.CharField()
+
+
+class ShortAppraisal2Serializer(serializers.ModelSerializer):
+    appraisal_set = ShortAppraisalSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        fields = (
+            "id",
+            "name",
+            "email",
+            "department",
+            "appraisal_set",
+        )

@@ -1,12 +1,8 @@
 from backend.users.api.serializers import EmptySerializer
 from backend.users.permissions import *
-from django.db.models import Count, Q
-from drf_spectacular.utils import (
-    OpenApiExample,
-    OpenApiParameter,
-    OpenApiResponse,
-    extend_schema,
-)
+from django.db.models import Count, Prefetch, Q
+from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
+                                   OpenApiResponse, extend_schema)
 from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -167,21 +163,49 @@ class AppraisalViewset(viewsets.ModelViewSet):
 
 
 def appraisal_query():
-    return Appraisal.objects.prefetch_related(
-        "overall_appraisal",
-        "goal_set",
-        "goal_set__category",
-        "goal_set__kpi_set",
-        "corevalue_set",
-        "corevalue_set__category",
-        "skill_set",
-        "skill_set__category",
-        "overall_appraisal__departmentalgoal_set",
-        "overall_appraisal__departmentalcorevalue_set",
-    ).annotate(
-        goal_count=Count("goal", distinct=True),
-        corevalue_count=Count("corevalue", distinct=True),
-        skill_count=Count("skill", distinct=True),
+    return (
+        Appraisal.objects.prefetch_related(
+            "overall_appraisal",
+            "goal_set",
+            "goal_set__category",
+            "goal_set__kpi_set",
+            "corevalue_set",
+            "corevalue_set__category",
+            "skill_set",
+            "skill_set__category",
+            "overall_appraisal__departmentalgoal_set",
+            "overall_appraisal__departmentalcorevalue_set",
+        )
+        .annotate(
+            goal_count=Count("goal", distinct=True),
+            corevalue_count=Count("corevalue", distinct=True),
+            skill_count=Count("skill", distinct=True),
+        )
+        .exclude(overall_appraisal__stage=6)
+    )
+
+
+def manager_appraisal_query():
+    return (
+        Appraisal.objects.select_related(
+            "overall_appraisal",
+            "employee",
+            "employee__department",
+            "employee__first_reporting_manager",
+            "employee__second_reporting_manager",
+        )
+        .only(
+            "overall_appraisal__name",
+            "overall_appraisal__stage",
+            "status",
+            "employee",
+        )
+        .annotate(
+            goal_count=Count("goal", distinct=True),
+            corevalue_count=Count("corevalue", distinct=True),
+            skill_count=Count("skill", distinct=True),
+        )
+        .exclude(overall_appraisal__stage=6)
     )
 
 
@@ -197,26 +221,8 @@ class ManagerAppraisalView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = appraisal_query()
-        return (
-            Appraisal.objects.select_related(
-                "overall_appraisal",
-                "employee",
-                "employee__department",
-                "employee__first_reporting_manager",
-                "employee__second_reporting_manager",
-            )
-            .only(
-                "overall_appraisal__name",
-                "overall_appraisal__stage",
-                "status",
-                "employee",
-            )
-            .annotate(
-                goal_count=Count("goal", distinct=True),
-                corevalue_count=Count("corevalue", distinct=True),
-                skill_count=Count("skill", distinct=True),
-            )
-            .filter(employee__first_reporting_manager=self.request.user.profile)
+        return manager_appraisal_query().filter(
+            employee__first_reporting_manager=self.request.user.profile
         )
 
 
@@ -250,3 +256,29 @@ def appraisal_status(request):
     serializer = StatusSerializer(queryset)
 
     return Response(serializer.data)
+
+
+class ShortManagerAppraisal(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ShortAppraisal2Serializer
+
+    def get_queryset(self):
+        return Profile.objects.prefetch_related(
+            Prefetch(
+                "appraisal_set",
+                manager_appraisal_query(),
+            ),
+        ).filter(first_reporting_manager=self.request.user.profile)
+
+
+class ShortHodAppraisal(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ShortAppraisal2Serializer
+
+    def get_queryset(self):
+        return Profile.objects.prefetch_related(
+            Prefetch(
+                "appraisal_set",
+                manager_appraisal_query(),
+            ),
+        ).filter(second_reporting_manager=self.request.user.profile)
