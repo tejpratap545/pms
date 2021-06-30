@@ -1,8 +1,12 @@
 from backend.users.api.serializers import EmptySerializer
 from backend.users.permissions import *
 from django.db.models import Count, Prefetch, Q
-from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
-                                   OpenApiResponse, extend_schema)
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+)
 from rest_framework import generics, mixins, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -258,9 +262,28 @@ def appraisal_status(request):
     return Response(serializer.data)
 
 
+def manager_appraisal_query2():
+    return (
+        Appraisal.objects.select_related(
+            "overall_appraisal",
+        )
+        .only(
+            "overall_appraisal__name",
+            "overall_appraisal__stage",
+            "status",
+        )
+        .annotate(
+            goal_count=Count("goal", distinct=True),
+            corevalue_count=Count("corevalue", distinct=True),
+            skill_count=Count("skill", distinct=True),
+        )
+        .exclude(overall_appraisal__stage=6)
+    )
+
+
 class ShortManagerAppraisal(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ShortAppraisal2Serializer
+    serializer_class = ShortProfile2Serializer
 
     def get_queryset(self):
         return Profile.objects.prefetch_related(
@@ -268,12 +291,13 @@ class ShortManagerAppraisal(generics.ListAPIView):
                 "appraisal_set",
                 manager_appraisal_query(),
             ),
+            "department",
         ).filter(first_reporting_manager=self.request.user.profile)
 
 
 class ShortHodAppraisal(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ShortAppraisal2Serializer
+    serializer_class = ShortProfile2Serializer
 
     def get_queryset(self):
         return Profile.objects.prefetch_related(
@@ -281,4 +305,5 @@ class ShortHodAppraisal(generics.ListAPIView):
                 "appraisal_set",
                 manager_appraisal_query(),
             ),
+            "department",
         ).filter(second_reporting_manager=self.request.user.profile)
