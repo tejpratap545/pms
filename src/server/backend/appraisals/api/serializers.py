@@ -175,6 +175,15 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
         return overall_appraisal
 
 
+class DetailOverallAppraisalSerializer(serializers.ModelSerializer):
+    departmentalgoal_set = DetailDepartmentalGoalSerializer(many=True)
+    departmentalcorevalue_set = DetailDepartmentalCoreValueSerializer(many=True)
+
+    class Meta:
+        model = OverAllAppraisal
+        fields = "__all__"
+
+
 class ShortOverallAppraisalSerSerializer(serializers.ModelSerializer):
     class Meta:
         model = OverAllAppraisal
@@ -194,7 +203,7 @@ class AppraisalSerializer(serializers.ModelSerializer):
 
 class DetailAppraisalSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
-    overall_appraisal = OverAllAppraisalSerializer()
+    overall_appraisal = DetailOverallAppraisalSerializer()
     goal_set = DetailGoalSerializer(many=True)
     corevalue_set = DetailCoreValueSerializer(many=True)
     skill_set = DetailSkillSerializer(many=True)

@@ -19,7 +19,6 @@ from .serializers import *
 
 
 class OverAllAppraisalViewSet(viewsets.ModelViewSet):
-    serializer_class = OverAllAppraisalSerializer
     permission_classes = [IsPermission(permissions=["CAN_MANAGE_APPRAISAL"])]
     filterset_fields = ["name", "stage", "company"]
 
@@ -30,7 +29,17 @@ class OverAllAppraisalViewSet(viewsets.ModelViewSet):
                 employee_count=Count("appraisal", distinct=True)
             )
 
+        if self.request.method == "GET":
+            queryset = queryset.prefetch_related(
+                "departmental_goal", "departmental_corevalue"
+            )
+
         return queryset
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return DetailOverallAppraisalSerializer
+        return OverAllAppraisalSerializer
 
 
 class AppraisalViewset(viewsets.ModelViewSet):
@@ -117,6 +126,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
                     "corevalue_set__category",
                     "skill_set",
                     "skill_set__category",
+                    "overall_appraisal__departmentalgoal_set",
+                    "overall_appraisal__departmentalcorevalue_set",
                 )
                 .annotate(
                     goal_count=Count("goal", distinct=True),
@@ -165,6 +176,8 @@ def appraisal_query():
         "corevalue_set__category",
         "skill_set",
         "skill_set__category",
+        "overall_appraisal__departmentalgoal_set",
+        "overall_appraisal__departmentalcorevalue_set",
     ).annotate(
         goal_count=Count("goal", distinct=True),
         corevalue_count=Count("corevalue", distinct=True),

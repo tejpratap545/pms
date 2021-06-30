@@ -1,3 +1,4 @@
+from backend.users.api.serializers import ShortEmployeeSerializer
 from rest_framework import serializers
 
 from ..models import *
@@ -94,4 +95,34 @@ class DetailGoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
+        fields = "__all__"
+
+
+class DepartmentalGoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepartmentalGoal
+        fields = "__all__"
+
+
+class DepartmentalCoreValueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepartmentalCoreValue
+        fields = "__all__"
+
+
+class DetailDepartmentalGoalSerializer(serializers.ModelSerializer):
+    manager = ShortEmployeeSerializer()
+    category= GoalCategorySerializer()
+
+    class Meta:
+        model = DepartmentalGoal
+        fields = "__all__"
+
+
+class DetailDepartmentalCoreValueSerializer(serializers.ModelSerializer):
+    manager = ShortEmployeeSerializer()
+    category= CoreValueCategorySerializer()
+
+    class Meta:
+        model = DepartmentalCoreValue
         fields = "__all__"

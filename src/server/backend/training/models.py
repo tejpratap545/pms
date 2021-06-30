@@ -1,10 +1,13 @@
-from typing import List
+from typing import TYPE_CHECKING, List
 
-from backend.appraisals.models import Appraisal
+from backend.appraisals.models import Appraisal, OverAllAppraisal
 from backend.users.models import Company, Profile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.datetime_safe import date
+
+if TYPE_CHECKING:
+    from backend.training.models import Goal
 
 
 class GoalCategory(models.Model):
@@ -39,7 +42,7 @@ class SkillsCategory(models.Model):
 
 class KPI(models.Model):
     PROGRESS_CHOICES = (("Working", "Working"), ("Completed", "Completed"))
-    goal: Goal = models.ForeignKey("Goal", on_delete=models.CASCADE)
+    goal = models.ForeignKey("Goal", on_delete=models.CASCADE)
     summary: str = models.TextField(blank=True, null=True)
     due: date = models.DateField(blank=True, null=True)
     date_created: date = models.DateField(null=True, default=date.today)
@@ -140,7 +143,7 @@ class Skill(models.Model):
 
 class DepartmentalGoal(models.Model):
     summary = models.CharField(max_length=150)
-    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    appraisal = models.ForeignKey(OverAllAppraisal, on_delete=models.CASCADE)
     due = models.DateField(null=True, blank=True)
     description = models.CharField(max_length=150, null=True, blank=True)
     category = models.ForeignKey(
@@ -153,7 +156,7 @@ class DepartmentalGoal(models.Model):
 
 class DepartmentalCoreValue(models.Model):
     summary = models.CharField(max_length=150)
-    appraisal = models.ForeignKey(Appraisal, on_delete=models.CASCADE)
+    appraisal = models.ForeignKey(OverAllAppraisal, on_delete=models.CASCADE)
     due = models.DateField(null=True, blank=True)
     description = models.CharField(max_length=150, null=True, blank=True)
     category = models.ForeignKey(
