@@ -1,11 +1,7 @@
 from backend.users.api.serializers import EmptySerializer
 from backend.users.permissions import *
-from drf_spectacular.utils import (
-    OpenApiExample,
-    OpenApiParameter,
-    OpenApiResponse,
-    extend_schema,
-)
+from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
+                                   OpenApiResponse, extend_schema)
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -117,3 +113,13 @@ class SkillViewSET(viewsets.ModelViewSet):
 class KPIViewSet(viewsets.ModelViewSet):
     queryset = KPI.objects.all()
     serializer_class = KPISerializer
+
+
+class DepartmentalGoalViewset(viewsets.ModelViewSet):
+    queryset = DepartmentalGoal.objects.all()
+    serializer_class = DepartmentalGoalSerializer
+
+
+class DepartmentalCoreValueViewset(viewsets.ModelViewSet):
+    queryset = DepartmentalCoreValue.objects.all()
+    serializer_class = DepartmentalCoreValueSerializer

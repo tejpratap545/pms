@@ -25,6 +25,12 @@ router.register(
     "over-all-appraisal", OverAllAppraisalViewSet, basename="OverAllAppraisal"
 )
 router.register("goal", GoalViewSET, basename="Goal")
+router.register(
+    "departmental-goal", DepartmentalGoalViewset, basename="DepartmentalGoal"
+)
+router.register(
+    "departmental-core-value", DepartmentalCoreValueViewset, basename="DepartmentalCoreValue"
+)
 router.register("skill", SkillViewSET, basename="Skill")
 router.register("core-value", CoreValueViewSET, basename="CoreValue")
 router.register("appraisal", AppraisalViewset, basename="Appraisal")
