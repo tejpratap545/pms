@@ -2,7 +2,7 @@
   <div class="app">
     <vs-dialog v-model="active" class="dialog" not-close prevent-close>
       <template #header>
-        <h4 class="not-margin">Login to <b>Denselight</b></h4>
+        <h4 class="not-margin">Login to <b>PMS</b></h4>
       </template>
 
       <div class="con-form">
@@ -14,10 +14,6 @@
             <i class="bx bxs-lock"></i>
           </template>
         </vs-input>
-        <div class="flex">
-          <vs-checkbox v-model="remember">Remember me</vs-checkbox>
-          <a href="#">Forgot Password?</a>
-        </div>
       </div>
 
       <template #footer>

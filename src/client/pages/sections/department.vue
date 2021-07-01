@@ -43,6 +43,162 @@
               </vs-table>
             </div>
           </div>
+          <div class="subordinate-details-manager" style="margin-top: 20px">
+            <vs-table v-model="selected">
+              <template #header>
+                <div
+                  class="table-header"
+                  style="justify-content: space-between"
+                >
+                  <h3>First level subordinates</h3>
+                  <vs-input v-model="search" placeholder="Search" shadow>
+                    <template #icon>
+                      <i class="bx bx-search"></i>
+                    </template>
+                  </vs-input>
+                </div>
+              </template>
+              <template #thead>
+                <vs-tr>
+                  <vs-th> Employee Name </vs-th>
+                  <vs-th> Employee Email </vs-th>
+                  <vs-th> Id </vs-th>
+                </vs-tr>
+              </template>
+              <template #tbody>
+                <vs-tr
+                  v-for="(tr, i) in $vs.getSearch(userManagerList, search)"
+                  :key="i"
+                  :data="tr"
+                  :is-selected="selected == tr"
+                >
+                  <vs-td>
+                    {{ tr.name }}
+                  </vs-td>
+                  <vs-td>
+                    {{ tr.email }}
+                  </vs-td>
+                  <vs-td>
+                    {{ tr.id }}
+                  </vs-td>
+
+                  <template #expand>
+                    <div>
+                      <vs-table class="my-5">
+                        <template #header>
+                          <div class="table-header">
+                            <h3>Appraisals</h3>
+                          </div>
+                        </template>
+                        <template #thead>
+                          <vs-tr>
+                            <vs-th> Name </vs-th>
+                            <vs-th> Goal count </vs-th>
+                            <vs-th> Corevalue count </vs-th>
+                            <vs-th> Skills count </vs-th>
+                            <vs-th> Stage </vs-th>
+                            <vs-th> Status </vs-th>
+                          </vs-tr>
+                        </template>
+                        <template #tbody>
+                          <vs-tr
+                            v-for="(appraisal, j) in tr.appraisal_set"
+                            :key="j"
+                          >
+                            <vs-td style="padding: 10px">{{
+                              appraisal.name
+                            }}</vs-td>
+                            <vs-td>{{ appraisal.goal_count }}</vs-td>
+                            <vs-td>{{ appraisal.corevalue_count }}</vs-td>
+                            <vs-td>{{ appraisal.skill_count }}</vs-td>
+                            <vs-td>{{ appraisal.stage }}</vs-td>
+                            <vs-td>{{ appraisal.status }}</vs-td>
+                          </vs-tr>
+                        </template>
+                      </vs-table>
+                    </div>
+                  </template>
+                </vs-tr>
+              </template>
+            </vs-table>
+            <vs-table v-model="selected" style="margin-top: 20px">
+              <template #header>
+                <div
+                  class="table-header"
+                  style="justify-content: space-between"
+                >
+                  <h3>Second level subordinates</h3>
+                  <vs-input v-model="search" placeholder="Search" shadow>
+                    <template #icon>
+                      <i class="bx bx-search"></i>
+                    </template>
+                  </vs-input>
+                </div>
+              </template>
+              <template #thead>
+                <vs-tr>
+                  <vs-th> Employee Name </vs-th>
+                  <vs-th> Employee Email </vs-th>
+                  <vs-th> Id </vs-th>
+                </vs-tr>
+              </template>
+              <template #tbody>
+                <vs-tr
+                  v-for="(tr, i) in $vs.getSearch(userHodList, search)"
+                  :key="i"
+                  :data="tr"
+                  :is-selected="selected == tr"
+                >
+                  <vs-td>
+                    {{ tr.name }}
+                  </vs-td>
+                  <vs-td>
+                    {{ tr.email }}
+                  </vs-td>
+                  <vs-td>
+                    {{ tr.id }}
+                  </vs-td>
+
+                  <template #expand>
+                    <div>
+                      <vs-table class="my-5">
+                        <template #header>
+                          <div class="table-header">
+                            <h3>Appraisals</h3>
+                          </div>
+                        </template>
+                        <template #thead>
+                          <vs-tr>
+                            <vs-th> Name </vs-th>
+                            <vs-th> Goal count </vs-th>
+                            <vs-th> Corevalue count </vs-th>
+                            <vs-th> Skills count </vs-th>
+                            <vs-th> Stage </vs-th>
+                            <vs-th> Status </vs-th>
+                          </vs-tr>
+                        </template>
+                        <template #tbody>
+                          <vs-tr
+                            v-for="(appraisal, j) in tr.appraisal_set"
+                            :key="j"
+                          >
+                            <vs-td style="padding: 10px">{{
+                              appraisal.name
+                            }}</vs-td>
+                            <vs-td>{{ appraisal.goal_count }}</vs-td>
+                            <vs-td>{{ appraisal.corevalue_count }}</vs-td>
+                            <vs-td>{{ appraisal.skill_count }}</vs-td>
+                            <vs-td>{{ appraisal.stage }}</vs-td>
+                            <vs-td>{{ appraisal.status }}</vs-td>
+                          </vs-tr>
+                        </template>
+                      </vs-table>
+                    </div>
+                  </template>
+                </vs-tr>
+              </template>
+            </vs-table>
+          </div>
         </div>
         <div v-if="active == 'subordinate-appraials'" class="child">
           <vs-navbar v-model="activeStage" center-collapsed>
@@ -436,6 +592,8 @@ export default {
       stage2: [],
       stage3: [],
     },
+    userHodList: [],
+    userManagerList: [],
   }),
   async fetch() {
     try {
@@ -448,6 +606,21 @@ export default {
       this.appraisalManagerList.stage1 = res.filter((x) => x.stage === 1);
       this.appraisalManagerList.stage2 = res.filter((x) => x.stage === 2);
       this.appraisalManagerList.stage3 = res.filter((x) => x.stage === 3);
+
+      this.userHodList = await this.$axios.$get(`api/appraisal/short/hod`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+
+      this.userManagerList = await this.$axios.$get(
+        `api/appraisal/short/manager`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        }
+      );
     } catch (err) {
       return this.$vs.notification({
         color: "danger",

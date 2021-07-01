@@ -4,6 +4,8 @@
       <vs-row>
         <vs-col w="4"> Actions </vs-col>
         <vs-col w="8" style="display: flex; justify-content: flex-end">
+          <vs-button @click="midyearReview = true"> Midyear Review </vs-button>
+          <vs-button @click="endyearReview = true"> Endyear Review </vs-button>
           <vs-button @click="upstageAppraisal = true">
             Upstage Apraisal {{ selectedAppraisal.stage }}
           </vs-button>
@@ -273,8 +275,102 @@
         </vs-tr>
       </template>
     </vs-table>
+    <vs-table class="my-5">
+      <template #header>
+        <div class="table-header" style="justify-content: space-between">
+          <h3>Department goals</h3>
+        </div>
+      </template>
+      <template #thead>
+        <vs-tr>
+          <vs-th> Summary </vs-th>
+          <vs-th> Category </vs-th>
+          <vs-th> Manager </vs-th>
+          <vs-th> Description </vs-th>
+          <vs-th> Due </vs-th>
+        </vs-tr>
+      </template>
+      <template #tbody>
+        <vs-tr
+          v-for="(tr, i) in selectedAppraisal.overall_appraisal
+            .departmentalgoal_set"
+          :key="i"
+        >
+          <vs-td>
+            {{ tr.summary }}
+          </vs-td>
+          <vs-td>
+            {{ tr.category.name }}
+          </vs-td>
+          <vs-td>
+            {{ tr.manager.name }}
+          </vs-td>
+          <vs-td>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-html="tr.description"></span>
+          </vs-td>
+          <vs-td>
+            {{ tr.due }}
+          </vs-td>
+        </vs-tr>
+      </template>
+    </vs-table>
+    <vs-table class="my-5">
+      <template #header>
+        <div class="table-header" style="justify-content: space-between">
+          <h3>Department corevalues</h3>
+        </div>
+      </template>
+      <template #thead>
+        <vs-tr>
+          <vs-th> Summary </vs-th>
+          <vs-th> Category </vs-th>
+          <vs-th> Manager </vs-th>
+          <vs-th> Description </vs-th>
+          <vs-th> Due </vs-th>
+        </vs-tr>
+      </template>
+      <template #tbody>
+        <vs-tr
+          v-for="(tr, i) in selectedAppraisal.overall_appraisal
+            .departmentalcorevalue_set"
+          :key="i"
+        >
+          <vs-td>
+            {{ tr.summary }}
+          </vs-td>
+          <vs-td>
+            {{ tr.category.name }}
+          </vs-td>
+          <vs-td>
+            {{ tr.manager.name }}
+          </vs-td>
+          <vs-td>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-html="tr.description"></span>
+          </vs-td>
+          <vs-td>
+            {{ tr.due }}
+          </vs-td>
+        </vs-tr>
+      </template>
+    </vs-table>
 
     <!-- Dialogs -->
+    <MidyearReview
+      v-if="midyearReview"
+      :dialog="midyearReview"
+      :selected-appraisal="selectedAppraisal"
+      @close="(midyearReview = false), $emit('refresh')"
+    />
+
+    <EndyearReview
+      v-if="endyearReview"
+      :dialog="endyearReview"
+      :selected-appraisal="selectedAppraisal"
+      @close="(endyearReview = false), $emit('refresh')"
+    />
+
     <UpstageAppraisal
       v-if="upstageAppraisal"
       :dialog="upstageAppraisal"
@@ -326,6 +422,8 @@ export default {
     newSkill: false,
     newKpi: false,
     upstageAppraisal: false,
+    midyearReview: false,
+    endyearReview: false,
   }),
   methods: {
     deleteItem(item, id) {
