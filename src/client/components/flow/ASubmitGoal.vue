@@ -44,6 +44,33 @@ export default {
     closeDialog() {
       this.$emit("close");
     },
+    submitGoal() {
+      this.$axios
+        .$post(
+          `api/appraisal/${this.selectedAppraisal.id}/up-stage/`,
+          this.roleData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.accessToken}`,
+            },
+          }
+        )
+        .then(() => {
+          this.$vs.notification({
+            color: "success",
+            title: "Suucessfullly submitted goals",
+          });
+          this.closeDialog();
+        })
+        .catch(() => {
+          this.loading = false;
+          return this.$vs.notification({
+            color: "danger",
+            title:
+              "Error Submitting goals please check goals Weightage or kpi ",
+          });
+        });
+    },
   },
 };
 </script>

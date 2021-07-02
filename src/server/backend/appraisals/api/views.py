@@ -105,21 +105,41 @@ class AppraisalViewset(viewsets.ModelViewSet):
     )
     @action(detail=True, methods=["post"], url_path="up-stage")
     def up_stage(self, request, pk=None):
+        """
+        Which users and in which satge they can up status the appraisal.
+        Employee can upsatge the appraisal in employee stages
+
+        For status 0 ----> status 1
+           1. At least one goal , core value and skill
+           2. All goals have at least one kpi
+           3. All gols , core value and skill have 100 weightage
+           4. user must be employee
+           5. Overall Appraisal must in stage 1
+
+        for status 1 -----> status 2
+           1. user must be first reporting manager of employee
+           2. Overall Appraisal must in stage 1
+           3. Must be all goal approved by the first reporting manager
+
+
+        """
         appraisal: Appraisal = self.get_object()
         employee_stage = appraisal.employee_stages()
-        manager_stage = appraisal.manager_stage()
+        manager_stage = appraisal.manager_stages()
         stage_1 = [0, 1, 2, 3]
         stage: int = appraisal.status
 
         if (stage in employee_stage and appraisal.employee == request.user.profile) or (
             stage in manager_stage and appraisal.employee.manager == self.request.user
-        ):
+        ):  
+            if appraisal.can_upsatus(user=self.request.user.profile):
 
-            appraisal.status += 1
-            appraisal.save()
-            pass
+                appraisal.status += 1
+                appraisal.save()
+                return Response({"status": "Appraisal is successfully Updated"})
+        return Response(status= 400,data="Bad request (something invalid)")
 
-        return Response({"status": "Appraisal is successfully Updated"})
+        
 
 
 class MyAppraisalView(generics.ListAPIView):

@@ -127,7 +127,7 @@ class Appraisal(models.Model):
 
     # appraisal core value properties
     def core_values(self) -> List[CoreValue]:
-        return self.core_value_set.all()
+        return self.corevalue_set.all()
 
     def core_values_count(self) -> int:
         return self.core_values.count()
@@ -149,8 +149,8 @@ class Appraisal(models.Model):
     def is_100_weightage(self) -> bool:
         return (
             self.goals_weightage() == 100
-            and self.core_values_weightage() == 100
-            and self.skills_weightage() == 100
+            # and self.core_values_weightage() == 100
+            # and self.skills_weightage() == 100
         )
 
     @property
@@ -159,7 +159,10 @@ class Appraisal(models.Model):
 
     @property
     def is_at_least_one_kpi(self) -> bool:
-        return any(goal.kpi_count == 0 for goal in self.goals())
+        """
+        return true is all goals have at least one kpi
+        """
+        return not any(goal.kpi_count == 0 for goal in self.goals())
 
     @property
     def name(self) -> str:
@@ -215,8 +218,8 @@ class Appraisal(models.Model):
 
             if (
                 self.status == 0
-                and self.is_100_weightage()
-                and self.is_at_least_one_kpi()
+                and self.is_100_weightage
+                and self.is_at_least_one_kpi
             ):
                 return True
 
