@@ -1,3 +1,4 @@
+from statistics import mode
 from typing import TYPE_CHECKING, List
 
 from backend.appraisals.models import Appraisal, OverAllAppraisal
@@ -78,9 +79,7 @@ class Goal(models.Model):
         (0, "PENDINGD"),
         (1, "APPROVED"),
     )
-    status: str = models.CharField(
-        max_length=100, blank=True, null=True, choices=STATUS_CHOICE
-    )
+    status: int = models.IntegerField(blank=True, null=True, choices=STATUS_CHOICE)
 
     stage1_employee_comment: str = models.TextField(blank=True, null=True)
     stage1_manager_comment: str = models.TextField(blank=True, null=True)
@@ -98,6 +97,19 @@ class Goal(models.Model):
     )
 
     stage2_manager_comment: str = models.TextField(blank=True, null=True)
+    RATING_CHOICES = [
+        (1, "1 - Major Improvement Needed"),
+        (2, "2 - Needs Improvement"),
+        (3, "3 - Meets Expectations"),
+        (4, "4 - Exceeds Expectations"),
+        (5, "5 - Far Exceed Expectations"),
+    ]
+    employee_rating: int = models.IntegerField(
+        blank=True, null=True, choices=RATING_CHOICES
+    )
+    manager_rating: int = models.IntegerField(
+        blank=True, null=True, choices=RATING_CHOICES
+    )
 
     stage3_employee_comment: str = models.TextField(blank=True, null=True)
     stage3_manager_comment: str = models.TextField(blank=True, null=True)

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from statistics import mode
 
 from typing import TYPE_CHECKING, List
 
@@ -6,6 +7,8 @@ from backend.users.models import Company, Profile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.datetime_safe import date
+
+from .manger import AppraisalManger
 
 if TYPE_CHECKING:
     from backend.training.models import CoreValue, Goal, Skill
@@ -26,7 +29,7 @@ class OverAllAppraisal(models.Model):
     company: Company = models.ForeignKey(
         Company, on_delete=models.CASCADE, blank=True, null=False
     )
-    stage : int = models.IntegerField(choices=STAGES_CHOICES, default=0, blank=True)
+    stage: int = models.IntegerField(choices=STAGES_CHOICES, default=0, blank=True)
 
     goal_weightage = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)],
@@ -76,6 +79,14 @@ class Appraisal(models.Model):
         (11, "STAGE 3: hod end year approve stage"),
         (12, "STAGE 3: hod approved year approve stage"),
     )
+
+    RATING_CHOICES = [
+        (1, "1 - Major Improvement Needed"),
+        (2, "2 - Needs Improvement"),
+        (3, "3 - Meets Expectations"),
+        (4, "4 - Exceeds Expectations"),
+        (5, "5 - Far Exceed Expectations"),
+    ]
     overall_appraisal: OverAllAppraisal = models.ForeignKey(
         OverAllAppraisal, on_delete=models.CASCADE
     )
@@ -97,7 +108,14 @@ class Appraisal(models.Model):
     stage2_rejection_comment: str = models.TextField(blank=True, null=True)
     stage3_rejection_comment: str = models.TextField(blank=True, null=True)
 
+    hod_comment: str = models.TextField(blank=True, null=True)
+    hod_rating: int = models.IntegerField(
+        blank=True, null=True, choices=RATING_CHOICES
+    )
+
     other_properties = models.JSONField(blank=True, null=True)
+
+    objects = AppraisalManger()
 
     # appraisal goals properties
     def goals(self) -> List[Goal]:
@@ -146,7 +164,7 @@ class Appraisal(models.Model):
         return any(goal.kpi_count == 0 for goal in self.goals())
 
     @property
-    def name(self) -> string:
+    def name(self) -> str:
         return self.overall_appraisal.name
 
     # status in which employee can up stage the apprisal
@@ -174,26 +192,25 @@ class Appraisal(models.Model):
     def stage_3(cls) -> List[int]:
         return range(7, 13)
 
-    """
-    Which users and in which satge they can up status the appraisal.
-    Employee can upsatge the appraisal in employee stages
-
-    For status 0 ----> status 1
-       1. At least one goal , core value and skill 
-       2. All goals have at least one kpi
-       3. All gols , core value and skill have 100 weightage
-       4. user must be employee
-       5. Overall Appraisal must in stage 1
-
-    for status 1 -----> status 2
-       1. user must be first reporting manager of employee 
-       2. Overall Appraisal must in stage 1
-       3. Must be all goal approved by the first reporting manager
-
-
-    """
-
     def can_upsatus(self, user: Profile) -> bool:
+        """
+        Which users and in which satge they can up status the appraisal.
+        Employee can upsatge the appraisal in employee stages
+
+        For status 0 ----> status 1
+           1. At least one goal , core value and skill
+           2. All goals have at least one kpi
+           3. All gols , core value and skill have 100 weightage
+           4. user must be employee
+           5. Overall Appraisal must in stage 1
+
+        for status 1 -----> status 2
+           1. user must be first reporting manager of employee
+           2. Overall Appraisal must in stage 1
+           3. Must be all goal approved by the first reporting manager
+
+
+        """
         if (self.employee.id == user.id and self.status in self.employee_stages()) or (
             self.employee.first_reporting_manager.id == user.id
         ):

@@ -1,6 +1,5 @@
 from backend.training.api.serializers import *
-from backend.users.api.serializers import (DepartmentSerializer,
-                                           ShortProfileSerializer)
+from backend.users.api.serializers import DepartmentSerializer, ShortProfileSerializer
 from backend.users.models import Logs, Profile
 from django.core.mail import send_mail
 from django.db import transaction
@@ -266,7 +265,7 @@ class ShortAppraisal2Serializer(serializers.ModelSerializer):
 
 class ShortProfile2Serializer(serializers.ModelSerializer):
     appraisal_set = ShortAppraisal2Serializer(many=True)
-    department= DepartmentSerializer()
+    department = DepartmentSerializer()
 
     class Meta:
         model = Profile

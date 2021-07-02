@@ -87,54 +87,10 @@ class AppraisalViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.action == "list":
-            return (
-                super()
-                .get_queryset()
-                .select_related(
-                    "overall_appraisal",
-                    "employee",
-                    "employee__user",
-                    "employee__department",
-                    "employee__first_reporting_manager",
-                    "employee__first_reporting_manager__user",
-                    "employee__second_reporting_manager",
-                    "employee__second_reporting_manager__user",
-                )
-                .only(
-                    "overall_appraisal__name",
-                    "overall_appraisal__stage",
-                    "status",
-                    "employee",
-                )
-                .annotate(
-                    goal_count=Count("goal", distinct=True),
-                    corevalue_count=Count("corevalue", distinct=True),
-                    skill_count=Count("skill", distinct=True),
-                )
-            )
+            return super().get_queryset()
 
         if self.action == "retrieve":
-            return (
-                super()
-                .get_queryset()
-                .prefetch_related(
-                    "overall_appraisal",
-                    "goal_set",
-                    "goal_set__category",
-                    "goal_set__kpi_set",
-                    "corevalue_set",
-                    "corevalue_set__category",
-                    "skill_set",
-                    "skill_set__category",
-                    "overall_appraisal__departmentalgoal_set",
-                    "overall_appraisal__departmentalcorevalue_set",
-                )
-                .annotate(
-                    goal_count=Count("goal", distinct=True),
-                    corevalue_count=Count("corevalue", distinct=True),
-                    skill_count=Count("skill", distinct=True),
-                )
-            )
+            return super().get_queryset()
         return super().get_queryset()
 
     @extend_schema(
@@ -166,66 +122,18 @@ class AppraisalViewset(viewsets.ModelViewSet):
         return Response({"status": "Appraisal is successfully Updated"})
 
 
-def appraisal_query():
-    return (
-        Appraisal.objects.prefetch_related(
-            "overall_appraisal",
-            "goal_set",
-            "goal_set__category",
-            "goal_set__kpi_set",
-            "corevalue_set",
-            "corevalue_set__category",
-            "skill_set",
-            "skill_set__category",
-            "overall_appraisal__departmentalgoal_set",
-            "overall_appraisal__departmentalcorevalue_set",
-        )
-        .annotate(
-            goal_count=Count("goal", distinct=True),
-            corevalue_count=Count("corevalue", distinct=True),
-            skill_count=Count("skill", distinct=True),
-        )
-        .exclude(overall_appraisal__stage=6)
-    )
-
-
-def manager_appraisal_query():
-    return (
-        Appraisal.objects.select_related(
-            "overall_appraisal",
-            "employee",
-            "employee__department",
-            "employee__first_reporting_manager",
-            "employee__second_reporting_manager",
-        )
-        .only(
-            "overall_appraisal__name",
-            "overall_appraisal__stage",
-            "status",
-            "employee",
-        )
-        .annotate(
-            goal_count=Count("goal", distinct=True),
-            corevalue_count=Count("corevalue", distinct=True),
-            skill_count=Count("skill", distinct=True),
-        )
-        .exclude(overall_appraisal__stage=6)
-    )
-
-
 class MyAppraisalView(generics.ListAPIView):
     serializer_class = DetailAppraisalSerializer
 
     def get_queryset(self):
-        return appraisal_query().filter(employee=self.request.user.profile)
+        return Appraisal.objects.detail().filter(employee=self.request.user.profile)
 
 
 class ManagerAppraisalView(generics.ListAPIView):
     serializer_class = ShortAppraisalSerializer
 
     def get_queryset(self):
-        queryset = appraisal_query()
-        return manager_appraisal_query().filter(
+        return Appraisal.objects.short2().filter(
             employee__first_reporting_manager=self.request.user.profile
         )
 
@@ -262,25 +170,6 @@ def appraisal_status(request):
     return Response(serializer.data)
 
 
-def manager_appraisal_query2():
-    return (
-        Appraisal.objects.select_related(
-            "overall_appraisal",
-        )
-        .only(
-            "overall_appraisal__name",
-            "overall_appraisal__stage",
-            "status",
-        )
-        .annotate(
-            goal_count=Count("goal", distinct=True),
-            corevalue_count=Count("corevalue", distinct=True),
-            skill_count=Count("skill", distinct=True),
-        )
-        .exclude(overall_appraisal__stage=6)
-    )
-
-
 class ShortManagerAppraisal(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ShortProfile2Serializer
@@ -289,9 +178,10 @@ class ShortManagerAppraisal(generics.ListAPIView):
         return Profile.objects.prefetch_related(
             Prefetch(
                 "appraisal_set",
-                manager_appraisal_query(),
+                Appraisal.objects.short1(),
             ),
             "department",
+            "user",
         ).filter(first_reporting_manager=self.request.user.profile)
 
 
@@ -303,7 +193,8 @@ class ShortHodAppraisal(generics.ListAPIView):
         return Profile.objects.prefetch_related(
             Prefetch(
                 "appraisal_set",
-                manager_appraisal_query(),
+                Appraisal.objects.short1(),
             ),
             "department",
+            "user",
         ).filter(second_reporting_manager=self.request.user.profile)
