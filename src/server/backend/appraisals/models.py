@@ -63,21 +63,21 @@ class OverAllAppraisal(models.Model):
 class Appraisal(models.Model):
     STATUS_CHOICES = (
         # stage 1
-        (0, "STAGE 1: Employee Goal settings stage"),
-        (1, "STAGE 1: Manager Goal apprave stage"),
-        (2, "STAGE 1: Manager Approved the goal"),
+        (0, "STAGE 0: Employee Goal settings stage"),
+        (1, "STAGE 0: Manager Goal apprave stage"),
+        (2, "STAGE 0: Manager Approved the goal"),
         # satge 2
-        (3, "STAGE 2: Employee mid year review stage"),
-        (4, "STAGE 2: Employee mid year submit stage"),
-        (5, "STAGE 2: Manager mid year approve stage"),
-        (6, "STAGE 2: Manager Approved mid year review"),
+        (3, "STAGE 1: Employee mid year review stage"),
+        (4, "STAGE 1: Employee mid year submit stage"),
+        (5, "STAGE 1: Manager mid year approve stage"),
+        (6, "STAGE 1: Manager Approved mid year review"),
         # stage 3
-        (7, "STAGE 3: Employee end year review stage"),
-        (8, "STAGE 3: Employee end year submit stage"),
-        (9, "STAGE 3: Manager end year approve stage"),
-        (10, "STAGE 3: Manager Approved end year review"),
-        (11, "STAGE 3: hod end year approve stage"),
-        (12, "STAGE 3: hod approved year approve stage"),
+        (7, "STAGE 2: Employee end year review stage"),
+        (8, "STAGE 2: Employee end year submit stage"),
+        (9, "STAGE 2: Manager end year approve stage"),
+        (10, "STAGE 2: Manager Approved end year review"),
+        (11, "STAGE 2: hod end year approve stage"),
+        (12, "STAGE 2: hod approved year approve stage"),
     )
 
     RATING_CHOICES = [
@@ -109,9 +109,7 @@ class Appraisal(models.Model):
     stage3_rejection_comment: str = models.TextField(blank=True, null=True)
 
     hod_comment: str = models.TextField(blank=True, null=True)
-    hod_rating: int = models.IntegerField(
-        blank=True, null=True, choices=RATING_CHOICES
-    )
+    hod_rating: int = models.IntegerField(blank=True, null=True, choices=RATING_CHOICES)
 
     other_properties = models.JSONField(blank=True, null=True)
 

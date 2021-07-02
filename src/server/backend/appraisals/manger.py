@@ -8,6 +8,7 @@ class AppraisalQuerySet(models.QuerySet):
 
         queryset return all details about goal , core value , skills , overallapprial
         including departmental goal and departmental core value
+        including short profile details about the employee
         """
         return self.prefetch_related(
             "overall_appraisal",
@@ -20,6 +21,13 @@ class AppraisalQuerySet(models.QuerySet):
             "skill_set__category",
             "overall_appraisal__departmentalgoal_set",
             "overall_appraisal__departmentalcorevalue_set",
+            "employee",
+            "employee__user",
+            "employee__department",
+            "employee__first_reporting_manager",
+            "employee__first_reporting_manager__user",
+            "employee__second_reporting_manager",
+            "employee__second_reporting_manager__user",
         )
 
     def short1(self):

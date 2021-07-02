@@ -38,19 +38,86 @@
         </div>
         <div class="appraisal-item-open">
           <div class="appraisal-item">
+            <div class="my-5 pa-2">
+              <vs-row>
+                <vs-col w="4"> Actions </vs-col>
+                <vs-col w="8" style="display: flex; justify-content: flex-end">
+                  <vs-button
+                    v-if="stage == 0 && status == 0"
+                    @click="goalSubmit = true"
+                  >
+                    Submit Goal
+                  </vs-button>
+                  <vs-button
+                    v-if="stage == 1 && status == 3"
+                    @click="midyearReview = true"
+                  >
+                    Midyear Review
+                  </vs-button>
+                  <vs-button
+                    v-if="stage == 1 && status == 4"
+                    @click="midyearReview = true"
+                  >
+                    Edit Midyear Review
+                  </vs-button>
+                  <vs-button
+                    v-if="stage == 1 && status == 4"
+                    @click="submitMidyearReview = true"
+                  >
+                    Submit Midyear Review
+                  </vs-button>
+                  <vs-button
+                    v-if="stage == 2 && status == 7"
+                    @click="endyearReview = true"
+                  >
+                    EndYear Review
+                  </vs-button>
+                  <vs-button
+                    v-if="stage == 2 && status == 8"
+                    @click="endyearReview = true"
+                  >
+                    Edit End Year Review
+                  </vs-button>
+                  <vs-button
+                    v-if="stage == 2 && status == 8"
+                    @click="submitEndyearReview = true"
+                  >
+                    Submit End Year Review
+                  </vs-button>
+                </vs-col>
+              </vs-row>
+            </div>
+
             <Appraisal
               v-if="selectedAppraisal != null"
-              :selected-appraisal="
-                selectedAppraisalId == 0
-                  ? selectedAppraisal
-                  : apprisalList.find((x) => x.id == selectedAppraisalId)
-              "
+              :edit="true"
+              :selected-appraisal="currentAppraisal"
               @refresh="$fetch()"
             />
           </div>
         </div>
       </div>
     </div>
+    <ASubmitGoal
+      v-if="goalSubmit"
+      :dialog="goalSubmit"
+      :edit="false"
+      :selected-appraisal="currentAppraisal"
+      @close="(goalSubmit = false), $emit('refresh')"
+    />
+    <MidyearReview
+      v-if="midyearReview"
+      :dialog="midyearReview"
+      :selected-appraisal="selectedAppraisal"
+      @close="(midyearReview = false), $emit('refresh')"
+    />
+
+    <EndyearReview
+      v-if="endyearReview"
+      :dialog="endyearReview"
+      :selected-appraisal="selectedAppraisal"
+      @close="(endyearReview = false), $emit('refresh')"
+    />
   </div>
 </template>
 
@@ -64,6 +131,12 @@ export default {
     selectedGoal: {},
     selectedAppraisal: {},
     selectedAppraisalId: 0,
+    upstageAppraisal: false,
+    goalSubmit: false,
+    midyearReview: false,
+    endyearReview: false,
+    submitMidyearReview: false,
+    submitEndyearReview: false,
   }),
   async fetch() {
     try {
@@ -81,6 +154,19 @@ export default {
         title: "Error fetching appriasals",
       });
     }
+  },
+  computed: {
+    currentAppraisal() {
+      return this.selectedAppraisalId === 0
+        ? this.selectedAppraisal
+        : this.apprisalList.find((x) => x.id === this.selectedAppraisalId);
+    },
+    status() {
+      return this.currentAppraisal.status;
+    },
+    stage() {
+      return this.currentAppraisal.overall_appraisal.stage;
+    },
   },
 };
 </script>

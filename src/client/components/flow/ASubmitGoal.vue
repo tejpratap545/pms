@@ -1,0 +1,49 @@
+<template>
+  <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
+    <template #header>
+      <h4 class="not-margin"><b>Submit Goals , Core Value and skills</b></h4>
+
+      <vs-button class="closeDialogButton" icon floating @click="closeDialog">
+        <i class="bx bx-x"></i>
+      </vs-button>
+    </template>
+
+    <!-- <div v-if="$fetchState.pending"><Spinner /></div> -->
+    <div class="con-form">
+      <Appraisal :edit="true" :selected-appraisal="selectedAppraisal" />
+    </div>
+
+    <template #footer>
+      <div class="footer-dialog">
+        <vs-button :loading="loading" block @click="submitGoal">
+          Submit Goals
+        </vs-button>
+      </div>
+    </template>
+  </vs-dialog>
+</template>
+
+<script>
+export default {
+  name: "EndyearReview",
+  props: {
+    dialog: Boolean,
+    // eslint-disable-next-line vue/require-default-prop
+    selectedAppraisal: Object,
+  },
+  data: () => ({
+    active: false,
+    loading: false,
+  }),
+
+  mounted() {
+    this.active = this.dialog;
+    this.roleData = this.selectedRole;
+  },
+  methods: {
+    closeDialog() {
+      this.$emit("close");
+    },
+  },
+};
+</script>

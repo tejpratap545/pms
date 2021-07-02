@@ -29,7 +29,10 @@ export default {
   css: ["vuesax/dist/vuesax.css", "~/assets/css/main.css"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+
+  components: {
+    dirs: ["~/components", "~/components/flow"],
+  },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [

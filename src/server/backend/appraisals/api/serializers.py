@@ -210,6 +210,7 @@ class DetailAppraisalSerializer(serializers.ModelSerializer):
     goal_count = serializers.IntegerField()
     corevalue_count = serializers.IntegerField()
     skill_count = serializers.IntegerField()
+    employee = ShortProfileSerializer()
 
     class Meta:
         model = Appraisal

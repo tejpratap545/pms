@@ -1,22 +1,12 @@
 <template>
   <div>
-    <div class="my-5 pa-2">
-      <vs-row>
-        <vs-col w="4"> Actions </vs-col>
-        <vs-col w="8" style="display: flex; justify-content: flex-end">
-          <vs-button @click="midyearReview = true"> Midyear Review </vs-button>
-          <vs-button @click="endyearReview = true"> Endyear Review </vs-button>
-          <vs-button @click="upstageAppraisal = true">
-            Upstage Apraisal {{ selectedAppraisal.stage }}
-          </vs-button>
-        </vs-col>
-      </vs-row>
-    </div>
     <vs-table class="my-5">
       <template #header>
         <div class="table-header" style="justify-content: space-between">
           <h3>Goals</h3>
-          <vs-button @click="newGoal = true"> Add </vs-button>
+          <vs-button v-if="CanEditGoal" @click="newGoal = true">
+            Add
+          </vs-button>
         </div>
       </template>
       <template #thead>
@@ -44,7 +34,7 @@
 
           <template #expand>
             <div>
-              <div class="con-content">
+              <div v-if="CanEditGoal" class="con-content">
                 <vs-button border danger @click="deleteItem('goal', tr.id)">
                   Delete
                 </vs-button>
@@ -164,6 +154,7 @@
                   >
                     <h3>KPIs</h3>
                     <vs-button
+                      v-if="CanEditGoal"
                       color="success"
                       flat
                       icon
@@ -197,7 +188,9 @@
       <template #header>
         <div class="table-header" style="justify-content: space-between">
           <h3>Core values</h3>
-          <vs-button @click="newCoreValue = true"> Add </vs-button>
+          <vs-button v-if="CanEditGoal" @click="newCoreValue = true">
+            Add
+          </vs-button>
         </div>
       </template>
       <template #thead>
@@ -222,7 +215,7 @@
 
           <template #expand>
             <div>
-              <div class="con-content">
+              <div v-if="CanEditGoal" class="con-content">
                 <vs-button
                   border
                   danger
@@ -240,7 +233,9 @@
       <template #header>
         <div class="table-header" style="justify-content: space-between">
           <h3>Skills</h3>
-          <vs-button @click="newSkill = true"> Add </vs-button>
+          <vs-button v-if="CanEditGoal" @click="newSkill = true">
+            Add
+          </vs-button>
         </div>
       </template>
       <template #thead>
@@ -265,7 +260,7 @@
 
           <template #expand>
             <div>
-              <div class="con-content">
+              <div v-if="CanEditGoal" class="con-content">
                 <vs-button border danger @click="deleteItem('skill', tr.id)">
                   Delete
                 </vs-button>
@@ -357,19 +352,6 @@
     </vs-table>
 
     <!-- Dialogs -->
-    <MidyearReview
-      v-if="midyearReview"
-      :dialog="midyearReview"
-      :selected-appraisal="selectedAppraisal"
-      @close="(midyearReview = false), $emit('refresh')"
-    />
-
-    <EndyearReview
-      v-if="endyearReview"
-      :dialog="endyearReview"
-      :selected-appraisal="selectedAppraisal"
-      @close="(endyearReview = false), $emit('refresh')"
-    />
 
     <UpstageAppraisal
       v-if="upstageAppraisal"
@@ -415,16 +397,35 @@ export default {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     selectedAppraisal: Object,
+    edit: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     newGoal: false,
     newCoreValue: false,
     newSkill: false,
     newKpi: false,
-    upstageAppraisal: false,
-    midyearReview: false,
-    endyearReview: false,
   }),
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    CanEditGoal() {
+      if (
+        this.edit === true &&
+        this.selectedAppraisal.employee.id === this.user.id &&
+        this.selectedAppraisal.status === 0 &&
+        this.selectedAppraisal.overall_appraisal.stage === 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+
   methods: {
     deleteItem(item, id) {
       // eslint-disable-next-line no-console
