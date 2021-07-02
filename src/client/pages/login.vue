@@ -77,6 +77,10 @@ export default {
   position: absolute;
 }
 
+.vs-dialog {
+  min-width: 400px;
+}
+
 .footer-dialog .new {
   margin: 0px;
   margin-top: 20px;
