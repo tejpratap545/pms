@@ -40,7 +40,7 @@
           <div class="appraisal-item">
             <div class="my-5 pa-2">
               <vs-row>
-                <vs-col w="4"> Actions </vs-col>
+                <vs-col w="4"> <b>Actions</b> </vs-col>
                 <vs-col w="8" style="display: flex; justify-content: flex-end">
                   <vs-button
                     v-if="stage == 0 && status == 0"
@@ -84,6 +84,9 @@
                   >
                     Submit End Year Review
                   </vs-button>
+                  <vs-button v-else transparent disabled>
+                    No actions available</vs-button
+                  >
                 </vs-col>
               </vs-row>
             </div>
