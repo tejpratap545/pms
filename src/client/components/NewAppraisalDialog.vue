@@ -101,7 +101,7 @@
         block
         filter
       >
-        <vs-option v-for="i in 6" :key="i" :label="`Stage ${i}`" :value="i">
+        <vs-option v-for="i in 6" :key="i" :label="`Stage ${i}`" :value="i - 1">
           {{ `Stage ${i}` }}
         </vs-option>
       </vs-select>
@@ -231,6 +231,9 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
+    if (!this.$store.state.user.user.is_superuser) {
+      this.newAppraisalData.company = this.$store.state.user.user.company;
+    }
   },
   methods: {
     closeDialog() {

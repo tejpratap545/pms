@@ -34,9 +34,22 @@
 
           <template #expand>
             <div>
-              <div v-if="CanEditGoal" class="con-content">
-                <vs-button border danger @click="deleteItem('goal', tr.id)">
+              <div class="con-content">
+                <vs-button
+                  v-if="CanEditGoal"
+                  border
+                  danger
+                  @click="deleteItem('goal', tr.id)"
+                >
                   Delete
+                </vs-button>
+                <vs-button
+                  v-if="goalApprove"
+                  border
+                  success
+                  @click="(goalApproveDialog = true), (selectedGoal = tr)"
+                >
+                  Approve Or Reject Goal
                 </vs-button>
               </div>
               <div style="font-size: 12.8px">
@@ -387,6 +400,12 @@
       :selected-goal="selectedGoal"
       @close="(newKpi = false), $emit('refresh')"
     />
+    <ApproveGoal
+      v-if="goalApproveDialog"
+      :dialog="goalApproveDialog"
+      :goal="selectedGoal"
+      @close="(goalApproveDialog = false), $emit('refresh')"
+    />
   </div>
 </template>
 
@@ -401,12 +420,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    goalApprove: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     newGoal: false,
     newCoreValue: false,
     newSkill: false,
     newKpi: false,
+    goalApproveDialog: false,
   }),
   computed: {
     user() {

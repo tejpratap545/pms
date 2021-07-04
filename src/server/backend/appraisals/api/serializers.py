@@ -228,6 +228,7 @@ class ShortAppraisalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appraisal
         fields = (
+            "id",
             "name",
             "goal_count",
             "corevalue_count",
@@ -255,6 +256,7 @@ class ShortAppraisal2Serializer(serializers.ModelSerializer):
     class Meta:
         model = Appraisal
         fields = (
+            "id",
             "name",
             "goal_count",
             "corevalue_count",

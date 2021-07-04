@@ -29,7 +29,14 @@
                 <template #tbody>
                   <vs-tr>
                     <vs-td> Department </vs-td>
-                    <vs-td> {{ $store.state.user.department.name }} </vs-td>
+
+                    <vs-td>
+                      {{
+                        $store.state.user.department
+                          ? $store.state.user.department.name
+                          : ""
+                      }}
+                    </vs-td>
                   </vs-tr>
                   <vs-tr>
                     <vs-td> Department employees </vs-td>
@@ -315,16 +322,35 @@
                       {{ tr.skill_count }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.status }}
+                      <!-- // TODO  add icons   -->
+
+                      <!-- employee has to submit goals -->
+                      <span v-if="tr.status === 0 && tr.stage === 0"> </span>
+
+                      <!-- manager has to appraoved goals -->
+                      <span v-if="tr.status === 1 && tr.stage === 0"> </span>
+
+                      <!-- goals approved by the manager -->
+                      <span v-if="tr.status === 2 && tr.stage === 0"> </span>
+                      <!-- rejected or unknown status -->
+                      <span v-else> </span>
                     </vs-td>
 
                     <template #expand>
                       <div class="con-content">
                         <div>
-                          <vs-button color="success" flat icon>
+                          {{ tr }}
+                          <vs-button
+                            v-if="tr.status === 1 && tr.stage === 0"
+                            color="success"
+                            flat
+                            icon
+                            @click="
+                              (appraisalId = tr.id), (approveAppraisal = true)
+                            "
+                          >
                             <i class="bx bx-edit-alt"></i>
                           </vs-button>
-                          <vs-button danger> Delete appraisal </vs-button>
                         </div>
                       </div>
                     </template>
@@ -573,6 +599,13 @@
           </div>
         </div>
       </div>
+
+      <BApproveAppraisal
+        v-if="approveAppraisal"
+        :appraisal-id="appraisalId"
+        :dialog="approveAppraisal"
+        @close="(approveAppraisal = false), $fetch()"
+      />
     </div>
   </div>
 </template>
@@ -592,8 +625,11 @@ export default {
       stage2: [],
       stage3: [],
     },
+    appraisalId: Number,
     userHodList: [],
     userManagerList: [],
+
+    approveAppraisal: false,
   }),
   async fetch() {
     try {
@@ -603,9 +639,9 @@ export default {
         },
       });
 
-      this.appraisalManagerList.stage1 = res.filter((x) => x.stage === 1);
-      this.appraisalManagerList.stage2 = res.filter((x) => x.stage === 2);
-      this.appraisalManagerList.stage3 = res.filter((x) => x.stage === 3);
+      this.appraisalManagerList.stage1 = res.filter((x) => x.stage === 0);
+      this.appraisalManagerList.stage2 = res.filter((x) => x.stage === 1);
+      this.appraisalManagerList.stage3 = res.filter((x) => x.stage === 2);
 
       this.userHodList = await this.$axios.$get(`api/appraisal/short/hod`, {
         headers: {
@@ -628,25 +664,6 @@ export default {
       });
     }
   },
-  // methods: {
-  //   deleteAppraisal(id) {
-  //     this.loading = true;
-
-  //     this.$axios
-  //       .$delete(`api/appraisal/${id}/`, {
-  //         headers: {
-  //           Authorization: `Bearer ${this.$store.state.accessToken}`,
-  //         },
-  //       })
-  //       .then(() => {
-  //         this.$emit("refresh");
-  //         return this.$vs.notification({
-  //           color: "success",
-  //           title: `Successfully deleted appraisal`,
-  //         });
-  //       });
-  //   },
-  // },
 };
 </script>
 

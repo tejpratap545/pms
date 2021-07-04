@@ -87,10 +87,54 @@ class AppraisalViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.action == "list":
-            return super().get_queryset()
+            return (
+                super()
+                .get_queryset()
+                .select_related(
+                    "overall_appraisal",
+                    "employee",
+                    "employee__user",
+                    "employee__department",
+                    "employee__first_reporting_manager",
+                    "employee__first_reporting_manager__user",
+                    "employee__second_reporting_manager",
+                    "employee__second_reporting_manager__user",
+                )
+                .only(
+                    "overall_appraisal__name",
+                    "overall_appraisal__stage",
+                    "status",
+                    "employee",
+                )
+                .annotate(
+                    goal_count=Count("goal", distinct=True),
+                    corevalue_count=Count("corevalue", distinct=True),
+                    skill_count=Count("skill", distinct=True),
+                )
+            )
 
         if self.action == "retrieve":
-            return super().get_queryset()
+            return (
+                super()
+                .get_queryset()
+                .prefetch_related(
+                    "overall_appraisal",
+                    "goal_set",
+                    "goal_set__category",
+                    "goal_set__kpi_set",
+                    "corevalue_set",
+                    "corevalue_set__category",
+                    "skill_set",
+                    "skill_set__category",
+                    "overall_appraisal__departmentalgoal_set",
+                    "overall_appraisal__departmentalcorevalue_set",
+                )
+                .annotate(
+                    goal_count=Count("goal", distinct=True),
+                    corevalue_count=Count("corevalue", distinct=True),
+                    skill_count=Count("skill", distinct=True),
+                )
+            )
         return super().get_queryset()
 
     @extend_schema(
