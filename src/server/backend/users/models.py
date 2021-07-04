@@ -202,6 +202,11 @@ class Profile(models.Model):
     def email(self):
         return self.user.email
 
+    @property
+    @extend_schema_field(OpenApiTypes.EMAIL)
+    def username(self):
+        return self.user.username
+
     def __str__(self):
         return f"{self.name} {self.email}"
 

@@ -25,8 +25,19 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
 
+class ShortEmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = (
+            "id",
+            "name",
+            "email",
+        )
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+   
 
     class Meta:
         model = Profile
@@ -103,20 +114,11 @@ class RoleSerializer(serializers.ModelSerializer):
         )
 
 
-class ShortEmployeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = (
-            "id",
-            "name",
-            "email",
-        )
-
-
 class ShortProfileSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer()
     first_reporting_manager = ShortEmployeeSerializer()
     second_reporting_manager = ShortEmployeeSerializer()
+     
 
     class Meta:
         model = Profile
@@ -128,6 +130,7 @@ class ShortProfileSerializer(serializers.ModelSerializer):
             "second_reporting_manager",
             "email",
             "name",
+            "username"
         )
 
 

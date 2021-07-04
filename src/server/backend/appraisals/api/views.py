@@ -31,7 +31,7 @@ class OverAllAppraisalViewSet(viewsets.ModelViewSet):
 
         if self.request.method == "GET":
             queryset = queryset.prefetch_related(
-                "departmental_goal", "departmental_corevalue"
+                "departmentalgoal_set", "departmentalcorevalue_set"
             )
 
         return queryset
@@ -131,15 +131,13 @@ class AppraisalViewset(viewsets.ModelViewSet):
 
         if (stage in employee_stage and appraisal.employee == request.user.profile) or (
             stage in manager_stage and appraisal.employee.manager == self.request.user
-        ):  
+        ):
             if appraisal.can_upsatus(user=self.request.user.profile):
 
                 appraisal.status += 1
                 appraisal.save()
                 return Response({"status": "Appraisal is successfully Updated"})
-        return Response(status= 400,data="Bad request (something invalid)")
-
-        
+        return Response(status=400, data="Bad request (something invalid)")
 
 
 class MyAppraisalView(generics.ListAPIView):

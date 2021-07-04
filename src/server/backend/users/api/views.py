@@ -6,8 +6,7 @@ from django.core.mail import send_mail
 from django.db.models import Count, OuterRef, Q, Subquery
 from django.utils.datetime_safe import datetime
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
-                                   extend_schema)
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -40,7 +39,9 @@ class ShortEmployeeView(generics.ListAPIView):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsPermission(permissions="CAN_MANAGE_EMPLOYEE") | IsSuperUser]
+    permission_classes = [
+        IsPermission(permissions=["CAN_MANAGE_EMPLOYEE"]) | IsSuperUser
+    ]
     filterset_fields = [
         "user__company",
         "first_reporting_manager",
@@ -52,7 +53,14 @@ class ProfileViewSet(viewsets.ModelViewSet):
         "user__username",
     ]
     search_fields = ["name"]
-    serializer_class = ProfileSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return ProfileInfoSerializer
+
+        if self.action == "list":
+            return ShortProfileSerializer
+        return ProfileSerializer
 
     def get_queryset(self):
         queryset = Profile.objects.prefetch_related(
@@ -60,6 +68,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
             "user__company",
             "user__role",
             "user__role__permissions",
+            "first_reporting_manager",
+            "first_reporting_manager__user",
+            "second_reporting_manager", "second_reporting_manager__user",
         ).all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(user__company=self.request.user.company)
@@ -181,7 +192,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         profile.save()
         user.save()
 
-        return Response( "User is successfully Revieve")
+        return Response("User is successfully Revieve")
 
 
 class CompanyViewSet(viewsets.ModelViewSet):

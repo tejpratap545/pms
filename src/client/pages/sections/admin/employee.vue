@@ -23,7 +23,6 @@
             <vs-th> Email </vs-th>
             <vs-th> Date of Hire </vs-th>
             <vs-th> Department </vs-th>
-            <vs-th> Position </vs-th>
             <vs-th> Supervisor </vs-th>
             <vs-th
               sort
@@ -46,33 +45,27 @@
                   :src="
                     tr.avatar
                       ? tr.avatar
-                      : `https://avatars.dicebear.com/api/jdenticon/${tr.user.email}.svg`
+                      : `https://avatars.dicebear.com/api/jdenticon/${tr.email}.svg`
                   "
                   alt="Avatar"
                 />
               </vs-avatar>
             </vs-td>
-            <vs-td> {{ tr.user.username }} </vs-td>
-            <vs-td> {{ tr.user.first_name }} {{ tr.user.last_name }} </vs-td>
+            <vs-td> {{ tr.username }} </vs-td>
+            <vs-td> {{ tr.name }} </vs-td>
             <vs-td>
-              {{ tr.user.email }}
+              {{ tr.email }}
             </vs-td>
             <vs-td>
               {{ tr.date_of_hire }}
             </vs-td>
             <vs-td>
-              {{
-                tr.department
-                  ? departmentList.find((x) => x.id == tr.department).name
-                  : ``
-              }}
+              {{ tr.department ? tr.department.name : `` }}
             </vs-td>
-            <vs-td> {{ tr.job_title }} </vs-td>
             <vs-td>
               {{
                 tr.first_reporting_manager
-                  ? employeeList.find((x) => x.id == tr.first_reporting_manager)
-                      .user.username
+                  ? tr.first_reporting_manager.name
                   : ``
               }}
             </vs-td>
@@ -146,6 +139,7 @@ export default {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
       });
+      console.log(this.employeeList);
 
       this.departmentList = await this.$axios.$get(`api/department/`, {
         headers: {

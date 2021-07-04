@@ -112,17 +112,21 @@ class DepartmentalCoreValueSerializer(serializers.ModelSerializer):
 
 class DetailDepartmentalGoalSerializer(serializers.ModelSerializer):
     manager = ShortEmployeeSerializer()
-    category= GoalCategorySerializer()
+    category = GoalCategorySerializer()
 
     class Meta:
         model = DepartmentalGoal
         fields = "__all__"
 
+        extra_kwargs = {"manager": {"read_only": True}}
+
 
 class DetailDepartmentalCoreValueSerializer(serializers.ModelSerializer):
     manager = ShortEmployeeSerializer()
-    category= CoreValueCategorySerializer()
+    category = CoreValueCategorySerializer()
 
     class Meta:
         model = DepartmentalCoreValue
         fields = "__all__"
+
+        extra_kwargs = {"manager": {"read_only": True}}

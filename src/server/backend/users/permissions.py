@@ -25,8 +25,9 @@ class IsCompanyAdmin(BasePermission):
 
 
 class IsPermission(BasePermission):
-    def __init__(self, permissions):
-        self.permissions = permissions
+    def __init__(self, permissions: list[str]):
+
+        self.permissions = permissions + ["CAN_MANAGE_COMPANY"]
 
     def has_object_permission(self, request, view, obj: object):
         if request.method == "GET":
