@@ -19,7 +19,7 @@
           <vs-tr>
             <vs-th> Avatar </vs-th>
             <vs-th> Username </vs-th>
-            <vs-th> Fullname </vs-th>
+            <vs-th> Name </vs-th>
             <vs-th> Email </vs-th>
             <vs-th> Date of Hire </vs-th>
             <vs-th> Department </vs-th>
