@@ -15,6 +15,7 @@
           <vs-th> Weightage </vs-th>
           <vs-th> KPI Count </vs-th>
           <vs-th> Due </vs-th>
+          <vs-th>Status</vs-th>
         </vs-tr>
       </template>
       <template #tbody>
@@ -30,6 +31,12 @@
           </vs-td>
           <vs-td>
             {{ tr.due }}
+          </vs-td>
+          <vs-td>
+            <!-- TO-DO  Add icons here  -->
+            <span v-if="tr.status == 1"> approved</span>
+            <span v-else-if="tr.status == -1"> rejected</span>
+            <span v-else> No action</span>
           </vs-td>
 
           <template #expand>

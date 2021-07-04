@@ -106,20 +106,20 @@
       :dialog="goalSubmit"
       :edit="false"
       :selected-appraisal="currentAppraisal"
-      @close="(goalSubmit = false), $fetch"
+      @close="(goalSubmit = false), $fetch()"
     />
     <MidyearReview
       v-if="midyearReview"
       :dialog="midyearReview"
       :selected-appraisal="selectedAppraisal"
-      @close="(midyearReview = false), $fetch"
+      @close="(midyearReview = false), $fetch()"
     />
 
     <EndyearReview
       v-if="endyearReview"
       :dialog="endyearReview"
       :selected-appraisal="selectedAppraisal"
-      @close="(endyearReview = false), $fetch"
+      @close="(endyearReview = false), $fetch()"
     />
   </div>
 </template>

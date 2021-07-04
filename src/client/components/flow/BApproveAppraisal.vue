@@ -14,6 +14,7 @@
         :goal-approve="true"
         :edit="false"
         :selected-appraisal="appraisal"
+        @refresh="$fetch()"
       />
     </di>
 

@@ -99,6 +99,7 @@ export default {
       tracking_status: "null",
       appraisal: 0,
       category: 0,
+      status: 0,
     },
   }),
   async fetch() {

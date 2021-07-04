@@ -79,7 +79,7 @@ class Goal(models.Model):
         (0, "PENDINGD"),
         (1, "APPROVED"),
     )
-    status: int = models.IntegerField(blank=True, null=True, choices=STATUS_CHOICE)
+    status: int = models.IntegerField(blank=True, choices=STATUS_CHOICE, default=0)
 
     stage1_employee_comment: str = models.TextField(blank=True, null=True)
     stage1_manager_comment: str = models.TextField(blank=True, null=True)
