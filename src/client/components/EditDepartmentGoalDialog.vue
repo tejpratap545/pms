@@ -123,7 +123,7 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$patch(`api/departmental-goal/`, this.goalData, {
+          .$patch(`api/departmental-goal/${this.goalData.id}/`, this.goalData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },

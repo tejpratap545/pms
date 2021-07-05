@@ -60,7 +60,11 @@
         <div class="avatar">
           <vs-avatar size="100">
             <img
-              src="https://randomuser.me/api/portraits/women/83.jpg"
+              :src="
+                $store.state.user.avatar
+                  ? $store.state.user.avatar
+                  : `https://avatars.dicebear.com/api/jdenticon/${$store.state.user.user.email}.svg`
+              "
               alt=""
             />
           </vs-avatar>
@@ -95,8 +99,18 @@
                 </vs-td>
               </vs-tr>
               <vs-tr>
+                <vs-td> Company </vs-td>
+                <vs-td>
+                  {{
+                    companyList.filter(
+                      (x) => x.id == $store.state.user.user.company
+                    )[0].name
+                  }}
+                </vs-td>
+              </vs-tr>
+              <vs-tr>
                 <vs-td> Department </vs-td>
-                <vs-td> IT </vs-td>
+                <vs-td> {{ $store.state.user.department.name }} </vs-td>
               </vs-tr>
               <vs-tr>
                 <vs-td> Role </vs-td>
@@ -135,6 +149,7 @@ export default {
   data: () => ({
     loading: false,
     passwordActive: false,
+    companyList: [],
     apprisalStatus: {
       a1: 0,
       a2: 0,
@@ -144,6 +159,11 @@ export default {
   async fetch() {
     try {
       this.apprisalStatus = await this.$axios.$get(`api/appraisal/status`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+      this.companyList = await this.$axios.$get(`api/company/`, {
         headers: {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },

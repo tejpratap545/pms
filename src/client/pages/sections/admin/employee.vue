@@ -139,7 +139,6 @@ export default {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
       });
-      console.log(this.employeeList);
 
       this.departmentList = await this.$axios.$get(`api/department/`, {
         headers: {

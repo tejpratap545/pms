@@ -124,11 +124,15 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$post(`api/departmental-core-value/`, this.coreValueData, {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-          })
+          .$patch(
+            `api/departmental-core-value/${this.coreValueData.id}/`,
+            this.coreValueData,
+            {
+              headers: {
+                Authorization: `Bearer ${this.$store.state.accessToken}`,
+              },
+            }
+          )
           .then(() => this.closeDialog())
           .catch(() => {
             this.loading = false;
