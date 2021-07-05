@@ -640,14 +640,19 @@
                       {{ tr.skill_count }}
                     </vs-td>
                     <vs-td>
-                      <!-- employee has to submit goals -->
-                      <span v-if="tr.status === 0 && tr.stage === 0"> </span>
+                      <!-- TO-DO  Add icons -->
+                      <!--  employee has to input mid year review  -->
+                      <span v-if="tr.status === 2 && tr.stage === 1"> </span>
+                      <!--  employee has to submit mid year review  -->
+                      <span v-if="tr.status === 3 && tr.stage === 1"> </span>
+                      <!--  manager has to input mid year review  -->
+                      <span v-if="tr.status === 4 && tr.stage === 1"> </span>
 
-                      <!-- manager has to appraoved goals -->
-                      <span v-if="tr.status === 1 && tr.stage === 0"> </span>
+                      <!-- manager has to approved mid year review  -->
+                      <span v-if="tr.status === 5 && tr.stage === 1"> </span>
 
-                      <!-- goals approved by the manager -->
-                      <span v-if="tr.status === 2 && tr.stage === 0"> </span>
+                      <!-- mid year review  approved by the manager -->
+                      <span v-if="tr.status === 6 && tr.stage === 1"> </span>
                       <!-- rejected or unknown status -->
                       <span v-else> </span>
                     </vs-td>
@@ -787,7 +792,21 @@
                       {{ tr.skill_count }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.status }}
+                      <!-- TO-DO  Add icons -->
+                      <!--  employee has to input end year review  -->
+                      <span v-if="tr.status === 6 && tr.stage === 2"> </span>
+                      <!--  employee has to submit end year review  -->
+                      <span v-if="tr.status === 7 && tr.stage === 2"> </span>
+                      <!--  manager has to input end year review  -->
+                      <span v-if="tr.status === 8 && tr.stage === 2"> </span>
+
+                      <!-- manager has to approved end year review  -->
+                      <span v-if="tr.status === 9 && tr.stage === 2"> </span>
+
+                      <!-- end year review  approved by the manager -->
+                      <span v-if="tr.status === 10 && tr.stage === 2"> </span>
+                      <!-- rejected or unknown status -->
+                      <span v-else> </span>
                     </vs-td>
 
                     <template #expand>
