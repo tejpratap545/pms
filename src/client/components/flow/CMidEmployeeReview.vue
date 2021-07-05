@@ -108,7 +108,7 @@
     <template #footer>
       <div class="footer-dialog">
         <vs-button :loading="loading" block @click="submit">
-          Submit review
+          Submit Review
         </vs-button>
       </div>
     </template>
@@ -117,11 +117,14 @@
 
 <script>
 export default {
-  name: "MidyearReview",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     selectedAppraisal: Object,
+    edit: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     active: false,
@@ -133,8 +136,8 @@ export default {
   },
   methods: {
     patchGoals() {
-      this.goals.forEach(async (goal) => {
-        await this.$axios.patch(`api/goal/${goal.id}`, {
+      this.selectedAppraisal.goal_set.forEach(async (goal) => {
+        await this.$axios.patch(`api/goal/${goal.id}/`, {
           stage1_employee_comment: goal.stage1_employee_comment,
           tracking_status: goal.tracking_status,
         });
@@ -147,7 +150,7 @@ export default {
 
       this.$axios
         .$post(
-          `api/appraisal/${this.appraisalId}/up-stage/employee/mid-review/`,
+          `api/appraisal/${this.selectedAppraisal.id}/up-stage/employee/mid-review/`,
           {},
           {
             headers: {
@@ -158,14 +161,14 @@ export default {
         .then(() => {
           this.$vs.notification({
             color: "success",
-            title: `"Sucessfullly review appraisal ${this.appraisal.name} . Please Confirm or Edit review  and then Submit"`,
+            title: `"Sucessfullly review appraisal ${this.selectedAppraisal.name} . Please Confirm or Edit review  and then Submit"`,
           });
           this.closeDialog();
         })
         .catch(() => {
           return this.$vs.notification({
             color: "danger",
-            title: `"Error review mid year appraisal ${this.appraisal.name}."`,
+            title: `"Error review mid year appraisal ${this.selectedAppraisal.name}."`,
           });
         })
         .finally(() => {

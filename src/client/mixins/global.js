@@ -55,6 +55,8 @@ export default {
       } else if (stage === 2 && status === 8) {
         return "End Year Pending Manager/Supervisor input";
       } else if (stage === 2 && status === 9) {
+        return "End Year Pending Manager/Supervisor approve";
+      } else if (stage === 2 && status === 10) {
         return "End Year  Approved By Manager/Supervisor";
       } else {
         return "Unknown Stage";

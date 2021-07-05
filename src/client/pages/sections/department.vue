@@ -640,16 +640,44 @@
                       {{ tr.skill_count }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.status }}
+                      <!-- employee has to submit goals -->
+                      <span v-if="tr.status === 0 && tr.stage === 0"> </span>
+
+                      <!-- manager has to appraoved goals -->
+                      <span v-if="tr.status === 1 && tr.stage === 0"> </span>
+
+                      <!-- goals approved by the manager -->
+                      <span v-if="tr.status === 2 && tr.stage === 0"> </span>
+                      <!-- rejected or unknown status -->
+                      <span v-else> </span>
                     </vs-td>
 
                     <template #expand>
                       <div class="con-content">
                         <div>
-                          <vs-button color="success" flat icon>
-                            <i class="bx bx-edit-alt"></i>
+                          <vs-button
+                            v-if="
+                              (tr.status === 4 || tr.status === 5) &&
+                              tr.stage === 1
+                            "
+                            color="success"
+                            flat
+                            icon
+                            @click="(appraisalId = tr.id), (midReview = true)"
+                          >
+                            mid review
                           </vs-button>
-                          <vs-button danger> Delete appraisal </vs-button>
+                          <vs-button
+                            v-if="tr.status === 5 && tr.stage === 1"
+                            color="success"
+                            flat
+                            icon
+                            @click="
+                              (appraisalId = tr.id), (midReviewApprove = true)
+                            "
+                          >
+                            approve
+                          </vs-button>
                         </div>
                       </div>
                     </template>
@@ -765,10 +793,36 @@
                     <template #expand>
                       <div class="con-content">
                         <div>
-                          <vs-button color="success" flat icon>
-                            <i class="bx bx-edit-alt"></i>
-                          </vs-button>
-                          <vs-button danger> Delete appraisal </vs-button>
+                          <div class="con-content">
+                            <div>
+                              <vs-button
+                                v-if="
+                                  (tr.status === 8 || tr.status === 9) &&
+                                  tr.stage === 2
+                                "
+                                color="success"
+                                flat
+                                icon
+                                @click="
+                                  (appraisalId = tr.id), (endReview = true)
+                                "
+                              >
+                                end review
+                              </vs-button>
+                              <vs-button
+                                v-if="tr.status === 9 && tr.stage === 2"
+                                color="success"
+                                flat
+                                icon
+                                @click="
+                                  (appraisalId = tr.id),
+                                    (endReviewApprove = true)
+                                "
+                              >
+                                approve
+                              </vs-button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </template>
@@ -788,10 +842,30 @@
         :dialog="approveAppraisal"
         @close="(approveAppraisal = false), $fetch()"
       />
-      <EMidManagerReview />
-      <FMidManagerSubmit />
-      <IEndManagerReview />
-      <JEndManagerSubmit />
+      <EMidManagerReview
+        v-if="midReview"
+        :appraisal-id="appraisalId"
+        :dialog="midReview"
+        @close="(midReview = false), $fetch()"
+      />
+      <FMidManagerSubmit
+        v-if="midReviewApprove"
+        :appraisal-id="appraisalId"
+        :dialog="midReviewApprove"
+        @close="(midReviewApprove = false), $fetch()"
+      />
+      <IEndManagerReview
+        v-if="endReview"
+        :appraisal-id="appraisalId"
+        :dialog="endReview"
+        @close="(endReview = false), $fetch()"
+      />
+      <JEndManagerSubmit
+        v-if="endReviewApprove"
+        :appraisal-id="appraisalId"
+        :dialog="endReviewApprove"
+        @close="(endReviewApprove = false), $fetch()"
+      />
 
       <NewDepartmentGoalDialog
         v-if="newDepartmentGoal"
@@ -840,6 +914,10 @@ export default {
     search: "",
     loading: false,
     selected: {},
+    midReview: false,
+    endReview: false,
+    midReviewApprove: false,
+    endReviewApprove: false,
     appraisalManagerList: {
       stage1: [],
       stage2: [],

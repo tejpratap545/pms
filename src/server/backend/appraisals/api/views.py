@@ -254,8 +254,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 1 and appraisal.status == 2:
-            appraisal.status += 1
+        if appraisal.stage == 1 and (appraisal.status == 2 or appraisal.status == 3):
+            appraisal.status = 3
             appraisal.save()
             return Response("Appraisal is successfully submitted")
 
@@ -292,8 +292,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee.first_reporting_manager != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 1 and appraisal.status == 4:
-            appraisal.status += 1
+        if appraisal.stage == 1 and appraisal.status == 4 or appraisal.status == 5:
+            appraisal.status = 5
             appraisal.save()
             return Response("Appraisal is successfully submitted")
 
@@ -311,7 +311,7 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee.first_reporting_manager != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 1 and appraisal.status == 4:
+        if appraisal.stage == 1 and appraisal.status == 5:
             appraisal.status += 1
             appraisal.save()
             return Response("Appraisal is successfully submitted")
@@ -330,8 +330,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 2 and appraisal.status == 5:
-            appraisal.status += 1
+        if appraisal.stage == 2 and (appraisal.status == 6 or appraisal.status == 7):
+            appraisal.status = 7
             appraisal.save()
             return Response("Appraisal is successfully submitted")
 
@@ -349,7 +349,7 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 2 and appraisal.status == 6:
+        if appraisal.stage == 2 and appraisal.status == 7:
             appraisal.status += 1
             appraisal.save()
             return Response("Appraisal is successfully submitted")
@@ -368,8 +368,8 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee.first_reporting_manager != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 2 and appraisal.status == 7:
-            appraisal.status += 1
+        if appraisal.stage == 2 and (appraisal.status == 8 or appraisal.status == 9):
+            appraisal.status = 9
             appraisal.save()
             return Response("Appraisal is successfully submitted")
 
@@ -387,7 +387,7 @@ class AppraisalViewset(viewsets.ModelViewSet):
         appraisal: Appraisal = self.get_object()
         if appraisal.employee.first_reporting_manager != self.request.user.profile:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if appraisal.stage == 2 and appraisal.status == 8:
+        if appraisal.stage == 2 and appraisal.status == 9:
             appraisal.status += 1
             appraisal.save()
             return Response("Appraisal is successfully submitted")

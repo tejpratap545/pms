@@ -152,7 +152,7 @@
                   <vs-col w="8" class="description-card">
                     <span v-if="tr.stage2_employee_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.stage3_employee_comment"></span>
+                      <span v-html="tr.stage2_employee_comment"></span>
                     </span>
                     <span v-else>No Comment</span>
                   </vs-col>
@@ -162,7 +162,7 @@
                   <vs-col w="8" class="description-card">
                     <span v-if="tr.stage2_manager_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.stage3_manager_comment"></span>
+                      <span v-html="tr.stage2_manager_comment"></span>
                     </span>
                     <span v-else>No Comment</span>
                   </vs-col>

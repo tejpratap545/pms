@@ -1,7 +1,7 @@
 <template>
   <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
-      <h4 class="not-margin"><b>Submit Goals , Core Value and skills</b></h4>
+      <h4 class="not-margin"><b>Approve Goals , Core Value and skills</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>

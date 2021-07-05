@@ -71,19 +71,19 @@
                     Submit Midyear Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 2 && status == 5"
+                    v-if="stage == 2 && status == 6"
                     @click="endyearReview = true"
                   >
                     EndYear Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 2 && status == 6"
+                    v-if="stage == 2 && status == 7"
                     @click="endyearReview = true"
                   >
                     Edit End Year Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 2 && status == 6"
+                    v-if="stage == 2 && status == 7"
                     @click="submitEndyearReview = true"
                   >
                     Submit End Year Review
