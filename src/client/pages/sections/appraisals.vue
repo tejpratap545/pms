@@ -53,37 +53,37 @@
                     Submit Goal
                   </vs-button>
                   <vs-button
-                    v-if="stage == 1 && status == 3"
+                    v-if="stage == 1 && status == 2"
                     @click="midyearReview = true"
                   >
                     Midyear Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 1 && status == 4"
+                    v-if="stage == 1 && status == 3"
                     @click="midyearReview = true"
                   >
                     Edit Midyear Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 1 && status == 4"
+                    v-if="stage == 1 && status == 3"
                     @click="submitMidyearReview = true"
                   >
                     Submit Midyear Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 2 && status == 7"
+                    v-if="stage == 2 && status == 5"
                     @click="endyearReview = true"
                   >
                     EndYear Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 2 && status == 8"
+                    v-if="stage == 2 && status == 6"
                     @click="endyearReview = true"
                   >
                     Edit End Year Review
                   </vs-button>
                   <vs-button
-                    v-if="stage == 2 && status == 8"
+                    v-if="stage == 2 && status == 6"
                     @click="submitEndyearReview = true"
                   >
                     Submit End Year Review
@@ -114,18 +114,33 @@
       :selected-appraisal="currentAppraisal"
       @close="(goalSubmit = false), $fetch()"
     />
-    <MidyearReview
+    <CMidEmployeeReview
       v-if="midyearReview"
       :dialog="midyearReview"
-      :selected-appraisal="selectedAppraisal"
+      :edit="false"
+      :selected-appraisal="currentAppraisal"
       @close="(midyearReview = false), $fetch()"
     />
-
-    <EndyearReview
+    <DMidEmployeeSubmit
+      v-if="submitMidyearReview"
+      :dialog="submitMidyearReview"
+      :edit="false"
+      :selected-appraisal="currentAppraisal"
+      @close="(submitMidyearReview = false), $fetch()"
+    />
+    <GEndEmployeeReview
       v-if="endyearReview"
       :dialog="endyearReview"
-      :selected-appraisal="selectedAppraisal"
+      :edit="false"
+      :selected-appraisal="currentAppraisal"
       @close="(endyearReview = false), $fetch()"
+    />
+    <HEndEmployeeSubmit
+      v-if="submitEndyearReview"
+      :dialog="submitEndyearReview"
+      :edit="false"
+      :selected-appraisal="currentAppraisal"
+      @close="(submitEndyearReview = false), $fetch()"
     />
   </div>
 </template>

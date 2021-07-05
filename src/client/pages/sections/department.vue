@@ -788,6 +788,10 @@
         :dialog="approveAppraisal"
         @close="(approveAppraisal = false), $fetch()"
       />
+      <EMidManagerReview />
+      <FMidManagerSubmit />
+      <IEndManagerReview />
+      <JEndManagerSubmit />
 
       <NewDepartmentGoalDialog
         v-if="newDepartmentGoal"

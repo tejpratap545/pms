@@ -72,7 +72,7 @@
         block
         filter
       >
-        <vs-option v-for="i in 6" :key="i" :label="`Stage ${i}`" :value="i">
+        <vs-option v-for="i in 6" :key="i" :label="`Stage ${i}`" :value="i - 1">
           {{ `Stage ${i}` }}
         </vs-option>
       </vs-select>
