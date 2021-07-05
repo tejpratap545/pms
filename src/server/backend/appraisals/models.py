@@ -95,18 +95,32 @@ class Appraisal(models.Model):
     )
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, blank=True)
 
+    stage0_employee_comment: str = models.TextField(blank=True, null=True)
+    stage0_manager_comment: str = models.TextField(blank=True, null=True)
+
     stage1_employee_comment: str = models.TextField(blank=True, null=True)
     stage1_manager_comment: str = models.TextField(blank=True, null=True)
 
     stage2_employee_comment: str = models.TextField(blank=True, null=True)
     stage2_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage3_employee_comment: str = models.TextField(blank=True, null=True)
-    stage3_manager_comment: str = models.TextField(blank=True, null=True)
-
+    stage0_rejection_comment: str = models.TextField(blank=True, null=True)
     stage1_rejection_comment: str = models.TextField(blank=True, null=True)
     stage2_rejection_comment: str = models.TextField(blank=True, null=True)
-    stage3_rejection_comment: str = models.TextField(blank=True, null=True)
+    core_value_employee_comment : str =models.TextField(blank=True, null=True)
+    core_value_employee_rating : str = models.IntegerField(
+        blank=True, null=True, choices=RATING_CHOICES
+    )
+    core_value_manager_rating : str = models.IntegerField(
+        blank=True, null=True, choices=RATING_CHOICES
+    )
+    core_value_hod_rating : str = models.IntegerField(
+        blank=True, null=True, choices=RATING_CHOICES
+    )
+    core_value_manager_comment : str =models.TextField(blank=True, null=True)
+
+    core_value_hod_comment : str =models.TextField(blank=True, null=True)
+
 
     hod_comment: str = models.TextField(blank=True, null=True)
     hod_rating: int = models.IntegerField(blank=True, null=True, choices=RATING_CHOICES)

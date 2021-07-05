@@ -86,9 +86,9 @@
                     <b>Goal setting stage employee comment</b>
                   </vs-col>
                   <vs-col w="8" class="description-card">
-                    <span v-if="tr.stage1_employee_comment != null">
+                    <span v-if="tr.stage0_employee_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.stage1_employee_comment"></span>
+                      <span v-html="tr.stage0_employee_comment"></span>
                     </span>
                     <span v-else>No Comment</span>
                   </vs-col>
@@ -98,15 +98,15 @@
                     <b>Goal setting stage manager comment</b>
                   </vs-col>
                   <vs-col w="8" class="description-card">
-                    <span v-if="tr.stage1_manager_comment != null">
+                    <span v-if="tr.stage0_manager_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.stage1_manager_comment"></span>
+                      <span v-html="tr.stage0_manager_comment"></span>
                     </span>
                     <span v-else>No Comment</span>
                   </vs-col>
                 </vs-row>
                 <vs-row
-                  v-if="tr.stage1_rejection_comment != null"
+                  v-if="tr.stage0_rejection_comment != null"
                   style="padding: 20px 0"
                 >
                   <vs-col w="4">
@@ -114,15 +114,15 @@
                   </vs-col>
                   <vs-col w="8" class="description-card">
                     <!-- eslint-disable-next-line vue/no-v-html -->
-                    <span v-html="tr.stage1_rejection_comment"></span>
+                    <span v-html="tr.stage0_rejection_comment"></span>
                   </vs-col>
                 </vs-row>
                 <vs-row style="padding: 20px 0">
                   <vs-col w="4"> <b>Mid year employee comment</b> </vs-col>
                   <vs-col w="8" class="description-card">
-                    <span v-if="tr.stage2_employee_comment != null">
+                    <span v-if="tr.stage1_employee_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.stage2_employee_comment"></span>
+                      <span v-html="tr.stage1_employee_comment"></span>
                     </span>
                     <span v-else>No Comment</span>
                   </vs-col>
@@ -130,9 +130,9 @@
                 <vs-row style="padding: 20px 0">
                   <vs-col w="4"> <b>Mid year manager comment</b> </vs-col>
                   <vs-col w="8" class="description-card">
-                    <span v-if="tr.stage2_manager_comment != null">
+                    <span v-if="tr.stage1_manager_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
-                      <span v-html="tr.stage2_manager_comment"></span>
+                      <span v-html="tr.stage1_manager_comment"></span>
                     </span>
                     <span v-else>No Comment</span>
                   </vs-col>
@@ -144,13 +144,13 @@
                   <vs-col w="4"> <b>Mid year rejection comment</b> </vs-col>
                   <vs-col w="8" class="description-card">
                     <!-- eslint-disable-next-line vue/no-v-html -->
-                    <span v-html="tr.stage2_rejection_comment"></span>
+                    <span v-html="tr.stage1_rejection_comment"></span>
                   </vs-col>
                 </vs-row>
                 <vs-row style="padding: 20px 0">
                   <vs-col w="4"> <b>End year employee comment</b> </vs-col>
                   <vs-col w="8" class="description-card">
-                    <span v-if="tr.stage3_employee_comment != null">
+                    <span v-if="tr.stage2_employee_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
                       <span v-html="tr.stage3_employee_comment"></span>
                     </span>
@@ -160,7 +160,7 @@
                 <vs-row style="padding: 20px 0">
                   <vs-col w="4"> <b>End year manager comment</b> </vs-col>
                   <vs-col w="8" class="description-card">
-                    <span v-if="tr.stage3_manager_comment != null">
+                    <span v-if="tr.stage2_manager_comment != null">
                       <!-- eslint-disable-next-line vue/no-v-html -->
                       <span v-html="tr.stage3_manager_comment"></span>
                     </span>
@@ -174,7 +174,7 @@
                   <vs-col w="4"> <b>End year rejection comment</b> </vs-col>
                   <vs-col w="8" class="description-card">
                     <!-- eslint-disable-next-line vue/no-v-html -->
-                    <span v-html="tr.stage3_rejection_comment"></span>
+                    <span v-html="tr.stage2_rejection_comment"></span>
                   </vs-col>
                 </vs-row>
               </div>

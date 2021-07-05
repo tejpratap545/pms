@@ -81,10 +81,10 @@ class Goal(models.Model):
     )
     status: int = models.IntegerField(blank=True, choices=STATUS_CHOICE, default=0)
 
-    stage1_employee_comment: str = models.TextField(blank=True, null=True)
-    stage1_manager_comment: str = models.TextField(blank=True, null=True)
+    stage0_employee_comment: str = models.TextField(blank=True, null=True)
+    stage0_manager_comment: str = models.TextField(blank=True, null=True)
 
-    stage2_employee_comment: str = models.TextField(blank=True, null=True)
+    stage1_employee_comment: str = models.TextField(blank=True, null=True)
 
     TRACKING_CHOICES = [
         ("null", "null"),
@@ -96,7 +96,7 @@ class Goal(models.Model):
         max_length=50, blank=True, null=True, default="null", choices=TRACKING_CHOICES
     )
 
-    stage2_manager_comment: str = models.TextField(blank=True, null=True)
+    stage1_manager_comment: str = models.TextField(blank=True, null=True)
     RATING_CHOICES = [
         (1, "1 - Major Improvement Needed"),
         (2, "2 - Needs Improvement"),
@@ -111,8 +111,8 @@ class Goal(models.Model):
         blank=True, null=True, choices=RATING_CHOICES
     )
 
-    stage3_employee_comment: str = models.TextField(blank=True, null=True)
-    stage3_manager_comment: str = models.TextField(blank=True, null=True)
+    stage2_employee_comment: str = models.TextField(blank=True, null=True)
+    stage2_manager_comment: str = models.TextField(blank=True, null=True)
 
     def kpi(self) -> List[KPI]:
         return self.kpi_set.all()
