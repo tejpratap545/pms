@@ -128,6 +128,13 @@ class AppraisalViewset(viewsets.ModelViewSet):
                     "skill_set__category",
                     "overall_appraisal__departmentalgoal_set",
                     "overall_appraisal__departmentalcorevalue_set",
+                    "employee",
+                    "employee__user",
+                    "employee__department",
+                    "employee__first_reporting_manager",
+                    "employee__first_reporting_manager__user",
+                    "employee__second_reporting_manager",
+                    "employee__second_reporting_manager__user",
                 )
                 .annotate(
                     goal_count=Count("goal", distinct=True),
@@ -174,7 +181,7 @@ class AppraisalViewset(viewsets.ModelViewSet):
         stage: int = appraisal.status
 
         if (stage in employee_stage and appraisal.employee == request.user.profile) or (
-            stage in manager_stage and appraisal.employee.manager == self.request.user
+            stage in manager_stage and appraisal.employee.first_reporting_manager == self.request.user.profile
         ):
             if appraisal.can_upsatus(user=self.request.user.profile):
 

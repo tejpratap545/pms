@@ -10,6 +10,7 @@
 
     <div v-if="$fetchState.pending">loading ...</div>
     <di v-else class="con-form">
+      <EmployeeInfo :employee="appraisal.employee" />
       <Appraisal
         :goal-approve="true"
         :edit="false"
@@ -63,10 +64,11 @@ export default {
       this.$emit("close");
     },
     approveGoal() {
+      this.loading = true;
       this.$axios
         .$post(
-          `api/appraisal/${this.appraisalId.id}/up-stage/`,
-          this.roleData,
+          `api/appraisal/${this.appraisalId}/up-stage/`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
@@ -76,17 +78,18 @@ export default {
         .then(() => {
           this.$vs.notification({
             color: "success",
-            title: "Suucessfullly submitted goals",
+            title: `"Suucessfullly approved appraisal ${this.appraisal.name} of ${this.appraisal.employee.name}"`,
           });
           this.closeDialog();
         })
         .catch(() => {
-          this.loading = false;
           return this.$vs.notification({
             color: "danger",
-            title:
-              "Error Submitting goals please check goals Weightage or kpi ",
+            title: `"Error Approving appraisal ${this.appraisal.name} of ${this.appraisal.employee.name}. All goals must be approved "`,
           });
+        })
+        .finally(() => {
+          this.loading = false;
         });
     },
   },

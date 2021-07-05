@@ -148,7 +148,8 @@ class Appraisal(models.Model):
     @property
     def is_100_weightage(self) -> bool:
         return (
-            self.goals_weightage() == 100
+            self.goals_weightage()
+            == 100
             # and self.core_values_weightage() == 100
             # and self.skills_weightage() == 100
         )
@@ -216,14 +217,10 @@ class Appraisal(models.Model):
             self.employee.first_reporting_manager.id == user.id
         ):
 
-            if (
-                self.status == 0
-                and self.is_100_weightage
-                and self.is_at_least_one_kpi
-            ):
+            if self.status == 0 and self.is_100_weightage and self.is_at_least_one_kpi:
                 return True
 
-            if self.status == 1 and self.is_all_goal_approved():
+            if self.status == 1 and self.is_all_goal_approved:
                 return True
             pass
 
