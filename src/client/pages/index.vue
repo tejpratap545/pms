@@ -1,7 +1,8 @@
 <template>
   <div class="page">
     <h1>Home</h1>
-    <div class="center">
+    <div v-if="$fetchState.pending"><Spinner /></div>
+    <div v-else class="center">
       <div class="status-cards-group">
         <div
           class="card"
@@ -108,7 +109,7 @@
                   }}
                 </vs-td>
               </vs-tr>
-              <vs-tr>
+              <vs-tr v-if="$store.state.user.department">
                 <vs-td> Department </vs-td>
                 <vs-td> {{ $store.state.user.department.name }} </vs-td>
               </vs-tr>

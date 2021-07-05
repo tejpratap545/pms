@@ -25,16 +25,12 @@
         multiple
       >
         <vs-option
-          v-for="employee in appraisalData.company
-            ? employeeList.filter(
-                (x) => x.user.company == appraisalData.company
-              )
-            : employeeList"
+          v-for="employee in employeeList"
           :key="employee.id"
-          :label="employee.user.username"
+          :label="employee.name"
           :value="employee.id"
         >
-          {{ employee.user.username }}
+          {{ employee.name }}
         </vs-option>
       </vs-select>
 
@@ -48,9 +44,7 @@
         multiple
       >
         <vs-option
-          v-for="department in appraisalData.company
-            ? departmentList.filter((x) => x.company == appraisalData.company)
-            : departmentList"
+          v-for="department in departmentList"
           :key="department.id"
           :label="department.name"
           :value="department.id"
