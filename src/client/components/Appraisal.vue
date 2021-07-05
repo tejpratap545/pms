@@ -45,7 +45,13 @@
           <template #expand>
             <div>
               <div class="con-content">
-                <vs-button color="success" flat icon @click="editGoal = true">
+                <vs-button
+                  v-if="CanEdit"
+                  color="success"
+                  flat
+                  icon
+                  @click="editGoal = true"
+                >
                   <i class="bx bx-edit-alt"></i>
                 </vs-button>
                 <vs-button
@@ -461,6 +467,7 @@ export default {
   name: "Appraisal",
   props: {
     dialog: Boolean,
+    expanded: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     selectedAppraisal: Object,
     edit: {

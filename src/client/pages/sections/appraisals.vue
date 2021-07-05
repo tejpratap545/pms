@@ -42,6 +42,9 @@
               <vs-row>
                 <vs-col w="4"> <b>Actions</b> </vs-col>
                 <vs-col w="8" style="display: flex; justify-content: flex-end">
+                  <a :href="`/print?id=${selectedAppraisal.id}`" target="blank">
+                    <vs-button> Print </vs-button>
+                  </a>
                   <vs-button
                     v-if="stage == 0 && status == 0"
                     @click="goalSubmit = true"
@@ -84,9 +87,6 @@
                   >
                     Submit End Year Review
                   </vs-button>
-                  <vs-button v-else transparent disabled>
-                    No actions available</vs-button
-                  >
                 </vs-col>
               </vs-row>
             </div>
