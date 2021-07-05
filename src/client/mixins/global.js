@@ -35,7 +35,7 @@ export default {
       if (status === 0 && stage === 0) {
         return "Goals Setting Stage Pending Employee Goals Submission";
       } else if (stage === 0 && status === 1) {
-        return "'Goals Setting Stage Pending Manager/Supervisor Goal Approved'";
+        return "Goals Setting Stage Pending Manager/Supervisor Goal Approved";
       } else if (stage === 0 && status === 2) {
         return "Goals Setting Stage Goals Approved By Manager/Supervisor";
       } else if (stage === 1 && status === 3) {

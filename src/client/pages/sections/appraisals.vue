@@ -45,6 +45,7 @@
                   <a :href="`/print?id=${selectedAppraisal.id}`" target="blank">
                     <vs-button> Print </vs-button>
                   </a>
+
                   <vs-button
                     v-if="stage == 0 && status == 0"
                     @click="goalSubmit = true"
@@ -88,6 +89,11 @@
                     Submit End Year Review
                   </vs-button>
                 </vs-col>
+
+                <!-- TO-DO Place this status at right position -->
+                <b
+                  ><i> {{ getStatus(status, stage) }} </i></b
+                >
               </vs-row>
             </div>
 
@@ -125,7 +131,9 @@
 </template>
 
 <script>
+import global from "~/mixins/global";
 export default {
+  mixins: [global],
   layout: "dashboard",
   middleware: ["auth"],
   data: () => ({

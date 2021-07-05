@@ -273,7 +273,7 @@
                             <vs-th> Goal count </vs-th>
                             <vs-th> Corevalue count </vs-th>
                             <vs-th> Skills count </vs-th>
-                            <vs-th> Stage </vs-th>
+
                             <vs-th> Status </vs-th>
                           </vs-tr>
                         </template>
@@ -288,8 +288,13 @@
                             <vs-td>{{ appraisal.goal_count }}</vs-td>
                             <vs-td>{{ appraisal.corevalue_count }}</vs-td>
                             <vs-td>{{ appraisal.skill_count }}</vs-td>
-                            <vs-td>{{ appraisal.stage }}</vs-td>
-                            <vs-td>{{ appraisal.status }}</vs-td>
+                            <vs-td>
+                              <i>
+                                {{
+                                  getStatus(appraisal.status, appraisal.stage)
+                                }}</i
+                              ></vs-td
+                            >
                           </vs-tr>
                         </template>
                       </vs-table>
@@ -350,7 +355,7 @@
                             <vs-th> Goal count </vs-th>
                             <vs-th> Corevalue count </vs-th>
                             <vs-th> Skills count </vs-th>
-                            <vs-th> Stage </vs-th>
+
                             <vs-th> Status </vs-th>
                           </vs-tr>
                         </template>
@@ -365,8 +370,13 @@
                             <vs-td>{{ appraisal.goal_count }}</vs-td>
                             <vs-td>{{ appraisal.corevalue_count }}</vs-td>
                             <vs-td>{{ appraisal.skill_count }}</vs-td>
-                            <vs-td>{{ appraisal.stage }}</vs-td>
-                            <vs-td>{{ appraisal.status }}</vs-td>
+                            <vs-td>
+                              <i>
+                                {{
+                                  getStatus(appraisal.status, appraisal.stage)
+                                }}</i
+                              ></vs-td
+                            >
                           </vs-tr>
                         </template>
                       </vs-table>
@@ -815,7 +825,9 @@
 </template>
 
 <script>
+import global from "~/mixins/global";
 export default {
+  mixins: [global],
   layout: "dashboard",
   middleware: ["auth"],
   data: () => ({
