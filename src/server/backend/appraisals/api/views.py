@@ -12,7 +12,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework import status
 from ..models import *
 from .pagination import *
 from .serializers import *
@@ -154,7 +154,7 @@ class AppraisalViewset(viewsets.ModelViewSet):
             400: OpenApiResponse(description="Bad request (something invalid)"),
         },
     )
-    @action(detail=True, methods=["post"], url_path="up-stage")
+    @action(detail=True, methods=["post"], url_path="up-stage/")
     def up_stage(self, request, pk=None):
         """
         Which users and in which satge they can up status the appraisal.
@@ -181,14 +181,221 @@ class AppraisalViewset(viewsets.ModelViewSet):
         stage: int = appraisal.status
 
         if (stage in employee_stage and appraisal.employee == request.user.profile) or (
-            stage in manager_stage and appraisal.employee.first_reporting_manager == self.request.user.profile
+            stage in manager_stage
+            and appraisal.employee.first_reporting_manager == self.request.user.profile
         ):
             if appraisal.can_upsatus(user=self.request.user.profile):
 
                 appraisal.status += 1
                 appraisal.save()
-                return Response({"status": "Appraisal is successfully Updated"})
+                return Response("Appraisal is successfully Updated")
         return Response(status=400, data="Bad request (something invalid)")
+
+    @action(detail=True, methods=["post"], url_path="up-stage/submit")
+    def submit(self, request, pk=None):
+        """
+        Submit appraisal to manager
+        1. At least one goal , core value and skill
+        2. All goals have at least one kpi
+        3. All gols , core value and skill have 100 weightage
+        4. user must be employee
+        5. Overall Appraisal must in stage 0
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if (
+            appraisal.stage == 0
+            and appraisal.status == 0
+            and appraisal.is_100_weightage
+            and appraisal.is_at_least_one_kpi
+        ):
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully approved")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Error is approving appraisal",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/approve")
+    def approve(self, request, pk=None):
+        """
+        Approve appraisal by manager
+        1. user must be first reporting manager of employee
+        2. Overall Appraisal must in stage 0
+        3. Must be all goal approved by the first reporting manager
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if (
+            appraisal.stage == 0
+            and appraisal.status == 1
+            and appraisal.is_all_goal_approved
+        ):
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/employee/mid-review")
+    def mid_review_employee(self, request, pk=None):
+        """
+        Submit Mid Review By Employee
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 1 and appraisal.status == 2:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/employee/mid-submit")
+    def mid_submit_employee(self, request, pk=None):
+        """
+        Submit Mid Review By Employee
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 1 and appraisal.status == 3:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/manager/mid-review")
+    def mid_review_manager(self, request, pk=None):
+        """
+        Mid Review By Manager
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 1 and appraisal.status == 4:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/manager/mid-approve")
+    def mid_approve_manager(self, request, pk=None):
+        """
+        Approve Mid Review By Manager
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 1 and appraisal.status == 4:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/employee/end-review")
+    def end_review_employee(self, request, pk=None):
+        """
+        End Year Review By Employee
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 2 and appraisal.status == 5:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/employee/end-submit")
+    def end_submit_employee(self, request, pk=None):
+        """
+        Submit End Year Review By Employee
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 2 and appraisal.status == 6:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/manager/end-review")
+    def end_review_manager(self, request, pk=None):
+        """
+        Mid Review By Manager
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 2 and appraisal.status == 7:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
+
+    @action(detail=True, methods=["post"], url_path="up-stage/manager/end-approve")
+    def end_aprove_manager(self, request, pk=None):
+        """
+        Approve End Review By Manager
+
+        """
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if appraisal.stage == 2 and appraisal.status == 8:
+            appraisal.status += 1
+            appraisal.save()
+            return Response("Appraisal is successfully submitted")
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data="Appraisal is successfully submitted",
+        )
 
 
 class MyAppraisalView(generics.ListAPIView):

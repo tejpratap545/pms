@@ -67,7 +67,7 @@ export default {
       this.loading = true;
       this.$axios
         .$post(
-          `api/appraisal/${this.appraisalId}/up-stage/`,
+          `api/appraisal/${this.appraisalId}/up-stage/approve/`,
           {},
           {
             headers: {

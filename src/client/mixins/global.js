@@ -38,21 +38,23 @@ export default {
         return "Goals Setting Stage Pending Manager/Supervisor Goal Approved";
       } else if (stage === 0 && status === 2) {
         return "Goals Setting Stage Goals Approved By Manager/Supervisor";
-      } else if (stage === 1 && status === 3) {
+      } else if (stage === 1 && status === 2) {
         return "Mid Year Pending Employee input";
-      } else if (stage === 1 && status === 4) {
+      } else if (stage === 1 && status === 3) {
         return "Mid Year Pending Employee submit";
-      } else if (stage === 1 && status === 5) {
+      } else if (stage === 1 && status === 4) {
         return "Mid Year Pending Manager/Supervisor input";
+      } else if (stage === 1 && status === 5) {
+        return "Mid Year Pending Manager/Supervisor approve";
       } else if (stage === 1 && status === 6) {
         return "Mid Year Approved By Manager/Supervisor";
-      } else if (stage === 2 && status === 7) {
+      } else if (stage === 2 && status === 6) {
         return "End Year Pending Employee input";
-      } else if (stage === 2 && status === 8) {
+      } else if (stage === 2 && status === 7) {
         return "End Year Pending Employee submit";
-      } else if (stage === 2 && status === 9) {
+      } else if (stage === 2 && status === 8) {
         return "End Year Pending Manager/Supervisor input";
-      } else if (stage === 2 && status === 10) {
+      } else if (stage === 2 && status === 9) {
         return "End Year  Approved By Manager/Supervisor";
       } else {
         return "Unknown Stage";

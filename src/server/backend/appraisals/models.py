@@ -65,19 +65,19 @@ class Appraisal(models.Model):
         # stage 1
         (0, "STAGE 0: Employee Goal settings stage"),
         (1, "STAGE 0: Manager Goal apprave stage"),
-        (2, "STAGE 0: Manager Approved the goal"),
         # satge 2
-        (3, "STAGE 1: Employee mid year review stage"),
-        (4, "STAGE 1: Employee mid year submit stage"),
+        (2, "STAGE 1: Employee mid year review stage"),
+        (3, "STAGE 1: Employee mid year submit stage"),
+        (4, "STAGE 1: Manager mid year review stage"),
         (5, "STAGE 1: Manager mid year approve stage"),
-        (6, "STAGE 1: Manager Approved mid year review"),
         # stage 3
-        (7, "STAGE 2: Employee end year review stage"),
-        (8, "STAGE 2: Employee end year submit stage"),
-        (9, "STAGE 2: Manager end year approve stage"),
-        (10, "STAGE 2: Manager Approved end year review"),
-        (11, "STAGE 2: hod end year approve stage"),
-        (12, "STAGE 2: hod approved year approve stage"),
+        (5, "STAGE 2: Employee end year review stage"),
+        (6, "STAGE 2: Employee end year submit stage"),
+        (7, "STAGE 2: Manager end year review stage"),
+        (8, "STAGE 2: Manager end year approve stage"),
+        (9, "STAGE 2: Manager Approved end year review"),
+        (10, "STAGE 2: hod end year approve stage"),
+        (11, "STAGE 2: hod approved year approve stage"),
     )
 
     RATING_CHOICES = [
@@ -168,6 +168,10 @@ class Appraisal(models.Model):
     @property
     def name(self) -> str:
         return self.overall_appraisal.name
+
+    @property
+    def stage(self) -> str:
+        return self.overall_appraisal.stage
 
     # status in which employee can up stage the apprisal
     @classmethod

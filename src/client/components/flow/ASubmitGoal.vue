@@ -47,7 +47,7 @@ export default {
     submitGoal() {
       this.$axios
         .$post(
-          `api/appraisal/${this.selectedAppraisal.id}/up-stage/`,
+          `api/appraisal/${this.selectedAppraisal.id}/up-stage/submit/`,
           this.roleData,
           {
             headers: {
