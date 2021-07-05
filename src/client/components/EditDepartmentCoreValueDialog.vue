@@ -1,7 +1,7 @@
 <template>
   <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
-      <h4 class="not-margin">Add a new <b>Core Value</b></h4>
+      <h4 class="not-margin">Update <b>Core Value</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>
@@ -10,18 +10,35 @@
 
     <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="con-form">
-      <vs-input v-model="newCoreValueData.summary" placeholder="Summary">
+      <vs-input v-model="coreValueData.summary" placeholder="Summary">
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
       <Editor
-        :data="newCoreValueData.description"
-        @changeData="(value) => (newCoreValueData.description = value)"
+        :data="coreValueData.description"
+        @changeData="(value) => (coreValueData.description = value)"
       />
 
       <vs-select
+        v-model="coreValueData.manager"
+        :placeholder="`Select manager`"
+        style="margin: 10px 0"
+        block
+        filter
+      >
+        <vs-option
+          v-for="employee in employeeList"
+          :key="employee.id"
+          :label="employee.name"
+          :value="employee.id"
+        >
+          {{ employee.name }}
+        </vs-option>
+      </vs-select>
+
+      <vs-select
         v-if="coreValueCategoryList.length != 0"
-        v-model="newCoreValueData.category"
+        v-model="coreValueData.category"
         placeholder="Select Core Value Category"
         style="margin: 10px 0"
         block
@@ -39,7 +56,7 @@
 
       <div class="con-form-control my-2">
         <p>Core value due date</p>
-        <vs-input v-model="newCoreValueData.due" type="date">
+        <vs-input v-model="coreValueData.due" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
@@ -47,8 +64,8 @@
 
     <template #footer>
       <div class="footer-dialog">
-        <vs-button :loading="loading" block @click="createCoreValue">
-          Add New
+        <vs-button :loading="loading" block @click="updateCoreValue">
+          Update
         </vs-button>
       </div>
     </template>
@@ -57,26 +74,18 @@
 
 <script>
 export default {
-  name: "NewCoreValueDialog",
+  name: "EditDepartmentCoreValueDialog",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
-    selectedAppraisal: Object,
+    selectedCorevalue: Object,
   },
   data: () => ({
     active: false,
     loading: false,
+    employeeList: [],
     coreValueCategoryList: [],
-    newCoreValueData: {
-      summary: "",
-      description: "",
-      due: "",
-      weightage: 1,
-      // status: -1,
-      // tracking_status: "null",
-      appraisal: 0,
-      category: 0,
-    },
+    coreValueData: {},
   }),
   async fetch() {
     this.loading = true;
@@ -89,6 +98,11 @@ export default {
           },
         }
       );
+      this.employeeList = await this.$axios.$get(`api/user/short`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
@@ -99,18 +113,18 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
-    this.newCoreValueData.appraisal = this.selectedAppraisal.id;
+    this.coreValueData = this.selectedCorevalue;
   },
   methods: {
     closeDialog() {
       this.$emit("close");
     },
-    createCoreValue() {
+    updateCoreValue() {
       if (!this.loading) {
         this.loading = true;
 
         this.$axios
-          .$post(`api/core-value/`, this.newCoreValueData, {
+          .$post(`api/departmental-core-value/`, this.coreValueData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
@@ -120,7 +134,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating Core value dialog",
+              title: "Error updating Core value",
             });
           });
       }

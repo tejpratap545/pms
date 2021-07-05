@@ -1,7 +1,7 @@
 <template>
   <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
-      <h4 class="not-margin">Add a new <b>Core Value</b></h4>
+      <h4 class="not-margin">Add a new <b>Goal</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>
@@ -10,25 +10,42 @@
 
     <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="con-form">
-      <vs-input v-model="newCoreValueData.summary" placeholder="Summary">
+      <vs-input v-model="newGoalData.summary" placeholder="Summary">
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
       <Editor
-        :data="newCoreValueData.description"
-        @changeData="(value) => (newCoreValueData.description = value)"
+        :data="newGoalData.description"
+        @changeData="(value) => (newGoalData.description = value)"
       />
 
       <vs-select
-        v-if="coreValueCategoryList.length != 0"
-        v-model="newCoreValueData.category"
-        placeholder="Select Core Value Category"
+        v-model="newGoalData.manager"
+        :placeholder="`Select manager`"
         style="margin: 10px 0"
         block
         filter
       >
         <vs-option
-          v-for="(category, index) in coreValueCategoryList"
+          v-for="employee in employeeList"
+          :key="employee.id"
+          :label="employee.name"
+          :value="employee.id"
+        >
+          {{ employee.name }}
+        </vs-option>
+      </vs-select>
+
+      <vs-select
+        v-if="goalCategoryList.length != 0"
+        v-model="newGoalData.category"
+        placeholder="Select goal category"
+        style="margin: 10px 0"
+        block
+        filter
+      >
+        <vs-option
+          v-for="(category, index) in goalCategoryList"
           :key="index"
           :label="category.name"
           :value="category.id"
@@ -38,8 +55,8 @@
       </vs-select>
 
       <div class="con-form-control my-2">
-        <p>Core value due date</p>
-        <vs-input v-model="newCoreValueData.due" type="date">
+        <p>Goal due date</p>
+        <vs-input v-model="newGoalData.due" type="date">
           <template #icon><i class="bx bx-calendar-check"></i></template>
         </vs-input>
       </div>
@@ -47,7 +64,7 @@
 
     <template #footer>
       <div class="footer-dialog">
-        <vs-button :loading="loading" block @click="createCoreValue">
+        <vs-button :loading="loading" block @click="createGoal">
           Add New
         </vs-button>
       </div>
@@ -57,7 +74,7 @@
 
 <script>
 export default {
-  name: "NewCoreValueDialog",
+  name: "NewDepartmentGoalDialog",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
@@ -66,29 +83,32 @@ export default {
   data: () => ({
     active: false,
     loading: false,
-    coreValueCategoryList: [],
-    newCoreValueData: {
+
+    employeeList: [],
+    goalCategoryList: [],
+
+    newGoalData: {
       summary: "",
       description: "",
       due: "",
-      weightage: 1,
-      // status: -1,
-      // tracking_status: "null",
       appraisal: 0,
       category: 0,
+      manager: 0,
     },
   }),
   async fetch() {
     this.loading = true;
     try {
-      this.coreValueCategoryList = await this.$axios.$get(
-        `api/category/core_value/`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.accessToken}`,
-          },
-        }
-      );
+      this.goalCategoryList = await this.$axios.$get(`api/category/goal/`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
+      this.employeeList = await this.$axios.$get(`api/user/short`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
@@ -99,18 +119,18 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
-    this.newCoreValueData.appraisal = this.selectedAppraisal.id;
+    this.newGoalData.appraisal = this.selectedAppraisal.id;
   },
   methods: {
     closeDialog() {
       this.$emit("close");
     },
-    createCoreValue() {
+    createGoal() {
       if (!this.loading) {
         this.loading = true;
 
         this.$axios
-          .$post(`api/core-value/`, this.newCoreValueData, {
+          .$post(`api/departmental-goal/`, this.newGoalData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },
@@ -120,7 +140,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating Core value dialog",
+              title: "Error creating Goal",
             });
           });
       }

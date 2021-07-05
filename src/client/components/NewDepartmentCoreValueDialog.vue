@@ -20,6 +20,23 @@
       />
 
       <vs-select
+        v-model="newCoreValueData.manager"
+        :placeholder="`Select manager`"
+        style="margin: 10px 0"
+        block
+        filter
+      >
+        <vs-option
+          v-for="employee in employeeList"
+          :key="employee.id"
+          :label="employee.name"
+          :value="employee.id"
+        >
+          {{ employee.name }}
+        </vs-option>
+      </vs-select>
+
+      <vs-select
         v-if="coreValueCategoryList.length != 0"
         v-model="newCoreValueData.category"
         placeholder="Select Core Value Category"
@@ -57,7 +74,7 @@
 
 <script>
 export default {
-  name: "NewCoreValueDialog",
+  name: "NewDepartmentCoreValueDialog",
   props: {
     dialog: Boolean,
     // eslint-disable-next-line vue/require-default-prop
@@ -66,16 +83,15 @@ export default {
   data: () => ({
     active: false,
     loading: false,
+    employeeList: [],
     coreValueCategoryList: [],
     newCoreValueData: {
       summary: "",
       description: "",
       due: "",
-      weightage: 1,
-      // status: -1,
-      // tracking_status: "null",
       appraisal: 0,
       category: 0,
+      manager: 0,
     },
   }),
   async fetch() {
@@ -89,6 +105,11 @@ export default {
           },
         }
       );
+      this.employeeList = await this.$axios.$get(`api/user/short`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.accessToken}`,
+        },
+      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
@@ -110,7 +131,7 @@ export default {
         this.loading = true;
 
         this.$axios
-          .$post(`api/core-value/`, this.newCoreValueData, {
+          .$post(`api/departmental-core-value/`, this.newCoreValueData, {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,
             },

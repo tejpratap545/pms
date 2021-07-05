@@ -1,12 +1,10 @@
 <template>
   <div>
-    <vs-table class="my-5">
+    <vs-table v-model="selected" class="my-5">
       <template #header>
         <div class="table-header" style="justify-content: space-between">
           <h3>Goals</h3>
-          <vs-button v-if="CanEditGoal" @click="newGoal = true">
-            Add
-          </vs-button>
+          <vs-button v-if="CanEdit" @click="newGoal = true"> Add </vs-button>
         </div>
       </template>
       <template #thead>
@@ -19,7 +17,12 @@
         </vs-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in selectedAppraisal.goal_set" :key="i">
+        <vs-tr
+          v-for="(tr, i) in selectedAppraisal.goal_set"
+          :key="i"
+          :data="tr"
+          :is-selected="selected == tr"
+        >
           <vs-td>
             {{ tr.summary }}
           </vs-td>
@@ -42,8 +45,11 @@
           <template #expand>
             <div>
               <div class="con-content">
+                <vs-button color="success" flat icon @click="editGoal = true">
+                  <i class="bx bx-edit-alt"></i>
+                </vs-button>
                 <vs-button
-                  v-if="CanEditGoal"
+                  v-if="CanEdit"
                   border
                   danger
                   @click="deleteItem('goal', tr.id)"
@@ -174,7 +180,7 @@
                   >
                     <h3>KPIs</h3>
                     <vs-button
-                      v-if="CanEditGoal"
+                      v-if="CanEdit"
                       color="success"
                       flat
                       icon
@@ -204,11 +210,11 @@
         </vs-tr>
       </template>
     </vs-table>
-    <vs-table class="my-5">
+    <vs-table v-model="selected" class="my-5">
       <template #header>
         <div class="table-header" style="justify-content: space-between">
           <h3>Core values</h3>
-          <vs-button v-if="CanEditGoal" @click="newCoreValue = true">
+          <vs-button v-if="CanEdit" @click="newCoreValue = true">
             Add
           </vs-button>
         </div>
@@ -221,7 +227,12 @@
         </vs-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in selectedAppraisal.corevalue_set" :key="i">
+        <vs-tr
+          v-for="(tr, i) in selectedAppraisal.corevalue_set"
+          :key="i"
+          :data="tr"
+          :is-selected="selected == tr"
+        >
           <vs-td>
             {{ tr.summary }}
           </vs-td>
@@ -235,7 +246,15 @@
 
           <template #expand>
             <div>
-              <div v-if="CanEditGoal" class="con-content">
+              <div v-if="CanEdit" class="con-content">
+                <vs-button
+                  color="success"
+                  flat
+                  icon
+                  @click="editCoreValue = true"
+                >
+                  <i class="bx bx-edit-alt"></i>
+                </vs-button>
                 <vs-button
                   border
                   danger
@@ -249,13 +268,11 @@
         </vs-tr>
       </template>
     </vs-table>
-    <vs-table class="my-5">
+    <vs-table v-model="selected" class="my-5">
       <template #header>
         <div class="table-header" style="justify-content: space-between">
           <h3>Skills</h3>
-          <vs-button v-if="CanEditGoal" @click="newSkill = true">
-            Add
-          </vs-button>
+          <vs-button v-if="CanEdit" @click="newSkill = true"> Add </vs-button>
         </div>
       </template>
       <template #thead>
@@ -266,7 +283,12 @@
         </vs-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in selectedAppraisal.skill_set" :key="i">
+        <vs-tr
+          v-for="(tr, i) in selectedAppraisal.skill_set"
+          :key="i"
+          :data="tr"
+          :is-selected="selected == tr"
+        >
           <vs-td>
             {{ tr.summary }}
           </vs-td>
@@ -280,7 +302,10 @@
 
           <template #expand>
             <div>
-              <div v-if="CanEditGoal" class="con-content">
+              <div v-if="CanEdit" class="con-content">
+                <vs-button color="success" flat icon @click="editSkill = true">
+                  <i class="bx bx-edit-alt"></i>
+                </vs-button>
                 <vs-button border danger @click="deleteItem('skill', tr.id)">
                   Delete
                 </vs-button>
@@ -373,11 +398,25 @@
 
     <!-- Dialogs -->
 
-    <UpstageAppraisal
-      v-if="upstageAppraisal"
-      :dialog="upstageAppraisal"
-      :selected-appraisal-id="selectedAppraisal.id"
-      @close="(upstageAppraisal = false), $emit('refresh')"
+    <EditGoalDialog
+      v-if="editGoal"
+      :dialog="editGoal"
+      :selected-goal="selected"
+      @close="(editGoal = false), $emit('refresh')"
+    />
+
+    <EditCoreValueDialog
+      v-if="editCoreValue"
+      :dialog="editCoreValue"
+      :selected-corevalue="selected"
+      @close="(editCoreValue = false), $emit('refresh')"
+    />
+
+    <EditSkillsDialog
+      v-if="editSkill"
+      :dialog="editSkill"
+      :selected-corevalue="selected"
+      @close="(editSkill = false), $emit('refresh')"
     />
 
     <NewGoalDialog
@@ -407,6 +446,7 @@
       :selected-goal="selectedGoal"
       @close="(newKpi = false), $emit('refresh')"
     />
+
     <ApproveGoal
       v-if="goalApproveDialog"
       :dialog="goalApproveDialog"
@@ -433,17 +473,21 @@ export default {
     },
   },
   data: () => ({
+    selected: {},
     newGoal: false,
     newCoreValue: false,
     newSkill: false,
     newKpi: false,
+    editGoal: false,
+    editCoreValue: false,
+    editSkill: false,
     goalApproveDialog: false,
   }),
   computed: {
     user() {
       return this.$store.state.user;
     },
-    CanEditGoal() {
+    CanEdit() {
       if (
         this.edit === true &&
         this.selectedAppraisal.employee.id === this.user.id &&
@@ -459,8 +503,6 @@ export default {
 
   methods: {
     deleteItem(item, id) {
-      // eslint-disable-next-line no-console
-      console.log(item, id);
       this.loading = true;
 
       this.$axios

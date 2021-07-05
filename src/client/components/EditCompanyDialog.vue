@@ -103,7 +103,7 @@ export default {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error creating company",
+              title: "Error updating company",
             });
           });
       }

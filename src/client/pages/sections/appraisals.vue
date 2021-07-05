@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="appraisal-grid">
-        <div class="mobile-appraisal-select">
+        <div class="mobile-appraisal-select" style="display: none">
           <vs-select
             v-model="selectedAppraisalId"
             placeholder="Select Appraisal"
@@ -182,7 +182,6 @@ export default {
 }
 
 .mobile-appraisal-select {
-  display: none;
   width: 100%;
 }
 
