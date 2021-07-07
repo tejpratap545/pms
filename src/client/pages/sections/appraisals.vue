@@ -88,6 +88,9 @@
                   >
                     Submit End Year Review
                   </vs-button>
+                  <vs-button icon @click="$tours.myTour.start()">
+                    <i class="bx bx-help-circle"></i>
+                  </vs-button>
                 </vs-col>
 
                 <!-- TO-DO Place this status at right position -->
@@ -107,6 +110,11 @@
         </div>
       </div>
     </div>
+
+    <v-tour name="myTour" :steps="steps"></v-tour>
+
+    <!-- Dialogs -->
+
     <ASubmitGoal
       v-if="goalSubmit"
       :dialog="goalSubmit"
@@ -163,6 +171,15 @@ export default {
     endyearReview: false,
     submitMidyearReview: false,
     submitEndyearReview: false,
+    steps: [
+      {
+        target: ".page", // We're using document.querySelector() under the hood
+        header: {
+          title: "Get Started",
+        },
+        content: `Welcome to PMS Onboarding `,
+      },
+    ],
   }),
   async fetch() {
     try {

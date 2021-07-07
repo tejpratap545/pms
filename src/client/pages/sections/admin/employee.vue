@@ -12,7 +12,12 @@
                 <i class="bx bx-search"></i>
               </template>
             </vs-input>
-            <vs-button @click="newActive = true"> Add </vs-button>
+            <vs-button class="data-1" @click="newActive = true">
+              Add
+            </vs-button>
+            <vs-button icon @click="$tours.myTour.start()">
+              <i class="bx bx-help-circle"></i>
+            </vs-button>
           </div>
         </template>
         <template #thead>
@@ -38,6 +43,7 @@
             :key="i"
             :data="tr"
             :is-selected="selected == tr"
+            class="data-2"
           >
             <vs-td>
               <vs-avatar>
@@ -95,6 +101,8 @@
       </vs-table>
     </div>
 
+    <v-tour name="myTour" :steps="steps"></v-tour>
+
     <!-- Dialogs -->
     <NewEmployeeDialog
       v-if="newActive"
@@ -131,6 +139,30 @@ export default {
     selected: {},
     employeeList: [],
     departmentList: [],
+    steps: [
+      {
+        target: ".page", // We're using document.querySelector() under the hood
+        header: {
+          title: "Get Started",
+        },
+        content: `Welcome to PMS Onboarding `,
+      },
+      {
+        target: ".data-1",
+        header: {
+          title: "Adding Employee",
+        },
+        content: "Use this button to add a employee",
+      },
+      {
+        target: ".data-2",
+        header: {
+          title: "Editing Employee",
+        },
+        content:
+          "Click on an item to expand it and reveal more options like edit and delete",
+      },
+    ],
   }),
   async fetch() {
     try {

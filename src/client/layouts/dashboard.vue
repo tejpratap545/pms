@@ -115,13 +115,7 @@
         Records
       </vs-sidebar-item>
 
-      <template #footer>
-        <vs-row justify="center">
-          <vs-button icon @click="tutorialActive != tutorialActive">
-            <i class="bx bx-help-circle"></i>
-          </vs-button>
-        </vs-row>
-      </template>
+      <template #footer> </template>
     </vs-sidebar>
 
     <div>
