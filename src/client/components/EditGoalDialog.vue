@@ -18,24 +18,6 @@
         <template #icon> <i class="bx bx-tag-alt"></i> </template>
       </vs-input>
 
-      <vs-select
-        v-if="trackingStatusList.length != 0"
-        v-model="goalData.tracking_status"
-        placeholder="Tracking Status"
-        style="margin: 10px 0"
-        block
-        filter
-      >
-        <vs-option
-          v-for="(status, index) in trackingStatusList"
-          :key="index"
-          :label="status"
-          :value="status"
-        >
-          {{ status }}
-        </vs-option>
-      </vs-select>
-
       <Editor
         :data="goalData.description"
         @changeData="(value) => (goalData.description = value)"
@@ -89,7 +71,6 @@ export default {
     active: false,
     loading: false,
     goalCategoryList: [],
-    trackingStatusList: ["null", "On Track", "Not On Track"],
     goalData: {},
   }),
   async fetch() {
@@ -100,6 +81,7 @@ export default {
           Authorization: `Bearer ${this.$store.state.accessToken}`,
         },
       });
+      this.goalData.category = this.goalData.category.id;
     } catch (err) {
       return this.$vs.notification({
         color: "danger",

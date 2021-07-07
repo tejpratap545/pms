@@ -36,16 +36,18 @@
             </vs-option>
           </vs-select>
         </div>
-        <div class="appraisal-item-open">
+        <div v-if="currentAppraisal != null" class="appraisal-item-open">
           <div class="appraisal-item">
-            <div class="my-5 pa-2">
-              <vs-row>
+            <div>
+              <vs-row class="my-5 pa-2">
+                <vs-col w="4"> <b>Status</b> </vs-col>
+                <vs-col w="8" style="display: flex; justify-content: flex-end">
+                  <i> {{ getStatus(status, stage) }} </i>
+                </vs-col>
+              </vs-row>
+              <vs-row class="my-5 pa-2">
                 <vs-col w="4"> <b>Actions</b> </vs-col>
                 <vs-col w="8" style="display: flex; justify-content: flex-end">
-                  <a :href="`/print?id=${selectedAppraisal.id}`" target="blank">
-                    <vs-button> Print </vs-button>
-                  </a>
-
                   <vs-button
                     v-if="stage == 0 && status == 0"
                     @click="goalSubmit = true"
@@ -88,25 +90,32 @@
                   >
                     Submit End Year Review
                   </vs-button>
+                  <vs-button
+                    icon
+                    @click="
+                      location.replace(`/print?id=${selectedAppraisal.id}`)
+                    "
+                  >
+                    <i class="bx bx-printer"></i>
+                  </vs-button>
                   <vs-button icon @click="$tours.myTour.start()">
                     <i class="bx bx-help-circle"></i>
                   </vs-button>
                 </vs-col>
 
                 <!-- TO-DO Place this status at right position -->
-                <b
-                  ><i> {{ getStatus(status, stage) }} </i></b
-                >
               </vs-row>
             </div>
 
             <Appraisal
-              v-if="selectedAppraisal != null"
               :edit="true"
               :selected-appraisal="currentAppraisal"
               @refresh="$fetch()"
             />
           </div>
+        </div>
+        <div v-else>
+          <h2>No Appraisals</h2>
         </div>
       </div>
     </div>
@@ -163,7 +172,7 @@ export default {
     loading: false,
     apprisalList: [],
     selectedGoal: {},
-    selectedAppraisal: {},
+    selectedAppraisal: null,
     selectedAppraisalId: 0,
     upstageAppraisal: false,
     goalSubmit: false,
@@ -205,10 +214,12 @@ export default {
         : this.apprisalList.find((x) => x.id === this.selectedAppraisalId);
     },
     status() {
-      return this.currentAppraisal.status;
+      return this.currentAppraisal ? this.currentAppraisal.status : null;
     },
     stage() {
-      return this.currentAppraisal.overall_appraisal.stage;
+      return this.currentAppraisal
+        ? this.currentAppraisal.overall_appraisal.stage
+        : null;
     },
   },
 };

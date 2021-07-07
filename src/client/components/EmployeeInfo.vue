@@ -1,5 +1,5 @@
 <template>
-  <div class="status-user-profile">
+  <div class="status-user-profile" style="margin: 10px">
     <h3 style="text-align: center">Employee details</h3>
     <div class="details">
       <vs-table class="table" striped>

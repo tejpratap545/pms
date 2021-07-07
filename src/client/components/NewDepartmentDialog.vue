@@ -37,10 +37,10 @@
         <vs-option
           v-for="employee in employeeList"
           :key="employee.id"
-          :label="employee.user.username"
+          :label="employee.username"
           :value="employee.id"
         >
-          {{ employee.user.username }}
+          {{ employee.username }}
         </vs-option>
       </vs-select>
 

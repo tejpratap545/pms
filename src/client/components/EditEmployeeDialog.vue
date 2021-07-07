@@ -33,19 +33,6 @@
         </template>
       </vs-input>
 
-      <vs-input
-        v-model="employeeData.user.contact_number"
-        placeholder="Contact number"
-        @change="checkContactNumber(employeeData.user.contact_number)"
-      >
-        <template #icon>
-          <i class="bx bxs-phone"></i>
-        </template>
-        <template v-if="!validContactNumber" #message-danger>
-          Contact number must be unique
-        </template>
-      </vs-input>
-
       <vs-input v-model="employeeData.user.first_name" placeholder="Firstname">
         <template #icon>
           <i class="bx bx-user"></i>
@@ -55,19 +42,6 @@
       <vs-input v-model="employeeData.user.last_name" placeholder="Lastname">
         <template #icon>
           <i class="bx bx-user"></i>
-        </template>
-      </vs-input>
-
-      <vs-input
-        v-model="employeeData.user.username"
-        placeholder="Username"
-        @change="checkUsername(employeeData.user.username)"
-      >
-        <template #icon>
-          <i class="bx bx-user"></i>
-        </template>
-        <template v-if="!validUsername" #message-danger>
-          Username must be unique
         </template>
       </vs-input>
 
@@ -188,17 +162,6 @@
           {{ user.name }}
         </vs-option>
       </vs-select>
-
-      <vs-input
-        v-model="employeeData.user.email"
-        placeholder="User email"
-        @change="checkEmail(employeeData.user.email)"
-      >
-        <template #icon> @ </template>
-        <template v-if="!validEmail" #message-danger>
-          Email must be unique
-        </template>
-      </vs-input>
     </div>
 
     <template #footer>
@@ -263,10 +226,31 @@ export default {
         },
       });
 
-      if (this.employeeData.gender == null)
-        this.employeeData.gender = this.genderList[0];
+      this.employeeData = await this.$axios.$get(
+        `api/user/${this.selectedEmployee.id}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.accessToken}`,
+          },
+        }
+      );
 
-      this.employeeData.user.role = this.roleList[0].id;
+      this.employeeData.user.role = this.employeeData.user.role.id;
+      this.employeeData.department = this.employeeData.department.id;
+      this.employeeData.first_reporting_manager =
+        this.employeeData.first_reporting_manager.id;
+      this.employeeData.second_reporting_manager =
+        this.employeeData.second_reporting_manager.id;
+
+      delete this.employeeData.avatar;
+      delete this.employeeData.user.username;
+      delete this.employeeData.user.contact_number;
+      delete this.employeeData.user.email;
+      delete this.employeeData.resign_date;
+
+      Object.entries(this.employeeData).forEach((pair) => {
+        if (this.employeeData[pair[0]] == null) this.employeeData[pair[0]] = "";
+      });
     } catch (err) {
       return this.$vs.notification({
         color: "danger",
@@ -277,7 +261,6 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
-    this.employeeData = this.selectedEmployee;
 
     if (!this.$store.state.user.user.is_superuser) {
       this.userList = this.userList.filter(
@@ -286,60 +269,6 @@ export default {
     }
   },
   methods: {
-    checkEmail(email) {
-      this.$axios
-        .$post(
-          `api/check/email`,
-          {
-            email,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-          }
-        )
-        .then(() => (this.validEmail = true))
-        .catch(() => {
-          this.validEmail = false;
-        });
-    },
-    checkContactNumber(contactNumber) {
-      this.$axios
-        .$post(
-          `api/check/contact_number`,
-          {
-            contact_number: contactNumber,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-          }
-        )
-        .then(() => (this.validContactNumber = true))
-        .catch(() => {
-          this.validContactNumber = false;
-        });
-    },
-    checkUsername(username) {
-      this.$axios
-        .$post(
-          `api/check/username`,
-          {
-            username,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
-            },
-          }
-        )
-        .then(() => (this.validUsername = true))
-        .catch(() => {
-          this.validUsername = false;
-        });
-    },
     closeDialog() {
       this.$emit("close");
     },

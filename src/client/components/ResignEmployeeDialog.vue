@@ -3,7 +3,7 @@
     <template #header>
       <h4 class="not-margin">
         Resign Employee
-        <b>{{ selectedEmployee.user.username }}</b>
+        <b>{{ selectedEmployee.username }}</b>
       </h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
@@ -15,7 +15,7 @@
     <div v-else class="con-form">
       <vs-select
         v-model="replace_employee"
-        :placeholder="`Employee to replace ${selectedEmployee.user.username}`"
+        :placeholder="`Employee to replace ${selectedEmployee.username}`"
         block
         filter
       >

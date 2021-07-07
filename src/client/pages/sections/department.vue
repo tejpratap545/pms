@@ -519,7 +519,6 @@
                     <template #expand>
                       <div class="con-content">
                         <div>
-                          {{ tr }}
                           <vs-button
                             v-if="tr.status === 1 && tr.stage === 0"
                             color="success"

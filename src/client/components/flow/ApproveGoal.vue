@@ -1,5 +1,5 @@
 <template>
-  <vs-dialog v-model="active" not-close prevent-close>
+  <vs-dialog v-model="active" style="min-width: 600px" not-close prevent-close>
     <template #header>
       <h4 class="not-margin">Approve Or Reject <b>Goal</b></h4>
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
@@ -85,3 +85,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.footer-dialog {
+  display: flex;
+  flex-direction: row;
+}
+</style>
