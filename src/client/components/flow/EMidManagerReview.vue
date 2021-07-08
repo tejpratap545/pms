@@ -100,7 +100,7 @@
                   </vs-row>
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4"> <b>Mid year manager comment</b> </vs-col>
-                    <vs-col w="8" class="description-card">
+                    <vs-col w="8">
                       <!-- eslint-disable-next-line vue/no-v-html -->
                       <Editor
                         :data="tr.stage1_manager_comment"

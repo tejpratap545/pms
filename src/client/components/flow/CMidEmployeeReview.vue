@@ -85,9 +85,9 @@
 
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4">
-                      <b>Midyear employee component</b>
+                      <b>Midyear employee comment</b>
                     </vs-col>
-                    <vs-col w="8" class="description-card">
+                    <vs-col w="8">
                       <Editor
                         :data="tr.stage1_employee_comment"
                         @changeData="

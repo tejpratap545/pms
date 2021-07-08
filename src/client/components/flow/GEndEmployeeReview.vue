@@ -121,7 +121,7 @@
                     <vs-col w="4">
                       <b>Endyear employee comment</b>
                     </vs-col>
-                    <vs-col w="8" class="description-card">
+                    <vs-col w="8">
                       <Editor
                         :data="tr.stage2_employee_comment"
                         @changeData="
@@ -175,6 +175,29 @@
           </vs-tr>
         </template>
       </vs-table>
+
+      <vs-col w="4">
+        <b>Endyear employee core value comment</b>
+      </vs-col>
+      <vs-col w="8">
+        <Editor
+          :data="core_value_employee_comment"
+          @changeData="(value) => (core_value_employee_comment = value)"
+        />
+      </vs-col>
+
+      <vs-row style="padding: 20px 0">
+        <vs-col w="4">
+          <b>Endyear employee core value rating</b>
+        </vs-col>
+        <vs-col w="8" style="display: flex; justify-content: flex-end">
+          <star-rating
+            v-model="core_value_manager_rating"
+            :star-size="20"
+            :rating="core_value_manager_rating"
+          ></star-rating>
+        </vs-col>
+      </vs-row>
     </div>
 
     <template #footer>
@@ -201,6 +224,8 @@ export default {
   data: () => ({
     active: false,
     loading: false,
+    core_value_employee_comment: "",
+    core_value_manager_rating: 1,
   }),
 
   mounted() {
@@ -223,7 +248,10 @@ export default {
       this.$axios
         .$post(
           `api/appraisal/${this.selectedAppraisal.id}/up-stage/employee/end-review/`,
-          {},
+          {
+            core_value_employee_comment: this.core_value_employee_comment,
+            core_value_employee_rating: this.core_value_employee_rating,
+          },
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.accessToken}`,

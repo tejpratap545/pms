@@ -9,7 +9,7 @@
     </template>
 
     <div v-if="$fetchState.pending">loading ...</div>
-    <di v-else class="con-form">
+    <div v-else class="con-form">
       <EmployeeInfo :employee="appraisal.employee" />
       <vs-table class="my-5">
         <template #header>
@@ -65,6 +65,7 @@
                       <span v-else>No Comment</span>
                     </vs-col>
                   </vs-row>
+
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4">
                       <b>Goal setting stage manager comment</b>
@@ -77,6 +78,7 @@
                       <span v-else>No Comment</span>
                     </vs-col>
                   </vs-row>
+
                   <vs-row
                     v-if="tr.stage0_rejection_comment != null"
                     style="padding: 20px 0"
@@ -89,6 +91,7 @@
                       <span v-html="tr.stage0_rejection_comment"></span>
                     </vs-col>
                   </vs-row>
+
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4"> <b>Mid year employee comment</b> </vs-col>
                     <vs-col w="8" class="description-card">
@@ -99,6 +102,7 @@
                       <span v-else>No Comment</span>
                     </vs-col>
                   </vs-row>
+
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4"> <b>Mid year manager comment</b> </vs-col>
                     <vs-col w="8" class="description-card">
@@ -119,6 +123,7 @@
                       <span v-html="stage2_employee_comment"></span>
                     </vs-col>
                   </vs-row>
+
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4">
                       <b>Endyear manager comment</b>
@@ -194,7 +199,31 @@
           </vs-tr>
         </template>
       </vs-table>
-    </di>
+
+      <vs-col w="4">
+        <b>Endyear employee core value comment</b>
+      </vs-col>
+      <vs-col w="8">
+        <span v-if="core_value_employee_comment != null">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="core_value_employee_comment"></span>
+        </span>
+        <span v-else>No Comment</span>
+      </vs-col>
+
+      <vs-row style="padding: 20px 0">
+        <vs-col w="4">
+          <b>Endyear employee core value rating</b>
+        </vs-col>
+        <vs-col w="8" style="display: flex; justify-content: flex-end">
+          <star-rating
+            v-model="core_value_manager_rating"
+            :star-size="20"
+            :rating="core_value_manager_rating"
+          ></star-rating>
+        </vs-col>
+      </vs-row>
+    </div>
 
     <template #footer>
       <div class="footer-dialog">
