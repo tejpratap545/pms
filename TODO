@@ -1,0 +1,37 @@
+TO-DO 
+------------------------------------------------------------------------------
+
+1. Admin all employee appraisal list (pagination , filtering , searching ) 
+    a. Admin can edit goal , core value and skill any time
+    b. Admin can shift status of employee appraisal
+
+
+2. Goals , core value , skills weightage validation in create and update 
+6. Hod comment after end year 
+7. Dark theme 
+8. Rjection stage 0 , 1 and 3
+9. Dynamic naming save in company settings 
+10. Company login logo and dashboard logo
+12. Peer appraisal 
+13. Forgot password 
+14. Employee create   --> username , email , contact number , password validation 
+16. Forgot password 
+17. Current active appraisal save in localstorage 
+18. Icons 
+19. Records (employee , manager and hod)
+20. Roles 
+20. Notifications (employee)
+21. Logs Company , manager and hod 
+22. Email sending 
+23. Employee profile picture and display all  user details in home page 
+24. Chat component in goal , for employee and manager  
+
+
+
+------------------------------------------------------------------------------
+Bugs fixing  
+1. Scroll bug in some components 
+2. In department section nabber hide on small screen
+
+
+          
