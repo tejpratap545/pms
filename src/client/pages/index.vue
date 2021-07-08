@@ -113,12 +113,71 @@
                 <vs-td> Department </vs-td>
                 <vs-td> {{ $store.state.user.department.name }} </vs-td>
               </vs-tr>
+
+              <vs-tr>
+                <vs-td> Gender </vs-td>
+                <vs-td>
+                  {{ $store.state.user.gender }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> Marital status </vs-td>
+                <vs-td>
+                  {{ $store.state.user.marital_status }}
+                </vs-td>
+              </vs-tr>
+
               <vs-tr>
                 <vs-td> Role </vs-td>
                 <vs-td>
                   {{
-                    $store.state.user.user.is_superuser ? "Superadmin" : "user"
+                    $store.state.user.user.is_superuser
+                      ? "Superadmin"
+                      : $store.state.user.user.role.name
                   }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> Date of hire </vs-td>
+                <vs-td>
+                  {{ $store.state.user.date_of_hire }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> Job Title </vs-td>
+                <vs-td>
+                  {{ $store.state.user.job_title }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> Employee ID </vs-td>
+                <vs-td>
+                  {{ $store.state.user.employee_id }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> Employee Type </vs-td>
+                <vs-td>
+                  {{ $store.state.user.user.employment_type }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> First reporting manager</vs-td>
+                <vs-td>
+                  {{ $store.state.user.first_reporting_manager.name }}
+                </vs-td>
+              </vs-tr>
+
+              <vs-tr>
+                <vs-td> Second reporting manager</vs-td>
+                <vs-td>
+                  {{ $store.state.user.second_reporting_manager.name }}
                 </vs-td>
               </vs-tr>
             </template>

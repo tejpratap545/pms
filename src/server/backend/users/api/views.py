@@ -281,6 +281,8 @@ def get_token(request):
             )
 
             ResetPasswordToken.objects.create(user=user, token=token)
+            
+            print(f"Password reset token = {token}\n")
 
             send_mail(
                 "Password reset token",

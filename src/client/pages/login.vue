@@ -6,10 +6,10 @@
       </template>
 
       <div class="con-form">
-        <vs-input v-model="username">
+        <vs-input v-model="username" placeholder="Username">
           <template #icon> @ </template>
         </vs-input>
-        <vs-input v-model="password" type="password">
+        <vs-input v-model="password" type="password" placeholder="Password">
           <template #icon>
             <i class="bx bxs-lock"></i>
           </template>
@@ -22,7 +22,9 @@
             Sign In
           </vs-button>
 
-          <div class="new">New Here? <a href="#">Create New Account</a></div>
+          <div class="new">
+            Forgot password? <a href="/forgot-password">Reset password</a>
+          </div>
         </div>
       </template>
     </vs-dialog>
