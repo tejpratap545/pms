@@ -2,139 +2,217 @@
   <div class="page">
     <h1>Category Management</h1>
     <div class="center">
-      <vs-table v-model="selected">
-        <template #header>
-          <div class="table-header">
-            <vs-input v-model="search" placeholder="Search" shadow>
-              <template #icon>
-                <i class="bx bx-search"></i>
+      <vs-navbar v-model="activeStage" center-collapsed>
+        <vs-navbar-item id="core-value" :active="activeStage == 'core-value'">
+          Core Value
+        </vs-navbar-item>
+        <vs-navbar-item id="goals" :active="activeStage == 'goals'">
+          Goals
+        </vs-navbar-item>
+        <vs-navbar-item id="skills" :active="activeStage == 'skills'">
+          Skills
+        </vs-navbar-item>
+      </vs-navbar>
+
+      <div class="square my-5">
+        <vs-table v-if="activeStage == 'core-value'" v-model="selected">
+          <template #header>
+            <div class="table-header">
+              <vs-input v-model="search" placeholder="Search" shadow>
+                <template #icon>
+                  <i class="bx bx-search"></i>
+                </template>
+              </vs-input>
+              <vs-button class="data-1" @click="newActive = true">
+                Add
+              </vs-button>
+              <vs-button icon @click="$tours.myTour.start()">
+                <i class="bx bx-help-circle"></i>
+              </vs-button>
+            </div>
+          </template>
+          <template #thead>
+            <vs-tr>
+              <vs-th> Name </vs-th>
+              <vs-th> Type </vs-th>
+              <vs-th v-if="$store.state.user.user.is_superuser">
+                Company
+              </vs-th>
+              <vs-th> Id </vs-th>
+            </vs-tr>
+          </template>
+          <template #tbody>
+            <vs-tr
+              v-for="(tr, i) in $vs.getSearch(coreValueList, search)"
+              :key="`core${i}`"
+              :data="tr"
+              :is-selected="selected == tr"
+              class="data-2"
+            >
+              <vs-td>
+                {{ tr.name }}
+              </vs-td>
+              <vs-td> Core Values </vs-td>
+              <vs-td v-if="$store.state.user.user.is_superuser">
+                {{ companyList.filter((x) => x.id == tr.company)[0].name }}
+              </vs-td>
+              <vs-td>
+                {{ tr.id }}
+              </vs-td>
+
+              <template #expand>
+                <div class="con-content">
+                  <div>
+                    <vs-button
+                      color="success"
+                      flat
+                      icon
+                      @click="
+                        (editActive = true), (selectedType = 'core_value')
+                      "
+                    >
+                      <i class="bx bx-edit-alt"></i>
+                    </vs-button>
+                    <vs-button border danger @click="deleteCategory(tr.id)">
+                      Delete category
+                    </vs-button>
+                  </div>
+                </div>
               </template>
-            </vs-input>
-            <vs-button class="data-1" @click="newActive = true">
-              Add
-            </vs-button>
-            <vs-button icon @click="$tours.myTour.start()">
-              <i class="bx bx-help-circle"></i>
-            </vs-button>
-          </div>
-        </template>
-        <template #thead>
-          <vs-tr>
-            <vs-th> Name </vs-th>
-            <vs-th> Type </vs-th>
-            <vs-th v-if="$store.state.user.user.is_superuser"> Company </vs-th>
-            <vs-th> Id </vs-th>
-          </vs-tr>
-        </template>
-        <template #tbody>
-          <vs-tr
-            v-for="(tr, i) in $vs.getSearch(coreValueList, search)"
-            :key="`core${i}`"
-            :data="tr"
-            :is-selected="selected == tr"
-            class="data-2"
-          >
-            <vs-td>
-              {{ tr.name }}
-            </vs-td>
-            <vs-td> Core Values </vs-td>
-            <vs-td v-if="$store.state.user.user.is_superuser">
-              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
-            </vs-td>
-            <vs-td>
-              {{ tr.id }}
-            </vs-td>
+            </vs-tr>
+          </template>
+        </vs-table>
 
-            <template #expand>
-              <div class="con-content">
-                <div>
-                  <vs-button
-                    color="success"
-                    flat
-                    icon
-                    @click="(editActive = true), (selectedType = 'core_value')"
-                  >
-                    <i class="bx bx-edit-alt"></i>
-                  </vs-button>
-                  <vs-button border danger @click="deleteCategory(tr.id)">
-                    Delete category
-                  </vs-button>
-                </div>
-              </div>
-            </template>
-          </vs-tr>
-          <vs-tr
-            v-for="(tr, i) in $vs.getSearch(goalList, search)"
-            :key="`goal${i}`"
-            :data="tr"
-            :is-selected="selected == tr"
-          >
-            <vs-td>
-              {{ tr.name }}
-            </vs-td>
-            <vs-td> Goals </vs-td>
-            <vs-td v-if="$store.state.user.user.is_superuser">
-              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
-            </vs-td>
-            <vs-td>
-              {{ tr.id }}
-            </vs-td>
+        <vs-table v-if="activeStage == 'goals'" v-model="selected">
+          <template #header>
+            <div class="table-header">
+              <vs-input v-model="search" placeholder="Search" shadow>
+                <template #icon>
+                  <i class="bx bx-search"></i>
+                </template>
+              </vs-input>
+              <vs-button class="data-1" @click="newActive = true">
+                Add
+              </vs-button>
+              <vs-button icon @click="$tours.myTour.start()">
+                <i class="bx bx-help-circle"></i>
+              </vs-button>
+            </div>
+          </template>
+          <template #thead>
+            <vs-tr>
+              <vs-th> Name </vs-th>
+              <vs-th> Type </vs-th>
+              <vs-th v-if="$store.state.user.user.is_superuser">
+                Company
+              </vs-th>
+              <vs-th> Id </vs-th>
+            </vs-tr>
+          </template>
+          <template #tbody>
+            <vs-tr
+              v-for="(tr, i) in $vs.getSearch(goalList, search)"
+              :key="`goal${i}`"
+              :data="tr"
+              :is-selected="selected == tr"
+            >
+              <vs-td>
+                {{ tr.name }}
+              </vs-td>
+              <vs-td> Goals </vs-td>
+              <vs-td v-if="$store.state.user.user.is_superuser">
+                {{ companyList.filter((x) => x.id == tr.company)[0].name }}
+              </vs-td>
+              <vs-td>
+                {{ tr.id }}
+              </vs-td>
 
-            <template #expand>
-              <div class="con-content">
-                <div>
-                  <vs-button
-                    color="success"
-                    flat
-                    icon
-                    @click="(editActive = true), (selectedType = 'goal')"
-                  >
-                    <i class="bx bx-edit-alt"></i>
-                  </vs-button>
-                  <vs-button border danger @click="deleteCategory(tr.id)">
-                    Delete category
-                  </vs-button>
+              <template #expand>
+                <div class="con-content">
+                  <div>
+                    <vs-button
+                      color="success"
+                      flat
+                      icon
+                      @click="(editActive = true), (selectedType = 'goal')"
+                    >
+                      <i class="bx bx-edit-alt"></i>
+                    </vs-button>
+                    <vs-button border danger @click="deleteCategory(tr.id)">
+                      Delete category
+                    </vs-button>
+                  </div>
                 </div>
-              </div>
-            </template>
-          </vs-tr>
-          <vs-tr
-            v-for="(tr, i) in $vs.getSearch(skillList, search)"
-            :key="`skill${i}`"
-            :data="tr"
-            :is-selected="selected == tr"
-          >
-            <vs-td>
-              {{ tr.name }}
-            </vs-td>
-            <vs-td> Skills </vs-td>
-            <vs-td v-if="$store.state.user.user.is_superuser">
-              {{ companyList.filter((x) => x.id == tr.company)[0].name }}
-            </vs-td>
-            <vs-td>
-              {{ tr.id }}
-            </vs-td>
+              </template>
+            </vs-tr>
+          </template>
+        </vs-table>
 
-            <template #expand>
-              <div class="con-content">
-                <div>
-                  <vs-button
-                    color="success"
-                    flat
-                    icon
-                    @click="(editActive = true), (selectedType = 'skills')"
-                  >
-                    <i class="bx bx-edit-alt"></i>
-                  </vs-button>
-                  <vs-button border danger @click="deleteCategory(tr.id)">
-                    Delete category
-                  </vs-button>
+        <vs-table v-if="activeStage == 'skills'" v-model="selected">
+          <template #header>
+            <div class="table-header">
+              <vs-input v-model="search" placeholder="Search" shadow>
+                <template #icon>
+                  <i class="bx bx-search"></i>
+                </template>
+              </vs-input>
+              <vs-button class="data-1" @click="newActive = true">
+                Add
+              </vs-button>
+              <vs-button icon @click="$tours.myTour.start()">
+                <i class="bx bx-help-circle"></i>
+              </vs-button>
+            </div>
+          </template>
+          <template #thead>
+            <vs-tr>
+              <vs-th> Name </vs-th>
+              <vs-th> Type </vs-th>
+              <vs-th v-if="$store.state.user.user.is_superuser">
+                Company
+              </vs-th>
+              <vs-th> Id </vs-th>
+            </vs-tr>
+          </template>
+          <template #tbody>
+            <vs-tr
+              v-for="(tr, i) in $vs.getSearch(skillList, search)"
+              :key="`skill${i}`"
+              :data="tr"
+              :is-selected="selected == tr"
+            >
+              <vs-td>
+                {{ tr.name }}
+              </vs-td>
+              <vs-td> Skills </vs-td>
+              <vs-td v-if="$store.state.user.user.is_superuser">
+                {{ companyList.filter((x) => x.id == tr.company)[0].name }}
+              </vs-td>
+              <vs-td>
+                {{ tr.id }}
+              </vs-td>
+
+              <template #expand>
+                <div class="con-content">
+                  <div>
+                    <vs-button
+                      color="success"
+                      flat
+                      icon
+                      @click="(editActive = true), (selectedType = 'skills')"
+                    >
+                      <i class="bx bx-edit-alt"></i>
+                    </vs-button>
+                    <vs-button border danger @click="deleteCategory(tr.id)">
+                      Delete category
+                    </vs-button>
+                  </div>
                 </div>
-              </div>
-            </template>
-          </vs-tr>
-        </template>
-      </vs-table>
+              </template>
+            </vs-tr>
+          </template>
+        </vs-table>
+      </div>
     </div>
 
     <v-tour name="myTour" :steps="steps"></v-tour>
@@ -168,6 +246,7 @@ export default {
     loading: false,
     selected: {},
     selectedType: "",
+    activeStage: "core-value",
 
     companyList: [],
     coreValueList: [],
@@ -258,4 +337,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.vs-navbar-content,
+.vs-navbar,
+.vs-navbar__line {
+  position: relative;
+}
+</style>

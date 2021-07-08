@@ -9,6 +9,10 @@
     </template>
 
     <div class="con-form">
+      <vs-input v-model="passwordData.password" placeholder="Current Password">
+        <template #icon> <i class="bx bxs-lock-alt"></i></template>
+      </vs-input>
+
       <vs-input v-model="passwordData.password1" placeholder="New Password">
         <template #icon> <i class="bx bxs-lock-alt"></i></template>
       </vs-input>
@@ -38,6 +42,7 @@ export default {
     active: false,
     loading: false,
     passwordData: {
+      password: "",
       password1: "",
       password2: "",
     },
@@ -55,7 +60,7 @@ export default {
 
         this.$axios
           .$post(
-            `api/user/${this.$store.state.user.id}/set_password`,
+            `api/user/${this.$store.state.user.id}/change_password/`,
             this.passwordData,
             {
               headers: {

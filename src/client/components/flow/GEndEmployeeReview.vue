@@ -119,7 +119,7 @@
 
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4">
-                      <b>Endyear employee component</b>
+                      <b>Endyear employee comment</b>
                     </vs-col>
                     <vs-col w="8" class="description-card">
                       <Editor
@@ -128,6 +128,21 @@
                           (value) => (tr.stage2_employee_comment = value)
                         "
                       />
+                    </vs-col>
+                  </vs-row>
+                  <vs-row style="padding: 20px 0">
+                    <vs-col w="4">
+                      <b>Endyear employee rating</b>
+                    </vs-col>
+                    <vs-col
+                      w="8"
+                      style="display: flex; justify-content: flex-end"
+                    >
+                      <star-rating
+                        v-model="tr.employee_rating"
+                        :star-size="20"
+                        :rating="tr.employee_rating"
+                      ></star-rating>
                     </vs-col>
                   </vs-row>
                 </div>

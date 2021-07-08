@@ -132,6 +132,38 @@
                       />
                     </vs-col>
                   </vs-row>
+
+                  <vs-row style="padding: 20px 0">
+                    <vs-col w="4">
+                      <b>Endyear employee rating</b>
+                    </vs-col>
+                    <vs-col
+                      w="8"
+                      style="display: flex; justify-content: flex-end"
+                    >
+                      <star-rating
+                        :star-size="20"
+                        :rating="tr.employee_rating"
+                        :read-only="true"
+                      ></star-rating>
+                    </vs-col>
+                  </vs-row>
+
+                  <vs-row style="padding: 20px 0">
+                    <vs-col w="4">
+                      <b>Endyear manager rating</b>
+                    </vs-col>
+                    <vs-col
+                      w="8"
+                      style="display: flex; justify-content: flex-end"
+                    >
+                      <star-rating
+                        v-model="tr.manager_rating"
+                        :star-size="20"
+                        :rating="tr.manager_rating"
+                      ></star-rating>
+                    </vs-col>
+                  </vs-row>
                 </div>
                 <vs-table class="my-5">
                   <template #header>

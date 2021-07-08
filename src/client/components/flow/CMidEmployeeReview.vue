@@ -62,6 +62,29 @@
 
                   <vs-row style="padding: 20px 0">
                     <vs-col w="4">
+                      <b>Tracing status</b>
+                    </vs-col>
+                    <vs-col w="8" class="description-card">
+                      <vs-select
+                        v-if="trackingStatusList.length != 0"
+                        v-model="tr.tracking_status"
+                        block
+                        filter
+                      >
+                        <vs-option
+                          v-for="(status, index) in trackingStatusList"
+                          :key="index"
+                          :label="status"
+                          :value="status"
+                        >
+                          {{ status }}
+                        </vs-option>
+                      </vs-select>
+                    </vs-col>
+                  </vs-row>
+
+                  <vs-row style="padding: 20px 0">
+                    <vs-col w="4">
                       <b>Midyear employee component</b>
                     </vs-col>
                     <vs-col w="8" class="description-card">
@@ -129,6 +152,7 @@ export default {
   data: () => ({
     active: false,
     loading: false,
+    trackingStatusList: ["null", "On Track", "Not On Track"],
   }),
 
   mounted() {

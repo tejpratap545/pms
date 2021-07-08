@@ -16,7 +16,7 @@
 
     <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="con-form">
-      <vs-select
+      <!-- <vs-select
         v-model="appraisalData.individual_employees"
         placeholder="Select Employees"
         style="margin-bottom: 10px"
@@ -51,7 +51,7 @@
         >
           {{ department.name }}
         </vs-option>
-      </vs-select>
+      </vs-select> -->
 
       <vs-input v-model="appraisalData.name" placeholder="Appraisal Name">
         <template #icon>
@@ -181,12 +181,10 @@ export default {
   },
   mounted() {
     this.active = this.dialog;
-    this.appraisalData = {
-      individual_employees: [],
-      departments: [],
-      is_company: false,
-      ...this.selectedAppraisal,
-    };
+    this.appraisalData = this.selectedAppraisal;
+
+    delete this.appraisalData.departmentalgoal_set;
+    delete this.appraisalData.departmentalcorevalue_set;
   },
   methods: {
     closeDialog() {
