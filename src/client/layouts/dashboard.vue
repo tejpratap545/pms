@@ -1,6 +1,6 @@
 <template>
   <div class="hidden">
-    <vs-sidebar v-model="active" :reduce="reduce" open>
+    <vs-sidebar v-model="active" :reduce="reduce" square open>
       <template #logo>
         <vs-button
           style="margin-left: 10px"
@@ -115,30 +115,17 @@
         Records
       </vs-sidebar-item>
 
-      <template #footer> </template>
+      <template #footer>
+        <vs-switch v-model="active2" @click="ChangeTheme">
+          <i v-if="!active2" class="bx bxs-sun"></i>
+          <i v-else class="bx bxs-moon"></i>
+        </vs-switch>
+      </template>
     </vs-sidebar>
 
     <div>
       <Nuxt />
     </div>
-
-    <!--Dialogs -->
-
-    <vs-dialog v-model="tutorialActive" width="550px" not-center>
-      <template #header>
-        <h2 class="not-margin">PMS <b>Navigation</b></h2>
-      </template>
-
-      <div class="con-tutorials">
-        <div class="tutorial-item">
-          <p>Create new <b>Company</b></p>
-          <vs-button @click="companyCreateTutorial"> Start </vs-button>
-        </div>
-        <div class="tutorial-item"></div>
-        <div class="tutorial-item"></div>
-        <div class="tutorial-item"></div>
-      </div>
-    </vs-dialog>
   </div>
 </template>
 
@@ -146,21 +133,20 @@
 export default {
   data: () => ({
     active: "home",
+    active2: false,
     reduce: true,
-    tutorialActive: false,
   }),
   mounted() {
     this.active = location.pathname.split("/").pop();
   },
   methods: {
-    companyCreateTutorial() {
-      this.tutorialActive = false;
-      this.$router.replace("/sections/company");
-
-      // console.log(document.querySelector("#newCompanyButton"));
-      // console.log(this.$tours.companyCreateTour);
-
-      this.$tours.companyCreateTour.start();
+    ChangeTheme() {
+      this.$vs.toggleTheme();
+      if (this.active2) {
+        document.body.classList.add("darken");
+      } else {
+        document.body.classList.remove("darken");
+      }
     },
   },
 };
@@ -229,5 +215,9 @@ html {
 
 .hero-image img {
   height: 100px;
+}
+
+body.darken {
+  background: #1e2023;
 }
 </style>
