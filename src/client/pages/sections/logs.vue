@@ -7,6 +7,7 @@
         v-for="log in logList.results"
         :key="log.id"
         :color="log.color"
+        class="my-5"
         solid
       >
         <template #title> {{ log.title }} </template>

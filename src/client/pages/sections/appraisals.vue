@@ -52,7 +52,7 @@
                     v-if="stage == 0 && status == 0"
                     @click="goalSubmit = true"
                   >
-                    Submit Goal
+                    Submit Goals
                   </vs-button>
                   <vs-button
                     v-if="stage == 1 && status == 2"
@@ -90,12 +90,7 @@
                   >
                     Submit End Year Review
                   </vs-button>
-                  <vs-button
-                    icon
-                    @click="
-                      location.replace(`/print?id=${selectedAppraisal.id}`)
-                    "
-                  >
+                  <vs-button icon @click="print(selectedAppraisal.id)">
                     <i class="bx bx-printer"></i>
                   </vs-button>
                   <vs-button icon @click="$tours.myTour.start()">
@@ -236,11 +231,12 @@ export default {
       console.log(e);
     }
   },
+  */
   methods: {
-    saveAppraisal(a) {
-      localStorage.setItem("selectedAppraisal", JSON.stringify(a));
+    print(id) {
+      location.replace(`/print?id=${id}`);
     },
-  }, */
+  },
 };
 </script>
 

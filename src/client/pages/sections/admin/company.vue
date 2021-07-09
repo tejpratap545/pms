@@ -1,7 +1,8 @@
 <template>
   <div class="page">
     <h1>Company Management</h1>
-    <div class="center">
+    <div v-if="$fetchState.pending"><Spinner /></div>
+    <div v-else class="center grid">
       <vs-table v-model="selected">
         <template #header>
           <div class="table-header">
@@ -65,7 +66,7 @@
                     color="success"
                     flat
                     icon
-                    @click="editActive = true"
+                    @click="(editActive = true), (selected = tr)"
                   >
                     <i class="bx bx-edit-alt"></i>
                   </vs-button>

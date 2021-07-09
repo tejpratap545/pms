@@ -540,7 +540,10 @@ export default {
       }
     },
   },
-
+  mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.appraisal);
+  },
   methods: {
     deleteItem(item, id) {
       this.loading = true;
