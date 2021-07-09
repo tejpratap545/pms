@@ -13,6 +13,10 @@
         <!-- eslint-disable-next-line vue/no-v-html -->
         <span v-html="notification.description"></span>
       </vs-alert>
+
+      <h2 v-if="notifications.length == 0" style="text-align: center">
+        No unread notifications
+      </h2>
     </div>
   </div>
 </template>

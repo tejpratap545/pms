@@ -111,11 +111,14 @@
         Records
       </vs-sidebar-item>
 
-      <vs-sidebar-item
-        v-if="!$store.state.user.user.is_superuser"
-        id="notifications"
-        to="/sections/notifications"
-      >
+      <vs-sidebar-item id="logs" to="/sections/logs">
+        <template #icon>
+          <i class="bx bx-list-ol"></i>
+        </template>
+        Logs
+      </vs-sidebar-item>
+
+      <vs-sidebar-item id="notifications" to="/sections/notifications">
         <template #icon>
           <i class="bx bx-notification"></i>
         </template>
