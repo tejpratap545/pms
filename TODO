@@ -14,16 +14,14 @@ TO-DO
 12. Peer appraisal 
 13. Forgot password 
 14. Employee create   --> username , email , contact number , password validation 
-16. Forgot password 
-17. Current active appraisal save in localstorage 
 18. Icons 
 19. Records (employee , manager and hod)
 20. Roles 
-20. Notifications (employee)
+
 21. Logs Company , manager and hod 
+
 22. Email sending 
 23. Employee profile picture 
-24. Chat component in goal , for employee and manager  
 
 
 
