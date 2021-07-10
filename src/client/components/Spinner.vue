@@ -1,49 +1,49 @@
 <template>
-  <div class="loader-container">
-    <div class="loader"></div>
-  </div>
+	<div class="loader-container">
+		<div class="loader"></div>
+	</div>
 </template>
 
 <script>
 export default {
-  name: "Spinner",
+	name: 'Spinner'
 };
 </script>
 
 <style scoped>
 .loader-container {
-  margin: 100px 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+	margin: 100px 0;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .loader {
-  border: 5px solid #f3f3f3;
-  -webkit-animation: spin 1s linear infinite;
-  animation: spin 1s linear infinite;
-  border-top: 5px solid #555;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+	border: 5px solid #f3f3f3;
+	-webkit-animation: spin 1s linear infinite;
+	animation: spin 1s linear infinite;
+	border-top: 5px solid #555;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
 }
 
 /* Safari */
 @-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
 </style>
