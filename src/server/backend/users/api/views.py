@@ -117,9 +117,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
             ),
         },
     )
-    @action(detail=True, methods=["post"])
+    @action(detail=False, methods=["post"],url_path="me/change-password")
     def change_password(self, request, pk=None):
-        user: User = self.get_object().user
+        user: User = self.request.user
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
             if user.check_password(serializer.validated_data["password"]):

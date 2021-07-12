@@ -104,7 +104,11 @@
         Department
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="records" to="/sections/records">
+      <vs-sidebar-item
+        v-if="$store.state.user.user.is_admin"
+        id="records"
+        to="/sections/records"
+      >
         <template #icon>
           <i class="bx bx-data"></i>
         </template>

@@ -3,7 +3,7 @@
 		<h1>Logs</h1>
 		<div v-if="$fetchState.pending"><Spinner /></div>
 		<div v-else class="center">
-			<vs-alert v-for="log in logList.results" :key="log.id" :color="log.color" solid>
+			<vs-alert v-for="log in logList.results" :key="log.id" :color="log.color" class="my-5" solid>
 				<template #title> {{ log.title }} </template>
 				<!-- eslint-disable-next-line vue/no-v-html -->
 				<span v-html="log.description"></span>

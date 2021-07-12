@@ -1,7 +1,8 @@
 <template>
   <div class="page">
     <h1>Category Management</h1>
-    <div class="center">
+    <div v-if="$fetchState.pending"><Spinner /></div>
+    <div v-else class="center grid">
       <vs-navbar v-model="activeStage" center-collapsed>
         <vs-navbar-item id="core-value" :active="activeStage == 'core-value'">
           Core Value

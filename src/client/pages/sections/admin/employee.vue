@@ -1,9 +1,8 @@
 <template>
   <div class="page">
     <h1>Employee Management</h1>
-
     <div v-if="$fetchState.pending"><Spinner /></div>
-    <div v-else class="center">
+    <div v-else class="center grid">
       <vs-table v-model="selected">
         <template #header>
           <div class="table-header">

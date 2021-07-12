@@ -7,6 +7,7 @@
         v-for="notification in notifications"
         :key="notification.id"
         :color="notification.color"
+        class="my-5"
         solid
       >
         <template #title> {{ notification.title }} </template>
