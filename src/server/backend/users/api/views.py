@@ -1,4 +1,5 @@
 import secrets
+from backend.appraisals.api.pagination import StandardResultsSetPagination
 
 from backend.appraisals.models import OverAllAppraisal
 from django.conf import settings
@@ -434,9 +435,55 @@ def check_contact_number(request):
 class LogViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = LogsSerializer
-    filterset_fields = ["user"]
+    filterset_fields = [
+        "user",
+        "user__second_reporting_manager",
+        "user__first_reporting_manager",
+    ]
     search_fields = ["user__name"]
-    queryset = Logs.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        queryset = Logs.objects.all().select_related(
+            "user",
+            "user__user",
+        )
+        if not self.request.user.is_superuser:
+            queryset = queryset.filter(user__user__company=self.request.user.company)
+
+        return queryset
+
+    @action(detail=False, methods=["GET"])
+    def me(self, request):
+        queryset = self.get_queryset().filter(user=request.user.profle)
+        serializer = LogsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["GET"])
+    def manager(self, request):
+        queryset = (
+            self.get_queryset()
+            .select_related(
+                "user__first_reporting_manager",
+                "user__first_reporting_manager__user",
+            )
+            .filter(user__first_reporting_manager=request.user.profle)
+        )
+        serializer = LogsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["GET"])
+    def hod(self, request):
+        queryset = (
+            self.get_queryset()
+            .select_related(
+                "user__second_reporting_manager",
+                "user__second_reporting_manager__user",
+            )
+            .filter(user__second_reporting_manager=request.user.profle)
+        )
+        serializer = LogsSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
@@ -444,4 +491,32 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = NotificationSerializer
     filterset_fields = ["user"]
     search_fields = ["user__name"]
-    queryset = Notification.objects.all()
+
+    def get_queryset(self):
+        queryset = Notification.objects.all()
+        if not self.request.user.is_superuser:
+            queryset = queryset.filter(user__user__company=self.request.user.company)
+
+        return queryset
+
+    extend_schema(responses=[NotificationSerializer])
+
+    @action(detail=False, methods=["GET"])
+    def me(self, request):
+        queryset = self.get_queryset().filter(user=request.user.profile)
+        serializer = NotificationSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @extend_schema(
+        request=EmptySerializer,
+        responses={
+            200: OpenApiResponse(
+                description="Successfully mark as read notification",
+            ),
+        },
+    )
+    @action(detail=True, methods=["POST"])
+    def read(self, request):
+        notification: Notification = self.get_object()
+        notification.is_read = True
+        return Response("Successfully mark as read notification")
