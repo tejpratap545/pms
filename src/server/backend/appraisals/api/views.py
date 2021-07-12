@@ -397,6 +397,61 @@ class AppraisalViewset(viewsets.ModelViewSet):
             data="Appraisal is successfully submitted",
         )
 
+    @action(detail=True, methods=["POST"], url_path="up-stage/reject/stage-0")
+    def stage_0_reject(self, request, pk=None):
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        appraisal.status = 0
+        appraisal.stage0_rejection_comment = request.data.get(
+            "stage0_rejection_comment", "No comment"
+        )
+        appraisal.save()
+
+        return Response(
+            {
+                "msg": f"{appraisal.name} is successfully rejected in goal settings stage",
+                "comment": appraisal.stage0_rejection_comment,
+            }
+        )
+
+    @action(detail=True, methods=["POST"], url_path="up-stage/reject/stage-1")
+    def stage_1_reject(self, request, pk=None):
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        appraisal.status = 3
+        appraisal.stage1_rejection_comment = request.data.get(
+            "stage1_rejection_comment", "No comment"
+        )
+        appraisal.save()
+        return Response(
+            {
+                "msg": f"{appraisal.name} is successfully rejected in  mid review stage",
+                "comment": appraisal.stage1_rejection_comment,
+            }
+        )
+
+    @action(detail=True, methods=["POST"], url_path="up-stage/reject/stage-2")
+    def stage_2_reject(self, request, pk=None):
+        appraisal: Appraisal = self.get_object()
+        if appraisal.employee.first_reporting_manager != self.request.user.profile:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        appraisal.status = 7
+        appraisal.stage2_rejection_comment = request.data.get(
+            "stage2_rejection_comment", "No comment"
+        )
+        appraisal.save()
+        return Response(
+            {
+                "msg": f"{appraisal.name} is successfully rejected in  end year review stage ",
+                "comment": appraisal.stage2_rejection_comment,
+            }
+        )
+
 
 class MyAppraisalView(generics.ListAPIView):
     serializer_class = DetailAppraisalSerializer

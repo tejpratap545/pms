@@ -134,11 +134,12 @@ export default {
 	},
 	methods: {
 		ChangeTheme() {
-			this.$vs.toggleTheme();
-			if (this.active2) {
-				document.body.classList.add('darken');
-			} else {
-				document.body.classList.remove('darken');
+			if (process.client) {
+				if (this.active2) {
+					document.body.classList.add('darken');
+				} else {
+					document.body.classList.remove('darken');
+				}
 			}
 		}
 	}
