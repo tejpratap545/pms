@@ -16,6 +16,7 @@ from rest_framework import status
 from ..models import *
 from .pagination import *
 from .serializers import *
+from drf_spectacular.types import OpenApiTypes
 
 
 class OverAllAppraisalViewSet(viewsets.ModelViewSet):
@@ -396,6 +397,7 @@ class AppraisalViewset(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST,
             data="Appraisal is successfully submitted",
         )
+ 
 
     @action(detail=True, methods=["POST"], url_path="up-stage/reject/stage-0")
     def stage_0_reject(self, request, pk=None):

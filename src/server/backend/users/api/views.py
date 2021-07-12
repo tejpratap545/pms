@@ -70,7 +70,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
             "user__role__permissions",
             "first_reporting_manager",
             "first_reporting_manager__user",
-            "second_reporting_manager", "second_reporting_manager__user",
+            "second_reporting_manager",
+            "second_reporting_manager__user",
         ).all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(user__company=self.request.user.company)
@@ -281,7 +282,7 @@ def get_token(request):
             )
 
             ResetPasswordToken.objects.create(user=user, token=token)
-            
+
             print(f"Password reset token = {token}\n")
 
             send_mail(
@@ -428,3 +429,19 @@ def check_contact_number(request):
         return Response(
             "Contact Number is not  available", status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class LogViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = LogsSerializer
+    filterset_fields = ["user"]
+    search_fields = ["user__name"]
+    queryset = Logs.objects.all()
+
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = NotificationSerializer
+    filterset_fields = ["user"]
+    search_fields = ["user__name"]
+    queryset = Notification.objects.all()

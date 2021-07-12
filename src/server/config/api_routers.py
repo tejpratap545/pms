@@ -29,11 +29,15 @@ router.register(
     "departmental-goal", DepartmentalGoalViewset, basename="DepartmentalGoal"
 )
 router.register(
-    "departmental-core-value", DepartmentalCoreValueViewset, basename="DepartmentalCoreValue"
+    "departmental-core-value",
+    DepartmentalCoreValueViewset,
+    basename="DepartmentalCoreValue",
 )
 router.register("skill", SkillViewSET, basename="Skill")
 router.register("core-value", CoreValueViewSET, basename="CoreValue")
 router.register("appraisal", AppraisalViewset, basename="Appraisal")
 router.register("kpi", KPIViewSet, basename="KPI")
+router.register("notification", NotificationViewSet, basename="Notification")
+router.register("log", LogViewSet, basename="Logs")
 app_name = "pms"
 urlpatterns = router.urls

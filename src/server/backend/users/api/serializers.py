@@ -3,7 +3,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import *
 from rest_framework import serializers
 
-from ..models import Company, Department, Profile, User
+from ..models import Company, Department, Logs, Notification, Profile, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,7 +37,6 @@ class ShortEmployeeSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-   
 
     class Meta:
         model = Profile
@@ -118,7 +117,6 @@ class ShortProfileSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer()
     first_reporting_manager = ShortEmployeeSerializer()
     second_reporting_manager = ShortEmployeeSerializer()
-     
 
     class Meta:
         model = Profile
@@ -130,7 +128,7 @@ class ShortProfileSerializer(serializers.ModelSerializer):
             "second_reporting_manager",
             "email",
             "name",
-            "username"
+            "username",
         )
 
 
@@ -294,3 +292,17 @@ class CheckPasswordSerializer(serializers.Serializer):
 
 class CheckContactNumberSerializer(serializers.Serializer):
     contact_number = serializers.CharField()
+
+
+class LogsSerializer(serializers.ModelSerializer):
+    user = ShortEmployeeSerializer()
+    class Meta:
+        model = Logs
+        fields = "__all__"
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    user = ShortEmployeeSerializer()
+    class Meta:
+        model = Notification
+        fields = "__all__"

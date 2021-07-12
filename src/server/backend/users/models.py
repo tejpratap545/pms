@@ -1,3 +1,4 @@
+from statistics import mode
 from typing import Optional
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -288,3 +289,8 @@ class Logs(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField()
     color = models.CharField(max_length=100, choices=COLOR_CHOCE)
+
+
+class Notification(Logs):
+    is_read = models.BooleanField(default=False)
+    pass

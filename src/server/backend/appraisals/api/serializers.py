@@ -1,6 +1,6 @@
 from backend.training.api.serializers import *
 from backend.users.api.serializers import DepartmentSerializer, ShortProfileSerializer
-from backend.users.models import Logs, Profile
+from backend.users.models import Logs, Notification, Profile
 from django.core.mail import send_mail
 from django.db import transaction
 from rest_framework import serializers
@@ -279,3 +279,5 @@ class ShortProfile2Serializer(serializers.ModelSerializer):
             "department",
             "appraisal_set",
         )
+
+
