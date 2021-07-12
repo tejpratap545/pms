@@ -14,6 +14,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
+from backend.users.api.filter import LogsFilter
+
 from ..models import *
 from ..permissions import *
 from ..permissions import IsSuperUser
@@ -435,11 +437,7 @@ def check_contact_number(request):
 class LogViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = LogsSerializer
-    filterset_fields = [
-        "user",
-        "user__second_reporting_manager",
-        "user__first_reporting_manager",
-    ]
+    filterset_class = LogsFilter
     search_fields = ["user__name"]
     pagination_class = StandardResultsSetPagination
 
