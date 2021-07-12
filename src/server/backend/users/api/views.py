@@ -120,7 +120,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"])
     def change_password(self, request, pk=None):
         user: User = self.get_object().user
-        serializer = SetPasswordSerializer(data=request.data)
+        serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
             if user.check_password(serializer.validated_data["password"]):
                 user.set_password(serializer.validated_data["password1"])

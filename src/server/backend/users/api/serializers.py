@@ -248,8 +248,10 @@ class SetPasswordSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
 
-    def validate(self, attrs):
-        return self.data["password1"] == self.data["password2"]
+    def validate(self, data):
+        if data["password1"] == data["password2"]:
+            return data
+        raise serializers.ValidationError("password must be same")
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -257,8 +259,10 @@ class ChangePasswordSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
 
-    def validate(self, attrs):
-        return self.data["password1"] == self.data["password2"]
+    def validate(self, data):
+        if data["password1"] == data["password2"]:
+            return data
+        raise serializers.ValidationError("password must be same")
 
 
 class ResetPasswordSerializer(serializers.Serializer):
@@ -266,8 +270,10 @@ class ResetPasswordSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
 
-    def validate(self, attrs):
-        return self.data["password1"] == self.data["password2"]
+    def validate(self, data):
+        if data["password1"] == data["password2"]:
+            return data
+        raise serializers.ValidationError("password must be same")
 
 
 class ResetPasswordTokenSerializer(serializers.Serializer):
@@ -296,6 +302,7 @@ class CheckContactNumberSerializer(serializers.Serializer):
 
 class LogsSerializer(serializers.ModelSerializer):
     user = ShortEmployeeSerializer()
+
     class Meta:
         model = Logs
         fields = "__all__"
@@ -303,6 +310,7 @@ class LogsSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     user = ShortEmployeeSerializer()
+
     class Meta:
         model = Notification
         fields = "__all__"
