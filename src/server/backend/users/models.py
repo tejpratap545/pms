@@ -287,10 +287,10 @@ class Logs(models.Model):
     )
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
     title = models.CharField(max_length=250)
-    description = models.TextField()
     color = models.CharField(max_length=100, choices=COLOR_CHOCE)
-
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Notification(Logs):
     is_read = models.BooleanField(default=False)
+    description = models.TextField(blank=True, null=True)
     pass

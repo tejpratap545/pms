@@ -1,4 +1,7 @@
+from cmath import log
+import profile
 from backend.users.api.serializers import EmptySerializer
+from backend.users.models import User
 from backend.users.permissions import *
 from django.db.models import Count, Prefetch, Q
 from drf_spectacular.utils import (
@@ -213,6 +216,31 @@ class AppraisalViewset(viewsets.ModelViewSet):
         ):
             appraisal.status += 1
             appraisal.save()
+
+            # create logs and notifications
+
+            title = f"{appraisal.employee.name} submit appraisal {appraisal.name}"
+            description = (
+                f"Hi {appraisal.employee.first_reporting_manager.name} Employee {appraisal.employee.name} submit appraisal {appraisal.name} . "
+                f"Please approve all goals and then approve appraisal "
+            )
+            color = "info"
+            Logs.objects.create(user=appraisal.employee, title=title, color=color)
+            Notification.objects.create(
+                user=appraisal.employee.first_reporting_manager,
+                title=title,
+                description=description,
+                color=color,
+            )
+            try:
+                send_mail(
+                    title,
+                    description,
+                    settings.OFFICIAL_MAIL,
+                    [appraisal.employee.first_reporting_manager.user.email],
+                )
+            except:
+                pass
             return Response("Appraisal is successfully approved")
 
         return Response(
@@ -239,6 +267,31 @@ class AppraisalViewset(viewsets.ModelViewSet):
         ):
             appraisal.status += 1
             appraisal.save()
+            # create logs and notifications
+
+            title = f"{appraisal.employee.first_reporting_manager.name} approve appraisal {appraisal.name}"
+            description = f"Hi {appraisal.employee.name} manager {appraisal.employee.first_reporting_manager.name} approve appraisal {appraisal.name} . "
+            color = "success"
+            Logs.objects.create(
+                user=appraisal.employee.first_reporting_manager,
+                title=title,
+                color=color,
+            )
+            Notification.objects.create(
+                user=appraisal.employee,
+                title=title,
+                description=description,
+                color=color,
+            )
+            try:
+                send_mail(
+                    title,
+                    description,
+                    settings.OFFICIAL_MAIL,
+                    [appraisal.employee.user.email],
+                )
+            except:
+                pass
             return Response("Appraisal is successfully submitted")
 
         return Response(
@@ -258,6 +311,12 @@ class AppraisalViewset(viewsets.ModelViewSet):
         if appraisal.stage == 1 and (appraisal.status == 2 or appraisal.status == 3):
             appraisal.status = 3
             appraisal.save()
+
+            # create logs and notifications
+
+            title = f"{appraisal.employee.name} input mid year review of appraisal  {appraisal.name}"
+            color = "info"
+            Logs.objects.create(user=appraisal.employee, title=title, color=color)
             return Response("Appraisal is successfully submitted")
 
         return Response(
@@ -277,6 +336,31 @@ class AppraisalViewset(viewsets.ModelViewSet):
         if appraisal.stage == 1 and appraisal.status == 3:
             appraisal.status += 1
             appraisal.save()
+
+            # create logs and notifications
+
+            title = f"{appraisal.employee.name} submit mid year review of appraisal {appraisal.name}"
+            description = (
+                f"Hi {appraisal.employee.first_reporting_manager.name} Employee {appraisal.employee.name} submit mid year review of appraisa {appraisal.name} . "
+                f"Please add mid year comment and approve mid year review  "
+            )
+            color = "info"
+            Logs.objects.create(user=appraisal.employee, title=title, color=color)
+            Notification.objects.create(
+                user=appraisal.employee.first_reporting_manager,
+                title=title,
+                description=description,
+                color=color,
+            )
+            try:
+                send_mail(
+                    title,
+                    description,
+                    settings.OFFICIAL_MAIL,
+                    [appraisal.employee.first_reporting_manager.user.email],
+                )
+            except:
+                pass
             return Response("Appraisal is successfully submitted")
 
         return Response(
@@ -315,6 +399,32 @@ class AppraisalViewset(viewsets.ModelViewSet):
         if appraisal.stage == 1 and appraisal.status == 5:
             appraisal.status += 1
             appraisal.save()
+
+            # create logs and notifications
+
+            title = f"{appraisal.employee.first_reporting_manager.name} approve mid year review of  appraisal {appraisal.name}"
+            description = f"Hi {appraisal.employee.name} manager {appraisal.employee.first_reporting_manager.name} approve mid year review of  appraisal {appraisal.name} . "
+            color = "success"
+            Logs.objects.create(
+                user=appraisal.employee.first_reporting_manager,
+                title=title,
+                color=color,
+            )
+            Notification.objects.create(
+                user=appraisal.employee,
+                title=title,
+                description=description,
+                color=color,
+            )
+            try:
+                send_mail(
+                    title,
+                    description,
+                    settings.OFFICIAL_MAIL,
+                    [appraisal.employee.user.email],
+                )
+            except:
+                pass
             return Response("Appraisal is successfully submitted")
 
         return Response(
@@ -353,6 +463,31 @@ class AppraisalViewset(viewsets.ModelViewSet):
         if appraisal.stage == 2 and appraisal.status == 7:
             appraisal.status += 1
             appraisal.save()
+
+            # create logs and notifications
+
+            title = f"{appraisal.employee.name} submit end year review of appraisal {appraisal.name}"
+            description = (
+                f"Hi {appraisal.employee.first_reporting_manager.name} Employee {appraisal.employee.name} submit end year review of appraisal {appraisal.name} . "
+                f"Please add end year comment and approve end year review ."
+            )
+            color = "info"
+            Logs.objects.create(user=appraisal.employee, title=title, color=color)
+            Notification.objects.create(
+                user=appraisal.employee.first_reporting_manager,
+                title=title,
+                description=description,
+                color=color,
+            )
+            try:
+                send_mail(
+                    title,
+                    description,
+                    settings.OFFICIAL_MAIL,
+                    [appraisal.employee.first_reporting_manager.user.email],
+                )
+            except:
+                pass
             return Response("Appraisal is successfully submitted")
 
         return Response(
@@ -391,13 +526,38 @@ class AppraisalViewset(viewsets.ModelViewSet):
         if appraisal.stage == 2 and appraisal.status == 9:
             appraisal.status += 1
             appraisal.save()
+
+            # create logs and notifications
+
+            title = f"{appraisal.employee.first_reporting_manager.name} approve end year review of  appraisal {appraisal.name}"
+            description = f"Hi {appraisal.employee.name} manager {appraisal.employee.first_reporting_manager.name} approve end year review of  appraisal {appraisal.name} . "
+            color = "success"
+            Logs.objects.create(
+                user=appraisal.employee.first_reporting_manager,
+                title=title,
+                color=color,
+            )
+            Notification.objects.create(
+                user=appraisal.employee,
+                title=title,
+                description=description,
+                color=color,
+            )
+            try:
+                send_mail(
+                    title,
+                    description,
+                    settings.OFFICIAL_MAIL,
+                    [appraisal.employee.user.email],
+                )
+            except:
+                pass
             return Response("Appraisal is successfully submitted")
 
         return Response(
             status=status.HTTP_400_BAD_REQUEST,
             data="Appraisal is successfully submitted",
         )
- 
 
     @action(detail=True, methods=["POST"], url_path="up-stage/reject/stage-0")
     def stage_0_reject(self, request, pk=None):
@@ -410,6 +570,31 @@ class AppraisalViewset(viewsets.ModelViewSet):
             "stage0_rejection_comment", "No comment"
         )
         appraisal.save()
+
+        # create logs and notifications
+        title = f"{appraisal.employee.first_reporting_manager.name} reject appraisal {appraisal.name} in goal settings stage"
+        description = f"Hi {appraisal.employee.name} manager {appraisal.employee.first_reporting_manager.name} reject appraisal {appraisal.name} in goal settings stage. Manager goal settings stage rejection comment is {appraisal.stage0_rejection_comment} . Please edit goals , core value and skills and then submit. "
+        color = "error"
+        Logs.objects.create(
+            user=appraisal.employee.first_reporting_manager,
+            title=title,
+            color=color,
+        )
+        Notification.objects.create(
+            user=appraisal.employee,
+            title=title,
+            description=description,
+            color=color,
+        )
+        try:
+            send_mail(
+                title,
+                description,
+                settings.OFFICIAL_MAIL,
+                [appraisal.employee.user.email],
+            )
+        except:
+            pass
 
         return Response(
             {
@@ -429,6 +614,30 @@ class AppraisalViewset(viewsets.ModelViewSet):
             "stage1_rejection_comment", "No comment"
         )
         appraisal.save()
+        # create logs and notifications
+        title = f"{appraisal.employee.first_reporting_manager.name} reject appraisal {appraisal.name} in mid year review stage."
+        description = f"Hi {appraisal.employee.name} manager {appraisal.employee.first_reporting_manager.name} reject appraisal {appraisal.name} in mid year review  stage. Manager mid year review stage rejection comment is {appraisal.stage1_rejection_comment} . Please edit mid year review and then submit again. "
+        color = "error"
+        Logs.objects.create(
+            user=appraisal.employee.first_reporting_manager,
+            title=title,
+            color=color,
+        )
+        Notification.objects.create(
+            user=appraisal.employee,
+            title=title,
+            description=description,
+            color=color,
+        )
+        try:
+            send_mail(
+                title,
+                description,
+                settings.OFFICIAL_MAIL,
+                [appraisal.employee.user.email],
+            )
+        except:
+            pass
         return Response(
             {
                 "msg": f"{appraisal.name} is successfully rejected in  mid review stage",
@@ -447,6 +656,30 @@ class AppraisalViewset(viewsets.ModelViewSet):
             "stage2_rejection_comment", "No comment"
         )
         appraisal.save()
+
+        title = f"{appraisal.employee.first_reporting_manager.name} reject appraisal {appraisal.name} in end year review stage."
+        description = f"Hi {appraisal.employee.name} manager {appraisal.employee.first_reporting_manager.name} reject appraisal {appraisal.name} in end year review  stage. Manager end year review stage rejection comment is {appraisal.stage1_rejection_comment} . Please edit end year review and then submit again. "
+        color = "error"
+        Logs.objects.create(
+            user=appraisal.employee.first_reporting_manager,
+            title=title,
+            color=color,
+        )
+        Notification.objects.create(
+            user=appraisal.employee,
+            title=title,
+            description=description,
+            color=color,
+        )
+        try:
+            send_mail(
+                title,
+                description,
+                settings.OFFICIAL_MAIL,
+                [appraisal.employee.user.email],
+            )
+        except:
+            pass
         return Response(
             {
                 "msg": f"{appraisal.name} is successfully rejected in  end year review stage ",
