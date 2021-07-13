@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <h1>Home</h1>
-    <div v-if="$fetchState.pending"><Spinner /></div>
+    <div v-if="true"><Spinner /></div>
     <div v-else class="center">
       <div class="status-cards-group">
         <div class="card">

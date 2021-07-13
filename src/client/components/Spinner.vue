@@ -1,24 +1,30 @@
 <template>
   <div class="loader-container">
-    <div class="loader"></div>
+    <lottie-animation path="lottie/loading.json" :width="256" :height="256" />
   </div>
 </template>
 
 <script>
+import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
+
 export default {
   name: "Spinner",
+  components: {
+    LottieAnimation,
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .loader-container {
   margin: 100px 0;
+  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-.loader {
+/* .loader {
   border: 5px solid #f3f3f3;
   -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
@@ -28,7 +34,6 @@ export default {
   height: 50px;
 }
 
-/* Safari */
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
@@ -45,5 +50,5 @@ export default {
   100% {
     transform: rotate(360deg);
   }
-}
+} */
 </style>
