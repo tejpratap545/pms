@@ -236,5 +236,6 @@ html {
 
 body.darken {
   background: #1e2023;
+  color: white;
 }
 </style>

@@ -4,56 +4,36 @@
     <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="center">
       <div class="status-cards-group">
-        <div
-          class="card"
-          style="background: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%)"
-        >
-          <div class="icon">
-            <i class="bx bx-rocket"></i>
-          </div>
+        <div class="card">
+          <div class="status-description">Appraisals in goal setting stage</div>
+
           <div class="status">
             <h1>{{ apprisalStatus.a1 }}</h1>
           </div>
-          <div class="status-description">Appraisals in goal setting stage</div>
         </div>
 
-        <div
-          class="card"
-          style="background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)"
-        >
-          <div class="icon">
-            <i class="bx bx-calendar-alt"></i>
-          </div>
+        <div class="card">
+          <div class="status-description">Appraisals in mid year review</div>
+
           <div class="status">
             <h1>{{ apprisalStatus.a2 }}</h1>
           </div>
-          <div class="status-description">Appraisals in mid year review</div>
         </div>
 
-        <div
-          class="card"
-          style="background: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)"
-        >
-          <div class="icon">
-            <i class="bx bx-calendar-event"></i>
-          </div>
+        <div class="card">
+          <div class="status-description">Appraisals in end year review</div>
+
           <div class="status">
             <h1>{{ apprisalStatus.a3 }}</h1>
           </div>
-          <div class="status-description">Appraisals in end year review</div>
         </div>
 
-        <div
-          class="card"
-          style="background: linear-gradient(0deg, #fa709a 0%, #fee140 100%)"
-        >
-          <div class="icon">
-            <i class="bx bx-user-pin"></i>
-          </div>
+        <div class="card">
+          <div class="status-description">Peer Appraisals</div>
+
           <div class="status">
             <h1>2</h1>
           </div>
-          <div class="status-description">Peer Appraisals</div>
         </div>
       </div>
 
@@ -252,7 +232,7 @@ export default {
 <style>
 .status-cards-group {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -261,11 +241,11 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  background: #306bff;
   width: 100%;
   margin: 20px;
   padding: 20px;
-  max-width: 250px;
+  max-width: 220px;
   height: 180px;
   border-radius: 16px;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, var(--vs-shadow-opacity));
@@ -280,9 +260,13 @@ export default {
 }
 
 .card .status-description {
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   text-align: center;
+}
+
+.card .status {
+  font-size: 28px;
 }
 
 .status-user-profile {

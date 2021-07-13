@@ -255,10 +255,11 @@ export default {
   width: 330px;
   position: fixed;
   height: 100%;
-  background: rgb(204 219 255 / 15%);
+  background: rgb(255 255 255 / 15%);
   left: 0;
   top: 0;
   padding-left: 75px;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, var(--vs-shadow-opacity));
 }
 
 .appraisal-lists > h3 {
@@ -268,8 +269,8 @@ export default {
 
 .appraisal-lists > .appraisal-list-item {
   padding: 10px;
-  background: rgb(204 219 255 / 15%);
-  border-radius: 12px;
+  background: rgb(255 255 255 / 15%);
+  border-radius: 8px;
   margin-right: 20px;
   margin-bottom: 10px;
   opacity: 0.7;
@@ -286,7 +287,7 @@ export default {
 .appraisal-item {
   width: 100%;
   min-height: 600px;
-  background: rgb(168 171 180 / 15%);
+  background: rgb(255 255 255 / 15%);
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, var(--vs-shadow-opacity));
   border-radius: 16px;
   padding: 30px;
@@ -297,7 +298,7 @@ export default {
 }
 
 .appraisal-item-open {
-  max-width: 1000px;
+  max-width: 1200px;
   width: 100%;
   margin-left: 200px;
 }
