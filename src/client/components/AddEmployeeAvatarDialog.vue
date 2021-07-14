@@ -1,7 +1,7 @@
 <template>
   <vs-dialog v-model="active" :loading="loading" not-close prevent-close>
     <template #header>
-      <h4 class="not-margin">Change <b>Password</b></h4>
+      <h4 class="not-margin">Update <b>Profile</b></h4>
 
       <vs-button class="closeDialogButton" icon floating @click="closeDialog">
         <i class="bx bx-x"></i>
@@ -9,22 +9,12 @@
     </template>
 
     <div class="con-form">
-      <vs-input v-model="passwordData.password" placeholder="Current Password">
-        <template #icon> <i class="bx bxs-lock-alt"></i></template>
-      </vs-input>
-
-      <vs-input v-model="passwordData.password1" placeholder="New Password">
-        <template #icon> <i class="bx bxs-lock-alt"></i></template>
-      </vs-input>
-
-      <vs-input v-model="passwordData.password2" placeholder="Confirm Password">
-        <template #icon> <i class="bx bxs-lock-alt"></i></template>
-      </vs-input>
+      <input id="file1" type="file" placeholder="Select Profile" />
     </div>
 
     <template #footer>
       <div class="footer-dialog">
-        <vs-button :loading="loading" block @click="updatePassword">
+        <vs-button :loading="loading" block @click="updateProfile">
           Add New
         </vs-button>
       </div>
@@ -34,18 +24,13 @@
 
 <script>
 export default {
-  name: "ChangePassword",
+  name: "AddEmployeeAvatarDialog",
   props: {
     dialog: Boolean,
   },
   data: () => ({
     active: false,
     loading: false,
-    passwordData: {
-      password: "",
-      password1: "",
-      password2: "",
-    },
   }),
   mounted() {
     this.active = this.dialog;
@@ -54,22 +39,28 @@ export default {
     closeDialog() {
       this.$emit("close");
     },
-    updatePassword() {
+    updateProfile() {
       if (!this.loading) {
         this.loading = true;
 
         this.$axios
-          .$post(`api/user/me/change-password/`, this.passwordData, {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.accessToken}`,
+          .$patch(
+            `api/user/${this.$store.state.user.id}/`,
+            {
+              avatar: document.querySelector("#file1").value,
             },
-          })
+            {
+              headers: {
+                Authorization: `Bearer ${this.$store.state.accessToken}`,
+              },
+            }
+          )
           .then(() => this.closeDialog())
           .catch(() => {
             this.loading = false;
             return this.$vs.notification({
               color: "danger",
-              title: "Error changing password",
+              title: "Error changing avatar",
             });
           });
       }

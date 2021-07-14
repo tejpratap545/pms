@@ -275,6 +275,7 @@ export default {
   margin-bottom: 10px;
   opacity: 0.7;
   text-align: center;
+  overflow: hidden;
 }
 
 .appraisal-lists > .appraisal-list-item.active,

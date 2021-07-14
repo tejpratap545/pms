@@ -50,7 +50,7 @@
                   :src="
                     tr.avatar
                       ? tr.avatar
-                      : `https://avatars.dicebear.com/api/jdenticon/${tr.email}.svg`
+                      : `https://avatars.dicebear.com/api/human/${tr.email}.svg`
                   "
                   alt="Avatar"
                 />

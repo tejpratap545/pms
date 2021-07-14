@@ -44,7 +44,7 @@
               :src="
                 $store.state.user.avatar
                   ? $store.state.user.avatar
-                  : `https://avatars.dicebear.com/api/jdenticon/${$store.state.user.user.email}.svg`
+                  : `https://avatars.dicebear.com/api/human/${$store.state.user.user.email}.svg`
               "
               alt=""
             />
@@ -169,6 +169,7 @@
           <vs-button @click="passwordActive = true">
             Change password
           </vs-button>
+          <vs-button @click="avatarUpload = true"> Change Profile </vs-button>
         </div>
       </div>
     </div>
@@ -178,6 +179,12 @@
       v-if="passwordActive"
       :dialog="passwordActive"
       @close="passwordActive = false"
+    />
+
+    <AddEmployeeAvatarDialog
+      v-if="avatarUpload"
+      :dialog="avatarUpload"
+      @close="avatarUpload = false"
     />
   </div>
 </template>
@@ -189,6 +196,7 @@ export default {
   data: () => ({
     loading: false,
     passwordActive: false,
+    avatarUpload: false,
     companyList: [],
     apprisalStatus: {
       a1: 0,
@@ -240,13 +248,13 @@ export default {
   color: #eee;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   background: #306bff;
   width: 100%;
-  margin: 20px;
+  margin: 10px;
   padding: 20px;
-  max-width: 220px;
-  height: 180px;
+  max-width: 180px;
+  height: 130px;
   border-radius: 16px;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, var(--vs-shadow-opacity));
 }
@@ -260,13 +268,13 @@ export default {
 }
 
 .card .status-description {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 600;
   text-align: center;
 }
 
 .card .status {
-  font-size: 28px;
+  font-size: 20px;
 }
 
 .status-user-profile {
