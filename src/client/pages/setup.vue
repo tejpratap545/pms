@@ -2,7 +2,7 @@
   <div class="setup">
     <div class="setup-title">
       <h2 style="font-weight: 600">PMS Setup</h2>
-      <vs-button v-if="page > 1 && page < 3" flat @click="page--">
+      <vs-button v-if="page > 1" flat @click="page--">
         <i class="bx bxs-left-arrow"></i>Back
       </vs-button>
     </div>
