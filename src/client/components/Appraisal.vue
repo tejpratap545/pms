@@ -569,7 +569,7 @@ export default {
 <style>
 .description-card {
   padding: 10px;
-  background-color: #f4f7f8;
+  background-color: rgba(25, 91, 255, 0.15);
   border-radius: 16px;
 }
 </style>
