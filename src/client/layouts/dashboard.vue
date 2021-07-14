@@ -1,5 +1,5 @@
 <template>
-	<div class="hidden">
+	<div>
 		<vs-sidebar v-model="active" :reduce="reduce" square open>
 			<template #logo>
 				<vs-button style="margin-left: 10px" icon flat @click="reduce = !reduce">
@@ -142,25 +142,44 @@
 
 <script>
 export default {
-	data: () => ({
-		active: 'home',
-		darktheme: false,
-		reduce: true
-	}),
+	data() {
+		return {
+			active: 'home',
+			darktheme: false,
+			reduce: true
+		};
+	},
+	head() {
+		return {
+			bodyAttrs: {
+				class: this.darktheme ? 'darken' : ''
+			}
+		};
+	},
+	computed: {
+		theme() {
+			if (this.darktheme) {
+				return 'dark';
+			}
+			return 'light';
+		}
+	},
+
 	mounted() {
 		this.active = location.pathname.split('/').pop();
+		if (window.localStorage.getItem('darktheme') === 'true') {
+			this.darktheme = true;
+			this.$vs.setTheme(this.theme);
+		}
+		this.$vs.setTheme(this.theme);
 	},
 	methods: {
 		ChangeTheme() {
 			if (process.client) {
-				this.$vs.toggleTheme();
 				this.darktheme = !this.darktheme;
+				this.$vs.setTheme(this.theme);
 
-				if (this.darktheme) {
-					document.body.classList.add('darken');
-				} else {
-					document.body.classList.remove('darken');
-				}
+				window.localStorage.setItem('darktheme', this.darktheme);
 			}
 		}
 	}
