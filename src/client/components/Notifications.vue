@@ -1,6 +1,6 @@
 <template>
-  <div class="page">
-    <h1>Notifications</h1>
+  <div>
+    <h2 style="font-weight: 600">Notifications</h2>
     <div v-if="$fetchState.pending"><Spinner /></div>
     <div v-else class="center">
       <vs-alert
@@ -15,17 +15,14 @@
         <span v-html="notification.description"></span>
       </vs-alert>
 
-      <h2 v-if="notifications.length == 0" style="text-align: center">
-        No unread notifications
-      </h2>
+      <h4 v-if="notifications.length == 0">No unread notifications</h4>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  layout: "dashboard",
-  middleware: ["auth"],
+  name: "Notifications",
   data: () => ({
     notifications: [],
   }),
