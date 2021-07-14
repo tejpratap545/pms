@@ -1,39 +1,54 @@
 <template>
-  <ckeditor
-    v-model="editorData"
-    :editor="editor"
-    :config="editorConfig"
-  ></ckeditor>
+	<div>
+		<froala v-model="editorData" :tag="'textarea'" :config="config"></froala>
+	</div>
 </template>
 
 <script>
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// eslint-disable-next-line no-unused-vars
+import VueFroala from 'vue-froala-wysiwyg';
 export default {
-  props: {
-    data: {
-      type: String,
-      required: true,
-    },
-  },
-  data: () => ({
-    editor: ClassicEditor,
+	props: {
+		data: {
+			type: String,
+			required: true
+		}
+	},
+	data: () => ({
+		config: {
+			placeholderText: 'Edit Your Content Here!',
+			theme: 'dark',
+			events: {
+				'froalaEditor.initialized'() {
+					console.log('initialized');
+				}
+			}
+		},
 
-    editorConfig: {
-      // The configuration of the editor.
-    },
-  }),
+		editorConfig: {
+			// The configuration of the editor.
+		}
+	}),
 
-  computed: {
-    editorData: {
-      get() {
-        return this.data;
-      },
-      set(value) {
-        this.$emit("changeData", value);
-      },
-    },
-  },
+	computed: {
+		editorData: {
+			get() {
+				return this.data;
+			},
+			set(value) {
+				this.$emit('changeData', value);
+			}
+		}
+	}
 };
 </script>
 
-<style></style>
+<style>
+:root {
+	--color: red;
+}
+
+.ck-editor {
+	color: var(--color);
+}
+</style>
