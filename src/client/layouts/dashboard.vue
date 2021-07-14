@@ -122,18 +122,26 @@
         Logs
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="notifications" to="/sections/notifications">
-        <template #icon>
-          <i class="bx bx-notification"></i>
-        </template>
-        Notifications
-      </vs-sidebar-item>
+      <vs-button @click="ChangeTheme">
+        <i v-if="darktheme" class="bx bxs-sun"></i>
+        <i v-else class="bx bxs-moon"></i>
+      </vs-button>
 
       <template #footer>
-        <vs-switch v-model="darktheme" @click="ChangeTheme">
-          <i v-if="darktheme" class="bx bxs-sun"></i>
-          <i v-else class="bx bxs-moon"></i>
-        </vs-switch>
+        <vs-row justify="space-between">
+          <vs-avatar>
+            <img
+              :src="`https://avatars.dicebear.com/api/human/${$store.state.user.user.email}.svg`"
+              alt=""
+            />
+          </vs-avatar>
+
+          <vs-avatar badge-color="danger" badge-position="top-right">
+            <i class="bx bx-bell"></i>
+
+            <template #badge> 28 </template>
+          </vs-avatar>
+        </vs-row>
       </template>
     </vs-sidebar>
 
@@ -147,7 +155,7 @@
 export default {
   data: () => ({
     active: "home",
-    darktheme: true,
+    darktheme: false,
     reduce: true,
   }),
   mounted() {
@@ -157,6 +165,7 @@ export default {
     ChangeTheme() {
       if (process.client) {
         this.$vs.toggleTheme();
+        this.darktheme = !this.darktheme;
 
         if (this.darktheme) {
           document.body.classList.add("darken");
