@@ -1,6 +1,7 @@
+from turtle import color
 from backend.training.api.serializers import *
 from backend.users.api.serializers import DepartmentSerializer, ShortProfileSerializer
-from backend.users.models import Logs, Notification, Profile
+from backend.users.models import Logs, Profile, User, Notification
 from django.core.mail import send_mail
 from django.db import transaction
 from rest_framework import serializers
@@ -39,6 +40,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
             individual_employees = validated_data.pop("individual_employees", [])
             departments = validated_data.pop("departments", [])
             company = validated_data.pop("company", 1)
+            user: User = self.context["request"].user
             if not self.context["request"].user.is_superuser:
                 company = self.context["request"].user.company
 
@@ -48,6 +50,10 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
             )
             appraisal_bulk_data = []
             logs_bulk_data = []
+            notification_bulk_data = []
+
+            title = f" {user.profile.name} created {overall_appraisal.name} appraisal"
+            Logs.objects.create(user=user.profile, title=title,color="info" )
 
             if is_company:
 
@@ -59,19 +65,19 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
                     )
 
-                    title = f"{overall_appraisal.name} appraisal created"
+                    
                     description = (
                         f"Hi {profile.name}  {self.context['request'].user.profile.name} created "
                         f"{overall_appraisal.name} "
                         f"Please go to dashboard and then add goals , kpis , core values and skills and then "
                         f"submitted to manager "
                     )
-                    logs_bulk_data.append(
-                        Logs(
+                    notification_bulk_data.append(
+                        Notification(
                             user=profile,
                             title=title,
+                            color=color,
                             description=description,
-                            color="info",
                         )
                     )
                     try:
@@ -97,19 +103,18 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                     appraisal_bulk_data.append(
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
                     )
-                    title = f"{overall_appraisal.name} appraisal created"
                     description = (
                         f"Hi {profile.name}  {self.context['request'].user.profile.name} created "
                         f"{overall_appraisal.name} "
                         f"Please go to dashboard and then add goals , kpis , core values and skills and then "
                         f"submitted to manager "
                     )
-                    logs_bulk_data.append(
-                        Logs(
+                    notification_bulk_data.append(
+                        Notification(
                             user=profile,
                             title=title,
+                            color=color,
                             description=description,
-                            color="info",
                         )
                     )
                     try:
@@ -136,19 +141,18 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                     appraisal_bulk_data.append(
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
                     )
-                    title = f"{overall_appraisal.name} appraisal created"
                     description = (
                         f"Hi {profile.name}  {self.context['request'].user.profile.name} created "
                         f"{overall_appraisal.name} "
                         f"Please go to dashboard and then add goals , kpis , core values and skills and then "
                         f"submitted to manager "
                     )
-                    logs_bulk_data.append(
-                        Logs(
+                    notification_bulk_data.append(
+                        Notification(
                             user=profile,
                             title=title,
+                            color=color,
                             description=description,
-                            color="info",
                         )
                     )
                     try:
@@ -170,7 +174,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                 return serializers.ValidationError("Something went wrong")
 
             Appraisal.objects.bulk_create(appraisal_bulk_data)
-            Logs.objects.bulk_create(logs_bulk_data)
+            Notification.objects.bulk_create(notification_bulk_data)
 
         return overall_appraisal
 
@@ -279,5 +283,3 @@ class ShortProfile2Serializer(serializers.ModelSerializer):
             "department",
             "appraisal_set",
         )
-
-

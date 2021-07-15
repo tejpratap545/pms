@@ -1,3 +1,4 @@
+from pyexpat import model
 from statistics import mode
 from typing import Optional
 
@@ -291,6 +292,22 @@ class Logs(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField(blank=True, null=True)
 
-class Notification(Logs):
+    class Meta:
+        ordering = ['-created_at']
+
+
+class Notification(models.Model):
     is_read = models.BooleanField(default=False)
-    pass
+    COLOR_CHOCE = (
+        ("info", "INFO"),
+        ("success", "SUCCESSS"),
+        ("errro", "ERROR"),
+    )
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True)
+    title = models.CharField(max_length=250)
+    color = models.CharField(max_length=100, choices=COLOR_CHOCE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-created_at']
