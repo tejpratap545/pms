@@ -158,69 +158,67 @@
 </template>
 
 <script>
-import global from "~/mixins/global";
+import global from '~/mixins/global';
 export default {
-  mixins: [global],
-  layout: "dashboard",
-  middleware: ["auth"],
-  data: () => ({
-    loading: false,
-    appraisalList: [],
-    selectedGoal: {},
-    selectedAppraisal: null,
-    selectedAppraisalId: 0,
-    upstageAppraisal: false,
-    goalSubmit: false,
-    midyearReview: false,
-    endyearReview: false,
-    submitMidyearReview: false,
-    submitEndyearReview: false,
-    steps: [
-      {
-        target: ".appraisal-item-open", // We're using document.querySelector() under the hood
-        header: {
-          title: "Get Started",
-        },
-        content: `Welcome to PMS Onboarding `,
-        params: {
-          placement: "left",
-        },
-      },
-    ],
-  }),
-  async fetch() {
-    try {
-      this.appraisalList = await this.$axios.$get(`api/appraisal/me`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.accessToken}`,
-        },
-      });
+	mixins: [global],
+	layout: 'dashboard',
+	middleware: ['auth'],
+	data: () => ({
+		loading: false,
+		appraisalList: [],
+		selectedGoal: {},
+		selectedAppraisal: null,
+		selectedAppraisalId: 0,
+		upstageAppraisal: false,
+		goalSubmit: false,
+		midyearReview: false,
+		endyearReview: false,
+		submitMidyearReview: false,
+		submitEndyearReview: false,
+		steps: [
+			{
+				target: '.appraisal-item-open', // We're using document.querySelector() under the hood
+				header: {
+					title: 'Get Started'
+				},
+				content: `Welcome to PMS Onboarding `,
+				params: {
+					placement: 'left'
+				}
+			}
+		]
+	}),
+	async fetch() {
+		try {
+			this.appraisalList = await this.$axios.$get(`api/appraisal/me`, {
+				headers: {
+					Authorization: `Bearer ${this.$store.state.accessToken}`
+				}
+			});
 
-      if (this.appraisalList.length !== 0)
-        this.selectedAppraisal = this.appraisalList[0];
-    } catch (err) {
-      return this.$vs.notification({
-        color: "danger",
-        title: "Error fetching appriasals",
-      });
-    }
-  },
-  computed: {
-    currentAppraisal() {
-      return this.selectedAppraisalId === 0
-        ? this.selectedAppraisal
-        : this.appraisalList.find((x) => x.id === this.selectedAppraisalId);
-    },
-    status() {
-      return this.currentAppraisal ? this.currentAppraisal.status : null;
-    },
-    stage() {
-      return this.currentAppraisal
-        ? this.currentAppraisal.overall_appraisal.stage
-        : null;
-    },
-  },
-  /* mounted() {
+			if (this.appraisalList.length !== 0) this.selectedAppraisal = this.appraisalList[0];
+		} catch (err) {
+			return this.$vs.notification({
+				color: 'danger',
+				title: 'Error fetching appriasals'
+			});
+		}
+	},
+	fetchOnServer: false,
+	computed: {
+		currentAppraisal() {
+			return this.selectedAppraisalId === 0
+				? this.selectedAppraisal
+				: this.appraisalList.find((x) => x.id === this.selectedAppraisalId);
+		},
+		status() {
+			return this.currentAppraisal ? this.currentAppraisal.status : null;
+		},
+		stage() {
+			return this.currentAppraisal ? this.currentAppraisal.overall_appraisal.stage : null;
+		}
+	},
+	/* mounted() {
     try {
       if (localStorage.getItem("selectedAppraisal") != null)
         this.selectedAppraisal = JSON.parse(
@@ -232,6 +230,14 @@ export default {
     }
   },
   */
+<<<<<<< HEAD
+=======
+	methods: {
+		print(id) {
+			location.replace(`/print?id=${id}`);
+		}
+	}
+>>>>>>> de01f65ec78b6121895f784ff67af18a1b0eebfb
 };
 </script>
 

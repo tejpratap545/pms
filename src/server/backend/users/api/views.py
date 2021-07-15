@@ -1,3 +1,4 @@
+import profile
 import secrets
 from backend.appraisals.api.pagination import StandardResultsSetPagination
 
@@ -15,6 +16,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from backend.users.api.filter import LogsFilter
+
 
 from ..models import *
 from ..permissions import *
@@ -117,7 +119,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
             ),
         },
     )
-    @action(detail=False, methods=["post"],url_path="me/change-password")
+    @action(detail=False, methods=["post"], url_path="me/change-password")
     def change_password(self, request, pk=None):
         user: User = self.request.user
         serializer = ChangePasswordSerializer(data=request.data)
@@ -198,9 +200,17 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
         return Response("User is successfully Revieve")
 
+    @action(detail=False, methods=["get"], url_path="unread-notification")
+    def un_read_notification(self, request):
+        user: profile = self.request.user.profile
+        un_read_notification = Notification.objects.filter(
+            user=user, is_read=False
+        ).count()
+        return Response({"unread": un_read_notification})
+
 
 class CompanyViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsSuperUser]
+    # permission_classes = [IsSuperUser]
     serializer_class = CompanySerializer
 
     def get_queryset(self):
@@ -213,6 +223,15 @@ class CompanyViewSet(viewsets.ModelViewSet):
         #     appraisal_count=Count(Subquery(appraisals_count)),
         # )
         return Company.objects.all()
+
+    @action(methods=["POST"], detail=False, url_path=r"domain")
+    def by_domain(self, request):
+        company = get_object_or_404(Company,domain=request.data.get("domain"))
+        if company:
+            serializer = CompanySerializer(company)
+            return Response(serializer.data)
+        else:
+            return Response(400, {"message": "company not found"})
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):

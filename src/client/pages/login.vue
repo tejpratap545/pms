@@ -2,7 +2,9 @@
   <div class="app">
     <vs-dialog v-model="active" class="dialog" not-close prevent-close>
       <template #header>
-        <h4 class="not-margin">Login to <b>PMS</b></h4>
+        <h4 class="not-margin">
+          Login to <b>{{ company.name }}</b>
+        </h4>
       </template>
 
       <div class="con-form">
@@ -44,7 +46,30 @@ export default {
     password: "",
     remember: false,
     loading: false,
+    loading1: false,
+    company: {},
+    error: false,
   }),
+  fetch() {
+    this.loading1 = true;
+    if (process.client) {
+      this.$axios
+        .$post("/api/company/domain/", {
+          domain: window.location.host,
+        })
+        .then((response) => {
+          this.company = response;
+        })
+        .catch(() => {
+          this.error = true;
+        })
+        .finally(() => {
+          this.loading1 = false;
+        });
+    }
+  },
+  fetchOnServer: false,
+
   methods: {
     login() {
       if (!this.loading) {
@@ -72,11 +97,11 @@ export default {
 
 <style>
 .app {
-  background: url(~/assets/img/background.jpg);
-  background-size: cover;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+	background: url(~/assets/img/background.jpg);
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+	position: absolute;
 }
 
 .vs-dialog {
@@ -84,18 +109,18 @@ export default {
 }
 
 .footer-dialog .new {
-  margin: 0px;
-  margin-top: 20px;
-  padding: 0px;
-  font-size: 0.7rem;
+	margin: 0px;
+	margin-top: 20px;
+	padding: 0px;
+	font-size: 0.7rem;
 }
 .footer-dialog .new a {
-  margin-left: 6px;
+	margin-left: 6px;
 }
 .footer-dialog .new a:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 .footer-dialog .vs-button {
-  margin: 0px;
+	margin: 0px;
 }
 </style>

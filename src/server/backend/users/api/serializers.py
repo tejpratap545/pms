@@ -3,7 +3,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import *
 from rest_framework import serializers
 
-from ..models import Company, Department, Logs, Notification, Profile, User
+from ..models import Company, Department, Logs, Profile, User,Notification
 
 
 class UserSerializer(serializers.ModelSerializer):

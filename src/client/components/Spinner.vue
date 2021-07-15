@@ -1,27 +1,27 @@
 <template>
-  <div class="loader-container">
-    <lottie-animation path="lottie/loading.json" :width="256" :height="256" />
-  </div>
+	<div class="loader-container">
+		<lottie-animation path="lottie/loading.json" :width="256" :height="256" />
+	</div>
 </template>
 
 <script>
-import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
+import LottieAnimation from 'lottie-vuejs/src/LottieAnimation.vue'; // import lottie-vuejs
 
 export default {
-  name: "Spinner",
-  components: {
-    LottieAnimation,
-  },
+	name: 'Spinner',
+	components: {
+		LottieAnimation
+	}
 };
 </script>
 
 <style>
 .loader-container {
-  margin: 100px 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+	margin: 100px 0;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 /* .loader {
