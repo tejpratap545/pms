@@ -159,7 +159,6 @@ export default {
 			})
 			.then((data) => {
 				this.notification = data.unread;
-				console.log(data.unread);
 			});
 	},
 	fetchOnServer: false,

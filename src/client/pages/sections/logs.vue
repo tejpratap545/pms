@@ -43,7 +43,8 @@ export default {
 				title: 'Error fetching logs'
 			});
 		}
-	}
+	},
+	fetchOnServer: false
 };
 </script>
 
