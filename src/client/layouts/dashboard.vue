@@ -128,7 +128,7 @@
 					<vs-avatar badge-color="danger" badge-position="top-right">
 						<i class="bx bx-bell"></i>
 
-						<template #badge> 28 </template>
+						<template #badge> {{ notification }} </template>
 					</vs-avatar>
 				</vs-row>
 			</template>
@@ -146,9 +146,23 @@ export default {
 		return {
 			active: 'home',
 			darktheme: false,
-			reduce: true
+			reduce: true,
+			notification: 1
 		};
 	},
+	fetch() {
+		this.$axios
+			.$get('api/user/unread-notification/', {
+				headers: {
+					Authorization: `Bearer ${this.$store.state.accessToken}`
+				}
+			})
+			.then((data) => {
+				this.notification = data.unread;
+				console.log(data.unread);
+			});
+	},
+	fetchOnServer: false,
 	head() {
 		return {
 			bodyAttrs: {

@@ -1,23 +1,19 @@
 <template>
 	<div>
-		<editor :editor="editor" />
+		<froala v-model="editorData" :tag="'textarea'" :config="config"></froala>
 	</div>
 </template>
 
 <script>
-import { Editor } from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit';
+// eslint-disable-next-line no-unused-vars
+import VueFroala from 'vue-froala-wysiwyg';
 export default {
-	components: {
-		Editor
-	},
 	props: {
 		data: {
 			type: String,
 			required: true
 		}
 	},
-
 	data: () => ({
 		config: {
 			placeholderText: 'Edit Your Content Here!',
@@ -28,7 +24,6 @@ export default {
 				}
 			}
 		},
-		editor: null,
 
 		editorConfig: {
 			// The configuration of the editor.
@@ -44,23 +39,6 @@ export default {
 				this.$emit('changeData', value);
 			}
 		}
-	},
-	mounted() {
-		this.editor = new Editor({
-			extensions: [StarterKit],
-			content: this.editorData,
-			onUpdate: () => {
-				// HTML
-				this.$emit('input', this.editor.getHTML());
-
-				// JSON
-				// this.$emit('input', this.editor.getJSON())
-			}
-		});
-	},
-
-	beforeDestroy() {
-		this.editor.destroy();
 	}
 };
 </script>

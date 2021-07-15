@@ -1,3 +1,4 @@
+import profile
 import secrets
 from backend.appraisals.api.pagination import StandardResultsSetPagination
 
@@ -197,6 +198,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
         user.save()
 
         return Response("User is successfully Revieve")
+
+    @action(detail=False, methods=["get"], url_path="unread-notification")
+    def un_read_notification(self,request):
+        user: profile = self.request.user.profile
+        un_read_notification = Notification.objects.filter(user=user, is_read=False).count()
+        return Response({'unread':un_read_notification})
+
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
