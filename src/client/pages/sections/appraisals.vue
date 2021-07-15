@@ -90,7 +90,7 @@
                   >
                     Submit End Year Review
                   </vs-button>
-                  <vs-button icon @click="print(selectedAppraisal.id)">
+                  <vs-button icon :to="`/print?id=${selectedAppraisal.id}`">
                     <i class="bx bx-printer"></i>
                   </vs-button>
                   <vs-button icon @click="$tours.myTour.start()">
@@ -232,11 +232,6 @@ export default {
     }
   },
   */
-  methods: {
-    print(id) {
-      location.replace(`/print?id=${id}`);
-    },
-  },
 };
 </script>
 

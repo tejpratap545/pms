@@ -80,7 +80,7 @@ export default {
 }
 
 .vs-dialog {
-  min-width: 400px;
+  max-width: 400px;
 }
 
 .footer-dialog .new {
