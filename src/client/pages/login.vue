@@ -42,9 +42,12 @@ export default {
 		password: '',
 		remember: false,
 		loading: false,
-		company: {}
+		loading1: false,
+		company: {},
+		error: false
 	}),
 	fetch() {
+		this.loading1 = true;
 		if (process.client) {
 			this.$axios
 				.$post('/api/company/domain/', {
@@ -52,6 +55,12 @@ export default {
 				})
 				.then((response) => {
 					this.company = response;
+				})
+				.catch(() => {
+					this.error = true;
+				})
+				.finally(() => {
+					this.loading1 = false;
 				});
 		}
 	},
