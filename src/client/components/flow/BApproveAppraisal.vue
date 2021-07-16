@@ -13,10 +13,21 @@
 			<EmployeeInfo :employee="appraisal.employee" />
 			<Appraisal :goal-approve="true" :edit="false" :appraisal="appraisal" @refresh="$fetch()" />
 		</di>
+		<Reject
+			v-if="rejectDialog"
+			:dialog="rejectDialog"
+			:appraisal="appraisal"
+			@close="(rejectDialog = false), closeDialog"
+		/>
 
 		<template #footer>
 			<div class="footer-dialog">
-				<vs-button :loading="loading" block @click="approveGoal"> Approve Appraiasal </vs-button>
+				<div class="footer-dialog">
+					<vs-button danger :loading="loading" @click="rejectDialog = true">
+						Reject Appraiasal
+					</vs-button>
+					<vs-button :loading="loading" @click="approve"> Approve Appraiasal </vs-button>
+				</div>
 			</div>
 		</template>
 	</vs-dialog>
@@ -33,7 +44,8 @@ export default {
 	data: () => ({
 		active: false,
 		loading: false,
-		appraisal: {}
+		appraisal: {},
+		rejectDialog: false
 	}),
 
 	async fetch() {
@@ -53,7 +65,7 @@ export default {
 		closeDialog() {
 			this.$emit('close');
 		},
-		approveGoal() {
+		approve() {
 			this.loading = true;
 			this.$axios
 				.$post(
@@ -85,3 +97,10 @@ export default {
 	}
 };
 </script>
+
+<style scoped>
+.footer-dialog {
+	display: flex;
+	flex-direction: row;
+}
+</style>

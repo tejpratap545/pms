@@ -49,7 +49,6 @@ export default {
 
 	mounted() {
 		this.active = this.dialog;
-		this.roleData = this.selectedRole;
 	},
 	methods: {
 		closeDialog() {
@@ -81,10 +80,3 @@ export default {
 	}
 };
 </script>
-
-<style scoped>
-.footer-dialog {
-	display: flex;
-	flex-direction: row;
-}
-</style>

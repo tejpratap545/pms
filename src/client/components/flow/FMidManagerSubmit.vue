@@ -13,9 +13,18 @@
 			<EmployeeInfo :employee="appraisal.employee" />
 			<Appraisal :edit="false" :appraisal="appraisal" @refresh="$fetch()" />
 		</di>
+		<Reject
+			v-if="rejectDialog"
+			:dialog="rejectDialog"
+			:appraisal="appraisal"
+			@close="(rejectDialog = false), closeDialog"
+		/>
 
 		<template #footer>
 			<div class="footer-dialog">
+				<vs-button danger :loading="loading" @click="rejectDialog = true">
+					Reject Appraiasal
+				</vs-button>
 				<vs-button :loading="loading" block @click="approveGoal"> Approve </vs-button>
 			</div>
 		</template>
@@ -85,3 +94,9 @@ export default {
 	}
 };
 </script>
+<style scoped>
+.footer-dialog {
+	display: flex;
+	flex-direction: row;
+}
+</style>

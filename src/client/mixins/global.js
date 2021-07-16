@@ -77,6 +77,22 @@ export default {
 				default:
 					return '';
 			}
+		},
+		getStage(stage) {
+			switch (stage) {
+				case 0:
+					return 'Goals Setting Stage ';
+				case 1:
+					return 'Mid Year Review';
+				case 2:
+					return 'Year-End Review';
+				case 3:
+					return 'Reports';
+				case 4:
+					return 'Calibration';
+				case 5:
+					return 'Completed';
+			}
 		}
 	}
 };

@@ -49,7 +49,7 @@
 							{{ tr.name }}
 						</vs-td>
 						<vs-td>
-							{{ `Stage ${tr.stage}` }}
+							{{ getStage(tr.stage) }}
 						</vs-td>
 						<vs-td v-if="$store.state.user.user.is_superuser">
 							{{ companyList.filter((x) => x.id == tr.company)[0].name }}
@@ -95,7 +95,9 @@
 </template>
 
 <script>
+import global from '~/mixins/global';
 export default {
+	mixins: [global],
 	layout: 'dashboard',
 	middleware: ['auth'],
 	data: () => ({

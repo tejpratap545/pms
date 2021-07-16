@@ -136,9 +136,18 @@
 				</template>
 			</vs-table>
 		</di>
+		<Reject
+			v-if="rejectDialog"
+			:dialog="rejectDialog"
+			:appraisal="appraisal"
+			@close="(rejectDialog = false), closeDialog"
+		/>
 
 		<template #footer>
 			<div class="footer-dialog">
+				<vs-button danger :loading="loading" @click="rejectDialog = true">
+					Reject Appraiasal
+				</vs-button>
 				<vs-button :loading="loading" block @click="submit"> Submit Review </vs-button>
 			</div>
 		</template>
@@ -216,3 +225,9 @@ export default {
 	}
 };
 </script>
+<style scoped>
+.footer-dialog {
+	display: flex;
+	flex-direction: row;
+}
+</style>

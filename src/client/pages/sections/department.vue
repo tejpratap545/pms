@@ -835,6 +835,7 @@ export default {
 
 		approveAppraisal: false
 	}),
+
 	async fetch() {
 		try {
 			const res = await this.$axios.$get(`api/appraisal/manager`, {
