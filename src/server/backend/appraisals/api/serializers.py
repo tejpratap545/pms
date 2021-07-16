@@ -1,4 +1,3 @@
-from turtle import color
 from backend.training.api.serializers import *
 from backend.users.api.serializers import DepartmentSerializer, ShortProfileSerializer
 from backend.users.models import Logs, Profile, User, Notification
@@ -53,7 +52,7 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
             notification_bulk_data = []
 
             title = f" {user.profile.name} created {overall_appraisal.name} appraisal"
-            Logs.objects.create(user=user.profile, title=title,color="info" )
+            Logs.objects.create(user=user.profile, title=title, color="info")
 
             if is_company:
 
@@ -65,7 +64,6 @@ class OverAllAppraisalSerializer(serializers.ModelSerializer):
                         Appraisal(employee=profile, overall_appraisal=overall_appraisal)
                     )
 
-                    
                     description = (
                         f"Hi {profile.name}  {self.context['request'].user.profile.name} created "
                         f"{overall_appraisal.name} "
