@@ -2,7 +2,9 @@
 	<div class="app">
 		<vs-dialog v-model="active" class="dialog" not-close prevent-close>
 			<template #header>
-				<h4 class="not-margin">Login to <b>PMS</b></h4>
+				<h4 class="not-margin">
+					Login to <b>{{ company.name }}</b>
+				</h4>
 			</template>
 
 			<div class="con-form">
@@ -39,8 +41,22 @@ export default {
 		username: '',
 		password: '',
 		remember: false,
-		loading: false
+		loading: false,
+		company: {}
 	}),
+	fetch() {
+		if (process.client) {
+			this.$axios
+				.$post('/api/company/domain/', {
+					domain: window.location.host
+				})
+				.then((response) => {
+					this.company = response;
+				});
+		}
+	},
+	fetchOnServer: false,
+
 	methods: {
 		login() {
 			if (!this.loading) {
